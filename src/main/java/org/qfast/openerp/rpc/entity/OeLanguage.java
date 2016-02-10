@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,20 +15,20 @@
  */
 package org.qfast.openerp.rpc.entity;
 
-import java.util.Locale;
 import org.qfast.openerp.rpc.OeConst.Direction;
 import org.qfast.openerp.rpc.boundary.OeLanguageService;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.util.Locale;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
-    public static final String _CODE = "code", _DATE_FORMAT = "date_format",
-            _TIME_FORMAT = "time_format", _DIRECTION = "direction",
-            _ISO_CODE = "iso_code";
-
+    public static final String _CODE = "code", _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
+            _DIRECTION = "direction", _ISO_CODE = "iso_code";
+    private static final long serialVersionUID = -2806061495597715017L;
     private Integer id;
     private String name;
     private String dateFormat;
@@ -117,14 +117,7 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final OeLanguage other = (OeLanguage) obj;
-        return OeUtil.equals(this.id, other.id);
+        return obj != null && getClass() == obj.getClass() && OeUtil.equals(this.id, ((OeLanguage) obj).id);
     }
 
     @Override
@@ -137,5 +130,4 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
                 + ", code=" + code
                 + ", isoCode=" + isoCode + '}';
     }
-    private static final long serialVersionUID = -2806061495597715017L;
 }

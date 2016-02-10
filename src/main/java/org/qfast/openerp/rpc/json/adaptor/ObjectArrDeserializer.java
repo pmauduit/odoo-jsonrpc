@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,8 +21,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
-import java.lang.reflect.Type;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.lang.reflect.Type;
 
 /**
  * @author Ahmed El-mawaziny
@@ -30,8 +31,8 @@ import org.qfast.openerp.rpc.util.OeUtil;
 public class ObjectArrDeserializer implements JsonDeserializer<Object[]> {
 
     @Override
-    public Object[] deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public Object[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         if (json != null && !json.isJsonNull()) {
             if (json.isJsonPrimitive()) {
                 JsonPrimitive asJsonPrimitive = json.getAsJsonPrimitive();

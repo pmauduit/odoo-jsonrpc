@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,15 +30,12 @@ import java.util.Map;
  */
 public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
 
-    public static final String _TYPE = "type", _HELP = "help",
-            _RES_MODEL = "res_model", _CONTEXT = "context", _USAGE = "usage",
-            _DOMAIN = "domain", _VIEW_ID = "view_id",
-            _SEARCH_VIEW_ID = "search_view_id", _AUTO_REFRESH = "auto_refresh",
-            _VIEW_MODE = "view_mode", _MULTI = "multi", _TARGET = "target",
-            _AUTO_SEARCH = "auto_search", _FILTER = "filter",
-            _SRC_MODEL = "src_model", _LIMIT = "limit", _VIEW_TYPE = "view_type",
-            _RES_ID = "res_id";
-
+    public static final String _TYPE = "type", _HELP = "help", _RES_MODEL = "res_model", _CONTEXT = "context",
+            _USAGE = "usage", _DOMAIN = "domain", _VIEW_ID = "view_id", _SEARCH_VIEW_ID = "search_view_id",
+            _AUTO_REFRESH = "auto_refresh", _VIEW_MODE = "view_mode", _MULTI = "multi", _TARGET = "target",
+            _AUTO_SEARCH = "auto_search", _FILTER = "filter", _SRC_MODEL = "src_model", _LIMIT = "limit",
+            _VIEW_TYPE = "view_type", _RES_ID = "res_id";
+    private static final long serialVersionUID = -6747437395841876695L;
     private Integer id;
     private String name;
     private String type;
@@ -264,8 +261,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() == obj.getClass()
-                && OeUtil.equals(this.id, ((OeActionWindow) obj).id);
+        return obj != null && getClass() == obj.getClass() && OeUtil.equals(this.id, ((OeActionWindow) obj).id);
     }
 
     @Override
@@ -291,5 +287,4 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
                 + ", viewType=" + viewType
                 + ", resId=" + resId + '}';
     }
-    private static final long serialVersionUID = -6747437395841876695L;
 }

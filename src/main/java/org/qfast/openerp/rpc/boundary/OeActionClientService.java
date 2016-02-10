@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,9 +30,10 @@ import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_CLIENT;
 public class OeActionClientService extends AbstractOeService<OeActionClient> {
 
     public static final String name = ACTION_CLIENT.getName();
+    private static final long serialVersionUID = -2826571013901902904L;
 
-    public OeActionClientService(OeExecutor executer) {
-        super(executer, OeActionClient.class);
+    public OeActionClientService(OeExecutor executor) {
+        super(executor, OeActionClient.class);
     }
 
     @Override
@@ -41,10 +42,8 @@ public class OeActionClientService extends AbstractOeService<OeActionClient> {
     }
 
     @Override
-    public List<OeActionClient> find(List<Object> sc, Integer offset,
-            Integer limit, String order, Map<String, Object> context,
-            String... columns) throws OeRpcException {
+    public List<OeActionClient> find(List<Object> sc, Integer offset, Integer limit, String order,
+                                     Map<String, Object> context, String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
-    private static final long serialVersionUID = -2826571013901902904L;
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,6 @@ import org.qfast.openerp.rpc.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 import org.qfast.openerp.rpc.util.OeUtil;
 
-import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,26 +46,7 @@ import static org.qfast.openerp.rpc.entity.OeMenu._PARENT_ID_ID;
 public class OeMenuService extends AbstractOeService<OeMenu> {
 
     public static final String name = MENUS.getName();
-
-    public enum Fun {
-
-        LOAD_MENUS("load_menus"),
-        LOAD_MENUS_ROOT("load_menus_root");
-        private final String name;
-
-        private Fun(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
+    private static final long serialVersionUID = -6623029584982281200L;
 
     public OeMenuService(OeExecutor executer) {
         super(executer, OeMenu.class);
@@ -77,14 +57,14 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return name;
     }
 
-    public JsonObject loadMenus() throws OeRpcException {
+    public JSONObject loadMenus() throws OeRpcException {
         if (executor.getVersion().getVersionNumber() < 8) {
             JSONObject params = new JSONObject();
             params.put("session_id", executor.getSessionId());
             params.put("context", executor.getJSONContext());
-            return (JsonObject) executor.execute(JsonMenu.LOAD.getPath(), params);
+            return (JSONObject) executor.execute(JsonMenu.LOAD.getPath(), params);
         } else {
-            return (JsonObject) executor.execute(name, LOAD_MENUS.getName());
+            return (JSONObject) executor.execute(name, LOAD_MENUS.getName());
         }
     }
 
@@ -96,7 +76,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * @throws OeRpcException
      */
     public OeMenu loadOeMenus() throws OeRpcException {
-        JsonObject result = loadMenus();
+        JSONObject result = loadMenus();
         if (result != null) {
             return OeBinder.bind(result.toString(), OeMenu.class, this);
         } else {
@@ -105,9 +85,8 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
     }
 
     @Override
-    public List<OeMenu> find(List<Object> sc, Integer offset,
-            Integer limit, String order, Map<String, Object> context,
-            String... columns) throws OeRpcException {
+    public List<OeMenu> find(List<Object> sc, Integer offset, Integer limit, String order, Map<String, Object> context,
+                             String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
@@ -192,12 +171,31 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
     }
 
     public Set<OeMenu> findByGroupIdParentId(Integer parentId,
-            Integer... groupId) throws OeRpcException {
+                                             Integer... groupId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_GROUPS_ID_ID).in(groupId)
                 .andColumn((parentId != null ? _PARENT_ID_ID : _PARENT_ID))
                 .eq(parentId);
         return (new HashSet<OeMenu>(super.find(cb)));
     }
-    private static final long serialVersionUID = -6623029584982281200L;
+
+    public enum Fun {
+
+        LOAD_MENUS("load_menus"),
+        LOAD_MENUS_ROOT("load_menus_root");
+        private final String name;
+
+        Fun(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 }

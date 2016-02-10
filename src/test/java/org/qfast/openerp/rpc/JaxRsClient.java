@@ -1,22 +1,29 @@
 /*
+ * Copyright 2016 QFast Ahmed El-mawaziny
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.qfast.openerp.rpc;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.json.JSONObject;
-import org.qfast.openerp.rpc.entity.OeMenu;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.json.adaptor.IntegerDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.ObjectArrDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.StringDeserializer;
 
-import javax.json.JsonValue;
+//import javax.json.JsonValue;
 
 /**
  * @author Ahmed El-mawaziny
@@ -65,23 +72,23 @@ public class JaxRsClient {
 //        OeDatabaseLanguage language = new OeDatabaseLanguage("http", "localhost", 8069);
 //        System.out.println(Arrays.deepToString(language.doListLang()));
 //        System.out.println(oeDatabase.doDuplicate("db8", "db82"));
-        OeExecutor executer = new OeExecutor("localhost", database, username, password);
+//        OeExecutor executer = new OeExecutor("localhost", database, username, password);
 //        System.out.println(executer.getVersion());
 //        System.out.println(Arrays.toString(executer.doSearchMap("res.partner", null, null, null, null, null)));
-        JSONObject jSONObject = new JSONObject();
-        jSONObject.put("session_id", executer.getSessionId());
-        jSONObject.put("context", executer.getJSONContext());
-        JsonValue result = executer.execute(OeConst.JsonMenu.LOAD.getPath(), jSONObject);
-//        System.out.println(result.getValueType().equals(JsonValue.ValueType.OBJECT));
-//        System.out.println(result);
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
-                .registerTypeAdapter(Integer.class, new IntegerDeserializer())
-                .registerTypeAdapter(String.class, new StringDeserializer())
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create();
-        OeMenu fromJson = gson.fromJson(result.toString(), OeMenu.class);
-        System.out.println("fromJson = " + fromJson);
+//        JSONObject jSONObject = new JSONObject();
+//        jSONObject.put("session_id", executer.getSessionId());
+//        jSONObject.put("context", executer.getJSONContext());
+//        JsonValue result = executer.execute(OeConst.JsonMenu.LOAD.getPath(), jSONObject);
+////        System.out.println(result.getValueType().equals(JsonValue.ValueType.OBJECT));
+////        System.out.println(result);
+//        Gson gson = new GsonBuilder()
+//                .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
+//                .registerTypeAdapter(Integer.class, new IntegerDeserializer())
+//                .registerTypeAdapter(String.class, new StringDeserializer())
+//                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+//                .create();
+//        OeMenu fromJson = gson.fromJson(result.toString(), OeMenu.class);
+//        System.out.println("fromJson = " + fromJson);
         
 //        System.out.println(executer.execute(name, OeMenuService.Fun.LOAD_MENUS.getName()));
     }

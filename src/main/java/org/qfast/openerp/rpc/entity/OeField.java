@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,24 +16,22 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
+import org.qfast.openerp.rpc.OeConst.OeFieldType;
+import org.qfast.openerp.rpc.util.OeUtil;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Map;
-import org.qfast.openerp.rpc.OeConst.OeFieldType;
-import org.qfast.openerp.rpc.util.OeUtil;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OeField implements Serializable {
 
-    public static final String _TYPE = "type", _VIEWS = "views",
-            _LABEL = "string", _READONLY = "readonly", _HELP = "help",
-            _STORE = "store", _RELATION = "relation", _SELECTION = "selection",
-            _REQUIRED = "required", _DOMAIN = "domain",
-            _COMPANY_DEPENDENT = "company_dependent", _SIZE = "size",
-            _DIGITS = "digits";
-
+    public static final String _TYPE = "type", _VIEWS = "views", _LABEL = "string", _READONLY = "readonly", _HELP = "help",
+            _STORE = "store", _RELATION = "relation", _SELECTION = "selection", _REQUIRED = "required", _DOMAIN = "domain",
+            _COMPANY_DEPENDENT = "company_dependent", _SIZE = "size", _DIGITS = "digits";
+    private static final long serialVersionUID = -8700005699990251758L;
     private String type;
     private Map<String, OeView> views;
     @SerializedName("string")
@@ -145,17 +143,17 @@ public class OeField implements Serializable {
     public void setSearchable(boolean searchable) {
         this.searchable = searchable;
     }
-    
+
     public Object[] getDomain() {
         return domain;
     }
 
-    public void setDomain(Object[] domain) {
-        this.domain = domain;
-    }
-
     public void setDomain(String domain) {
         this.domain = OeUtil.convertTuplesStringToArray(domain);
+    }
+
+    public void setDomain(Object[] domain) {
+        this.domain = domain;
     }
 
     public boolean isCompanyDependent() {
@@ -198,5 +196,4 @@ public class OeField implements Serializable {
                 + ", size=" + size
                 + ", digits=" + Arrays.deepToString(digits) + '}';
     }
-    private static final long serialVersionUID = -8700005699990251758L;
 }

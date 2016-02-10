@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ public class OeConst {
 
         private final String symble;
 
-        private OeOperator(String operator) {
+        OeOperator(String operator) {
             this.symble = operator;
         }
 
@@ -73,12 +73,8 @@ public class OeConst {
 
         private final String name;
 
-        private OeModel(String name) {
+        OeModel(String name) {
             this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
 
         public static OeModel value(String name) {
@@ -90,6 +86,10 @@ public class OeConst {
                 }
             }
             return null;
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -104,12 +104,8 @@ public class OeConst {
         ACTION_WINDOW("ir.actions.act_window");
         private final String name;
 
-        private OeActionType(String name) {
+        OeActionType(String name) {
             this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
 
         public static OeActionType value(String name) {
@@ -121,6 +117,10 @@ public class OeConst {
                 }
             }
             return null;
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -137,7 +137,7 @@ public class OeConst {
 
         private final String name;
 
-        private OeViewMode(String name) {
+        OeViewMode(String name) {
             this.name = name;
         }
 
@@ -176,12 +176,8 @@ public class OeConst {
 
         private final String name;
 
-        private OeFieldType(String name) {
+        OeFieldType(String name) {
             this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
 
         public static OeFieldType value(String name) {
@@ -189,6 +185,10 @@ public class OeConst {
                 return valueOf(name.toUpperCase());
             }
             return null;
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -212,7 +212,7 @@ public class OeConst {
 
         private final String name;
 
-        private OeFun(String name) {
+        OeFun(String name) {
             this.name = name;
         }
 
@@ -233,12 +233,8 @@ public class OeConst {
 
         private final String dir;
 
-        private Direction(String dir) {
+        Direction(String dir) {
             this.dir = dir;
-        }
-
-        public String getDir() {
-            return dir;
         }
 
         public static Direction value(String name) {
@@ -246,6 +242,10 @@ public class OeConst {
                 return valueOf(name.toUpperCase());
             }
             return null;
+        }
+
+        public String getDir() {
+            return dir;
         }
 
         @Override
@@ -262,16 +262,16 @@ public class OeConst {
 
         private final String name;
 
-        private OeAttr(String name) {
+        OeAttr(String name) {
             this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
 
         public static OeAttr value(String name) {
             return valueOf(name.toUpperCase());
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -290,16 +290,16 @@ public class OeConst {
 
         private final String name;
 
-        private OeViewElement(String name) {
+        OeViewElement(String name) {
             this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
 
         public static OeViewElement value(String name) {
             return valueOf(name.toUpperCase());
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override

@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,19 +15,19 @@
  */
 package org.qfast.openerp.rpc.entity;
 
-import java.util.Set;
 import org.qfast.openerp.rpc.boundary.OeGroupService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.util.Set;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
-    public static final String _USERS_ID = "users",
-            _USERS_ID_ID = _USERS_ID + ".id";
-
+    public static final String _USERS_ID = "users", _USERS_ID_ID = _USERS_ID + ".id";
+    private static final long serialVersionUID = -1559525299933043517L;
     private Integer id;
     private String name;
     private Set<OeMenu> menus;
@@ -75,19 +75,11 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final OeGroup other = (OeGroup) obj;
-        return OeUtil.equals(this.id, other.id);
+        return obj != null && getClass() == obj.getClass() && OeUtil.equals(this.id, ((OeGroup) obj).id);
     }
 
     @Override
     public String toString() {
         return "OeGroup{" + "id=" + id + ", name=" + name + '}';
     }
-    private static final long serialVersionUID = -1559525299933043517L;
 }

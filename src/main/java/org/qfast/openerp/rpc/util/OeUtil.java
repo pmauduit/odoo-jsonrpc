@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,16 +15,13 @@
  */
 package org.qfast.openerp.rpc.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.qfast.openerp.rpc.exception.OeRpcException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,34 +29,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.qfast.openerp.rpc.exception.OeRpcException;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public final class OeUtil {
-
-    public static Date getDate(Object o) throws ParseException {
-        if (o != null) {
-            String s = o.toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            if (s.length() == 10) {
-                return sdf.parse(s);
-            } else {
-                sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
-                return sdf.parse(s);
-            }
-        }
-        return null;
-    }
 
     public static boolean isNULL(Object text) {
         if (text != null) {
@@ -69,15 +43,6 @@ public final class OeUtil {
             }
         }
         return true;
-    }
-
-    public static void writeBase64(byte[] btDataFile, String filePath)
-            throws FileNotFoundException, IOException {
-
-        File of = new File(filePath);
-        FileOutputStream osf = new FileOutputStream(of);
-        osf.write(btDataFile);
-        osf.flush();
     }
 
     public static Locale getLocale(String locale) {
@@ -108,7 +73,7 @@ public final class OeUtil {
             while (m2.find()) {
                 list2.add(m2.group(1));
             }
-            list1.add(list2.toArray(new Object[]{}));
+            list1.add(list2.toArray(new Object[list2.size()]));
         }
 
         return list1.toArray(new Object[][]{});
@@ -122,15 +87,14 @@ public final class OeUtil {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> convertJsonToMap(JSONObject jSONObject) {
         Set<String> keySet = jSONObject.keySet();
-        Map<String, Object> convetedMap = new HashMap<String, Object>(keySet.size());
+        Map<String, Object> convertedMap = new HashMap<String, Object>(keySet.size());
         for (String key : keySet) {
-            convetedMap.put(key, jSONObject.get(key).toString());
+            convertedMap.put(key, jSONObject.get(key).toString());
         }
-        return convetedMap;
+        return convertedMap;
     }
 
-    public static <T> T[]
-            convertJsonArray(JsonArray jsonArray, Class<T[]> tArr) {
+    public static <T> T[] convertJsonArray(JSONArray jsonArray, Class<T[]> tArr) {
         JSONArray jSONArray = new JSONArray(jsonArray.toString());
         Object[] arr = new Object[jSONArray.length()];
         for (int i = 0; i < jSONArray.length(); i++) {
@@ -139,51 +103,22 @@ public final class OeUtil {
         return Arrays.copyOf(arr, arr.length, tArr);
     }
 
-    public static JsonObject
-            convertObjectListToJson(List<Object> searchCriteria) {
+    public static JSONObject convertObjectListToJson(List<Object> searchCriteria) {
         JSONObject jSONObject = new JSONObject();
         for (Object criteria : searchCriteria) {
             Object[] sc = (Object[]) criteria;
             jSONObject.put(sc[0].toString(), sc[1]);
         }
-        return convertJSONObjectToJsonObject(jSONObject);
+        return jSONObject;
     }
 
-    public static JsonArray
-            convertObjectListToJsonArr(List<Object> searchCriteria) {
+    public static JSONArray convertObjectListToJsonArr(List<Object> searchCriteria) {
         JSONArray jSONArray = new JSONArray();
         for (Object criteria : searchCriteria) {
             Object[] sc = (Object[]) criteria;
             jSONArray.put(sc);
         }
-        return convertJSONArrayToJsonArr(jSONArray);
-    }
-
-    public static JsonObject
-            convertJSONObjectToJsonObject(JSONObject jSONObject) {
-        JsonReader reader = null;
-        try {
-            reader
-                    = Json.createReader(new StringReader(jSONObject.toString()));
-            return reader.readObject();
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
-    }
-
-    public static JsonArray convertJSONArrayToJsonArr(JSONArray jSONArray) {
-        JsonReader reader = null;
-        try {
-            reader
-                    = Json.createReader(new StringReader(jSONArray.toString()));
-            return reader.readArray();
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        return jSONArray;
     }
 
     @SuppressWarnings("unchecked")
@@ -196,45 +131,16 @@ public final class OeUtil {
         return mapArr;
     }
 
-    public static Map<String, Object>[] convertJsonArrayToMapArray(JsonArray jsonArray) {
-        return convertJsonArrayToMapArray(new JSONArray(jsonArray.toString()));
+    public static JSONObject getCallWith(JSONObject params) throws JSONException {
+        JSONObject jSONObject = new JSONObject();
+        jSONObject.put("jsonrpc", "2.0");
+        jSONObject.put("method", "call");
+        jSONObject.put("params", params);
+        return jSONObject;
     }
 
-    public static JsonObject getCallWith(JsonObject params) {
-        JsonObject json = Json.createObjectBuilder()
-                .add("jsonrpc", "2.0")
-                .add("method", "call")
-                .add("params", params)
-                .build();
-        return json;
-    }
-
-    public static JsonObject getCallWith(JSONObject params) {
-        return getCallWith(convertJSONObjectToJsonObject(params));
-    }
-
-    public static JsonObject postRequest(Client client, String url,
-            JsonObject json) throws OeRpcException {
-        try {
-            return client
-                    .target(url)
-                    .request()
-                    .post(Entity.json(json), JsonObject.class);
-        } catch (Exception e) {
-            throw new OeRpcException(e);
-        }
-    }
-
-    public static JsonArray postRequestArr(Client client, String url,
-            JsonObject json) throws OeRpcException {
-        try {
-            return client
-                    .target(url)
-                    .request()
-                    .post(Entity.json(json), JsonArray.class);
-        } catch (Exception e) {
-            throw new OeRpcException(e);
-        }
+    public static JSONObject postRequest(String url, JSONObject json) throws OeRpcException {
+        return HttpClient.SendHttpPost(url, json);
     }
 
     public static boolean equals(Object a, Object b) {

@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,14 +15,15 @@
  */
 package org.qfast.openerp.rpc.exception;
 
-import javax.json.JsonObject;
-import javax.json.JsonValue.ValueType;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OeRpcException extends Exception {
 
+    private static final long serialVersionUID = 3646608250089159259L;
     private final int code;
     private final Throwable cause;
 
@@ -44,16 +45,27 @@ public class OeRpcException extends Exception {
         this.cause = cause;
     }
 
-    public OeRpcException(JsonObject err) {
+    public OeRpcException(JSONObject err) {
         this(err.getInt("code"), err.getString("message"), getTypeError(err));
     }
 
-    private static Throwable getTypeError(JsonObject err) {
-        if (!err.isNull("data") && !err.getJsonObject("data").isNull("debug")) {
-            String traceback = err.getJsonObject("data").getString("debug").trim();
-            return new Throwable(traceback.substring(traceback.lastIndexOf('\n')));
+    private static Throwable getTypeError(JSONObject err) {
+        if (!err.isNull("data") && !err.getJSONObject("data").isNull("debug")) {
+            String traceBack = err.getJSONObject("data").getString("debug").trim();
+            return new Throwable(traceBack.substring(traceBack.lastIndexOf('\n')));
         } else {
             return null;
+        }
+    }
+
+    public static void checkJsonResponse(JSONObject response) throws OeRpcException, JSONException {
+        if (response.get("result") != null) {
+            JSONObject result = response.getJSONObject("result");
+            if (result.has("error")) {
+                throw new OeRpcException(result.getString("error"));
+            }
+        } else if (response.has("error")) {
+            throw new OeRpcException(response.getJSONObject("error"));
         }
     }
 
@@ -65,17 +77,4 @@ public class OeRpcException extends Exception {
     public Throwable getCause() {
         return cause;
     }
-
-    public static void checkJsonResponse(JsonObject response) throws OeRpcException {
-        if (response.get("result") != null 
-                && response.get("result").getValueType() == ValueType.OBJECT) {
-            JsonObject result = response.getJsonObject("result");
-            if (result.containsKey("error")) {
-                throw new OeRpcException(result.getString("error"));
-            }
-        } else if (response.containsKey("error")) {
-            throw new OeRpcException(response.getJsonObject("error"));
-        }
-    }
-    private static final long serialVersionUID = 3646608250089159259L;
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,14 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
+import org.qfast.openerp.rpc.boundary.OeUserService;
+import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.util.OeUtil;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import org.qfast.openerp.rpc.boundary.OeUserService;
-import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.util.OeUtil;
 
 /**
  * @author Ahmed El-mawaziny
@@ -52,9 +53,9 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
      commercial_partner_id
      */
 
-    public static final String _LOGIN = "login", _PASSWORD = "password",
-            _LOGIN_DATE = "login_date", _ACTIVE = "active", _LANG = "lang";
-
+    public static final String _LOGIN = "login", _PASSWORD = "password", _LOGIN_DATE = "login_date",
+            _ACTIVE = "active", _LANG = "lang";
+    private static final long serialVersionUID = 4881734215550044357L;
     private Integer id;
     @SerializedName(_LOGIN)
     private String username;
@@ -138,8 +139,7 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     public OeLanguage getLanguage() throws OeRpcException {
         getLocale();
-        if ((language == null && locale != null)
-                || (language != null && !OeUtil.equals(language.getLocale(), locale))) {
+        if ((language == null && locale != null) || (language != null && !OeUtil.equals(language.getLocale(), locale))) {
             language = oe.findLangaugeByCode(locale.toString());
         }
         return language;
@@ -345,9 +345,7 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null
-                && getClass() != obj.getClass()
-                && OeUtil.equals(this.id, ((OeUser) obj).id);
+        return obj != null && getClass() != obj.getClass() && OeUtil.equals(this.id, ((OeUser) obj).id);
     }
 
     @Override
@@ -382,6 +380,4 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
                 + ", hasImage=" + hasImage
                 + ", active=" + active + '}';
     }
-
-    private static final long serialVersionUID = 4881734215550044357L;
 }

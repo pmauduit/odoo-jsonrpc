@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,19 +16,19 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
 import org.qfast.openerp.rpc.boundary.OeViewService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
+
 /**
  * @author Ahmed El-mawaziny
  */
-public class OeView extends AbstractOeEntity<OeViewService>
-        implements Comparable<OeView> {
+public class OeView extends AbstractOeEntity<OeViewService> implements Comparable<OeView> {
 
     public static final String _CREATE_DATE = "create_date",
             _WRITE_DATE = "write_date", _ARCH = "arch",
@@ -36,7 +36,7 @@ public class OeView extends AbstractOeEntity<OeViewService>
             _MODEL_DATA_ID = "model_data_id", _PRIORITY = "priority",
             _APPLICATION = "application", _MODE = "mode", _MODEL = "model",
             _TYPE = "type", _VIEW_ID = "view_id", _FIELDS = "fields";
-
+    private static final long serialVersionUID = 8484756380717630025L;
     private Integer id;
     private Integer viewId;
     private String name;
@@ -237,5 +237,4 @@ public class OeView extends AbstractOeEntity<OeViewService>
                 + ", type=" + viewMode
                 + ", oeFields=" + oeFields + '}';
     }
-    private static final long serialVersionUID = 8484756380717630025L;
 }

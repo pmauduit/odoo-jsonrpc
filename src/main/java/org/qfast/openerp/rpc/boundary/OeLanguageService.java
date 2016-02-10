@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,9 +32,10 @@ import static org.qfast.openerp.rpc.entity.OeLanguage._CODE;
 public class OeLanguageService extends AbstractOeService<OeLanguage> {
 
     public static final String name = LANGUAGE.getName();
+    private static final long serialVersionUID = -5453046024395914541L;
 
-    public OeLanguageService(OeExecutor executer) {
-        super(executer, OeLanguage.class);
+    public OeLanguageService(OeExecutor executor) {
+        super(executor, OeLanguage.class);
     }
 
     @Override
@@ -43,22 +44,19 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
     }
 
     @Override
-    public List<OeLanguage> find(List<Object> sc, Integer offset,
-            Integer limit, String order, Map<String, Object> context,
-            String... columns) throws OeRpcException {
+    public List<OeLanguage> find(List<Object> sc, Integer offset, Integer limit, String order,
+                                 Map<String, Object> context, String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
     /**
-     *
      * @param code
      * @return
-     * @throws org.qfast.openerp.rpc.exception.OeRpcException
+     * @throws OeRpcException
      */
     public OeLanguage findByCode(String code) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_CODE).eq(code);
         return findAny(cb);
     }
-    private static final long serialVersionUID = -5453046024395914541L;
 }

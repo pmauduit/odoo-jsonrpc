@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,17 +15,18 @@
  */
 package org.qfast.openerp.rpc.entity;
 
-import java.io.Serializable;
-import javax.json.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.io.Serializable;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public final class OeVersion implements Serializable {
 
+    private static final long serialVersionUID = -493333266795016076L;
     private final String serverSerie;
     private final String serverVersion;
     private final String versionType;
@@ -33,8 +34,8 @@ public final class OeVersion implements Serializable {
     private final int versionTypeNumber;
     private final int subVersion;
 
-    public OeVersion(String serverSerie, String serverVersion, String versionType,
-            int versionNumber, int versionTypeNumber, int subVersion) {
+    public OeVersion(String serverSerie, String serverVersion, String versionType, int versionNumber,
+                     int versionTypeNumber, int subVersion) {
         this.serverSerie = serverSerie;
         this.serverVersion = serverVersion;
         this.versionType = versionType;
@@ -51,25 +52,18 @@ public final class OeVersion implements Serializable {
         this.versionNumber = serverVersionInfo.getInt(0);
         this.versionTypeNumber = serverVersionInfo.getInt(4);
         if (serverVersionInfo.get(1) instanceof String) {
-            this.subVersion = Integer.parseInt(serverVersionInfo.getString(1)
-                    .split("\\.")[1].split("\\D+")[0]);
+            this.subVersion = Integer.parseInt(serverVersionInfo.getString(1).split("\\.")[1].split("\\D+")[0]);
         } else {
             this.subVersion = serverVersionInfo.getInt(1);
         }
-    }
-
-    public OeVersion(JsonObject result) {
-        this(new JSONObject(result.toString()));
     }
 
     public OeVersion(String serverVersion) {
         this.serverSerie = serverVersion;
         this.serverVersion = serverVersion;
         this.versionType = null;
-        this.versionNumber = Integer.parseInt(serverVersion.split("\\.")[0]
-                .split("\\D+")[0]);
-        this.subVersion = Integer.parseInt(serverVersion.split("\\.")[1]
-                .split("\\D+")[0]);
+        this.versionNumber = Integer.parseInt(serverVersion.split("\\.")[0].split("\\D+")[0]);
+        this.subVersion = Integer.parseInt(serverVersion.split("\\.")[1].split("\\D+")[0]);
         this.versionTypeNumber = 0;
     }
 
@@ -107,8 +101,7 @@ public final class OeVersion implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return obj != null && getClass() == obj.getClass()
-                && OeUtil.equals(this.serverVersion,
-                        ((OeVersion) obj).serverVersion);
+                && OeUtil.equals(this.serverVersion, ((OeVersion) obj).serverVersion);
     }
 
     @Override
@@ -121,5 +114,4 @@ public final class OeVersion implements Serializable {
                 + ", subVersion=" + subVersion
                 + '}';
     }
-    private static final long serialVersionUID = -493333266795016076L;
 }

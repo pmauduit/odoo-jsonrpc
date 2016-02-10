@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,6 @@ import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeBinder;
 
-import javax.json.JsonValue;
 import java.util.List;
 import java.util.Map;
 
@@ -43,29 +42,10 @@ import static org.qfast.openerp.rpc.boundary.OeViewService.Fun.FIELDS_VIEW_GET;
 public class OeViewService extends AbstractOeService<OeView> {
 
     public static final String name = VIEWS.getName();
+    private static final long serialVersionUID = 6031051003954410561L;
 
-    public enum Fun {
-
-        FIELDS_VIEW_GET("fields_view_get"),
-        FIELDS_GET("fields_get");
-        private final String name;
-
-        private Fun(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public OeViewService(OeExecutor executer) {
-        super(executer, OeView.class);
+    public OeViewService(OeExecutor executor) {
+        super(executor, OeView.class);
     }
 
     @Override
@@ -74,7 +54,6 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param oeAction
      * @return
      * @throws OeRpcException
@@ -84,7 +63,6 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param actionType
      * @param actionId
      * @return
@@ -95,7 +73,6 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param actionType
      * @param actionId
      * @return
@@ -120,7 +97,6 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param modelName
      * @param viewId
      * @param viewMode
@@ -128,31 +104,28 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @return
      * @throws OeRpcException
      */
-    public OeView getFieldsView(String modelName, Integer viewId,
-            String viewMode, Map<String, Object> context) throws OeRpcException {
+    public OeView getFieldsView(String modelName, Integer viewId, String viewMode, Map<String, Object> context)
+            throws OeRpcException {
         JSONArray argms = new JSONArray();
         argms.put(viewId);
         argms.put(((viewMode == null) ? FORM.getName() : viewMode));
         argms.put(executor.getJSONContext());
-        JsonValue result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), argms);
+        Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), argms);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }
 
     /**
-     *
      * @param modelName
      * @param viewMode
      * @param context
      * @return
      * @throws OeRpcException
      */
-    public OeView getFieldsView(String modelName, String viewMode,
-            Map<String, Object> context) throws OeRpcException {
+    public OeView getFieldsView(String modelName, String viewMode, Map<String, Object> context) throws OeRpcException {
         return getFieldsView(modelName, null, viewMode, context);
     }
 
     /**
-     *
      * @param modelName
      * @param viewMode
      * @return
@@ -163,7 +136,6 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param oeModel
      * @param viewId
      * @param viewMode
@@ -172,25 +144,22 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @throws OeRpcException
      */
     public OeView getFieldsView(OeModel oeModel, Integer viewId,
-            OeViewMode viewMode, Map<String, Object> context) throws OeRpcException {
+                                OeViewMode viewMode, Map<String, Object> context) throws OeRpcException {
         return getFieldsView(oeModel.getName(), viewId, viewMode.getName(), context);
     }
 
     /**
-     *
      * @param oeModel
      * @param viewMode
      * @param context
      * @return
      * @throws OeRpcException
      */
-    public OeView getFieldsView(OeModel oeModel, OeViewMode viewMode,
-            Map<String, Object> context) throws OeRpcException {
+    public OeView getFieldsView(OeModel oeModel, OeViewMode viewMode, Map<String, Object> context) throws OeRpcException {
         return getFieldsView(oeModel.getName(), viewMode.getName(), context);
     }
 
     /**
-     *
      * @param oeModel
      * @param viewMode
      * @return
@@ -201,23 +170,39 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     *
      * @param oeModel
      * @param viewId
      * @param viewMode
      * @return
      * @throws OeRpcException
      */
-    public OeView getFieldsView(OeModel oeModel, Integer viewId, OeViewMode viewMode)
-            throws OeRpcException {
+    public OeView getFieldsView(OeModel oeModel, Integer viewId, OeViewMode viewMode) throws OeRpcException {
         return getFieldsView(oeModel, viewId, viewMode, executor.getContext());
     }
 
     @Override
-    public List<OeView> find(List<Object> sc, Integer offset,
-            Integer limit, String order, Map<String, Object> context,
-            String... columns) throws OeRpcException {
+    public List<OeView> find(List<Object> sc, Integer offset, Integer limit, String order, Map<String, Object> context,
+                             String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
-    private static final long serialVersionUID = 6031051003954410561L;
+
+    public enum Fun {
+
+        FIELDS_VIEW_GET("fields_view_get"),
+        FIELDS_GET("fields_get");
+        private final String name;
+
+        Fun(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 }

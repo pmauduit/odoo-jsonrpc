@@ -1,11 +1,11 @@
 /*
- * Copyright 2015 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,25 +15,23 @@
  */
 package org.qfast.openerp.rpc.entity;
 
-import java.util.Date;
 import org.qfast.openerp.rpc.boundary.OePartnerService;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.util.Date;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OePartner extends AbstractOeEntity<OePartnerService> {
 
-    public static final String _PARTNER_CODE = "partner_code",
-            _ACCOUNT_ID = "account_id", _IMAGE_SMALL = "image_small",
-            _NAME = "name", _FIRST_NAME = "first_name",
-            _SECOND_NAME = "second_name", _SURNAME = "surname", _EMAIL = "email",
-            _DISPLAY_NAME = "display_name", _YEARLY_LIMIT = "yearly_limit",
-            _MONTHLY_LIMIT = "monthly_limit", _LATITUDE = "latitude",
-            _LONGITUDE = "longitude", _SERVICE_PROVIDER = "service_provider",
-            _EMPLOYEE = "employee", _VALID_FROM = "valid_from", _VALID_TO = "valid_to",
-            _PASSWORD = "partner_password";
-
+    public static final String _PARTNER_CODE = "partner_code", _ACCOUNT_ID = "account_id", _IMAGE_SMALL = "image_small",
+            _NAME = "name", _FIRST_NAME = "first_name", _SECOND_NAME = "second_name", _SURNAME = "surname",
+            _EMAIL = "email", _DISPLAY_NAME = "display_name", _YEARLY_LIMIT = "yearly_limit",
+            _MONTHLY_LIMIT = "monthly_limit", _LATITUDE = "latitude", _LONGITUDE = "longitude",
+            _SERVICE_PROVIDER = "service_provider", _EMPLOYEE = "employee", _VALID_FROM = "valid_from",
+            _VALID_TO = "valid_to", _PASSWORD = "partner_password";
+    private static final long serialVersionUID = -4327707202428848696L;
     private Integer id;
     private String partnerCode;
     private String accountId;
@@ -222,9 +220,7 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null
-                && getClass() != obj.getClass()
-                && OeUtil.equals(this.id, ((OePartner) obj).id);
+        return obj != null && getClass() != obj.getClass() && OeUtil.equals(this.id, ((OePartner) obj).id);
     }
 
     @Override
@@ -249,6 +245,5 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
                 + ", validFrom=" + validFrom
                 + ", validTo=" + validTo + '}';
     }
-    private static final long serialVersionUID = -4327707202428848696L;
 
 }

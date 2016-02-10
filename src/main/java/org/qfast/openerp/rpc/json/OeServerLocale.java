@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 QFast Ahmed El-mawaziny.
+ * Copyright 2016 QFast Ahmed El-mawaziny
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,18 +15,17 @@
  */
 package org.qfast.openerp.rpc.json;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import static org.qfast.openerp.rpc.OeConst.JsonSession.GET_LANG_LIST;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.qfast.openerp.rpc.entity.OeLocale;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.qfast.openerp.rpc.OeConst.JsonSession.GET_LANG_LIST;
 import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
 import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 
@@ -35,15 +34,14 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
  */
 public class OeServerLocale implements Serializable {
 
-    private final Client client;
+    private static final long serialVersionUID = -2489079149616037822L;
     private final String protocol;
     private final String host;
     private final int port;
     private final String url;
-    private final JsonObject emptyObject = Json.createObjectBuilder().build();
+    private final JSONObject emptyObject = new JSONObject();
 
     public OeServerLocale(String protocol, String host, int port) {
-        this.client = ClientBuilder.newClient();
         this.protocol = protocol;
         this.host = host;
         this.port = port;
@@ -52,10 +50,6 @@ public class OeServerLocale implements Serializable {
 
     public OeServerLocale(OeDatabase oeDatabase) {
         this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
-    }
-
-    public Client getClient() {
-        return client;
     }
 
     public String getProtocol() {
@@ -73,13 +67,12 @@ public class OeServerLocale implements Serializable {
     public Object[] doListLang() throws OeRpcException {
         try {
             String reqUrl = url + "/" + GET_LANG_LIST.toString();
-            JsonObject response = postRequest(client, reqUrl, getCallWith(emptyObject));
+            JSONObject response = postRequest(reqUrl, getCallWith(emptyObject));
             OeRpcException.checkJsonResponse(response);
-            JsonArray result = response.getJsonArray("result");
-            Object[] langs = new Object[result.size()];
-            for (int i = 0; i < result.size(); i++) {
-                langs[i] = OeUtil.convertJsonArray(result.getJsonArray(i),
-                        Object[].class);
+            JSONArray result = response.getJSONArray("result");
+            Object[] langs = new Object[result.length()];
+            for (int i = 0; i < result.length(); i++) {
+                langs[i] = OeUtil.convertJsonArray(result.getJSONArray(i), Object[].class);
             }
             return langs;
         } catch (Exception e) {
@@ -100,5 +93,4 @@ public class OeServerLocale implements Serializable {
             throw new OeRpcException(e);
         }
     }
-    private static final long serialVersionUID = -2489079149616037822L;
 }
