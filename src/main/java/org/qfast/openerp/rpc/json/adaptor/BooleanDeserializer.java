@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json.adaptor;
 
 import com.google.gson.Gson;
@@ -31,8 +32,7 @@ public class BooleanDeserializer implements JsonDeserializer<Boolean> {
     @Override
     public Boolean deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        if (json != null && !json.isJsonNull() && json.isJsonPrimitive()
-                && json.getAsJsonPrimitive().isNumber()) {
+        if (json != null && !json.isJsonNull() && json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
             return json.getAsInt() == 1;
         }
         return new Gson().fromJson(json, Boolean.class);

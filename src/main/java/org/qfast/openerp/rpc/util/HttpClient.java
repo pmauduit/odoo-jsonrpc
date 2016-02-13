@@ -21,20 +21,18 @@
  */
 package org.qfast.openerp.rpc.util;
 
+import com.google.gson.JsonObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +43,7 @@ public final class HttpClient {
 
     private static final Logger LOG = Logger.getLogger(HttpClient.class.getName());
 
-    public static JSONObject SendHttpPost(String URL, JSONObject jsonObjSend) {
+    public static JsonObject SendHttpPost(String URL, JsonObject jsonObjSend) {
         try {
             CloseableHttpClient httpclient = HttpClientBuilder.create().build();
             try {
@@ -62,7 +60,7 @@ public final class HttpClient {
                     InputStream in = entity.getContent();
                     String resultString = convertStreamToString(in);
 
-                    return new JSONObject(resultString);
+                    return OeUtil.parseAsJsonObject(resultString);
                 }
             } finally {
                 if (httpclient != null)
@@ -72,28 +70,25 @@ public final class HttpClient {
             LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } catch (IllegalStateException e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
-        } catch (JSONException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
-    private static String convertStreamToString(InputStream in) throws UnsupportedEncodingException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
+    private static String convertStreamToString(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try {
-            while (reader.ready()) {
-                sb.append(reader.readLine()).append("\n");
-            }
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
-        } finally {
+        String line;
+        if (in != null) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
             try {
-                if (in != null)
-                    in.close();
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
+            } finally {
+                in.close();
                 if (reader != null)
                     reader.close();
-            } catch (IOException ignored) {
             }
         }
         return sb.toString();

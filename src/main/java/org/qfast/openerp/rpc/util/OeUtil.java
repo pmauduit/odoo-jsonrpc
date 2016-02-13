@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.util;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +37,8 @@ import java.util.regex.Pattern;
  * @author Ahmed El-mawaziny
  */
 public final class OeUtil {
+
+    private static final Logger LOG = Logger.getLogger(OeUtil.class.getName());
 
     public static boolean isNULL(Object text) {
         if (text != null) {
@@ -61,9 +66,9 @@ public final class OeUtil {
         return null;
     }
 
-    public static Object[][] convertTuplesStringToArray(String tuplesString) {
+    public static Object[][] convertTupleStringToArray(String tupleString) {
         Pattern p = Pattern.compile("\\((.*?)\\)");
-        Matcher matcher = p.matcher(tuplesString);
+        Matcher matcher = p.matcher(tupleString);
         List<Object[]> list1 = new ArrayList<Object[]>(3);
         while (matcher.find()) {
             String tuple = matcher.group(1);
@@ -80,66 +85,43 @@ public final class OeUtil {
     }
 
     public static Map<String, Object> convertStringToMap(String jsonStr) {
-        JSONObject jsonObject = new JSONObject(jsonStr);
-        return convertJsonToMap(jsonObject);
+        return convertJsonToMap(new JsonObject().getAsJsonObject(jsonStr));
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> convertJsonToMap(JSONObject jSONObject) {
-        Set<String> keySet = jSONObject.keySet();
-        Map<String, Object> convertedMap = new HashMap<String, Object>(keySet.size());
-        for (String key : keySet) {
-            convertedMap.put(key, jSONObject.get(key).toString());
+    public static Map<String, Object> convertJsonToMap(JsonObject jsonObject) {
+        Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
+        Map<String, Object> convertedMap = new HashMap<String, Object>(entries.size());
+        for (Map.Entry<String, JsonElement> entry : entries) {
+            convertedMap.put(entry.getKey(), entry.getValue().toString());
         }
         return convertedMap;
     }
 
-    public static <T> T[] convertJsonArray(JSONArray jsonArray, Class<T[]> tArr) {
-        JSONArray jSONArray = new JSONArray(jsonArray.toString());
-        Object[] arr = new Object[jSONArray.length()];
-        for (int i = 0; i < jSONArray.length(); i++) {
-            arr[i] = jSONArray.get(i);
-        }
-        return Arrays.copyOf(arr, arr.length, tArr);
-    }
-
-    public static JSONObject convertObjectListToJson(List<Object> searchCriteria) {
-        JSONObject jSONObject = new JSONObject();
-        for (Object criteria : searchCriteria) {
-            Object[] sc = (Object[]) criteria;
-            jSONObject.put(sc[0].toString(), sc[1]);
-        }
-        return jSONObject;
-    }
-
-    public static JSONArray convertObjectListToJsonArr(List<Object> searchCriteria) {
-        JSONArray jSONArray = new JSONArray();
-        for (Object criteria : searchCriteria) {
-            Object[] sc = (Object[]) criteria;
-            jSONArray.put(sc);
-        }
-        return jSONArray;
+    public static <T> T[] convertJsonArray(JsonArray jsonArray, Class<T[]> tArr) {
+        return new Gson().fromJson(jsonArray, tArr);
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object>[] convertJsonArrayToMapArray(JSONArray jSONArray) {
-        int length = jSONArray.length();
+    public static Map<String, Object>[] convertJsonArrayToMapArray(JsonArray jsonArray) {
+        int length = jsonArray.size();
         Map<String, Object>[] mapArr = new HashMap[length];
         for (int i = 0; i < length; i++) {
-            mapArr[i] = convertJsonToMap(jSONArray.getJSONObject(i));
+            mapArr[i] = convertJsonToMap(jsonArray.get(i).getAsJsonObject());
         }
         return mapArr;
     }
 
-    public static JSONObject getCallWith(JSONObject params) throws JSONException {
-        JSONObject jSONObject = new JSONObject();
-        jSONObject.put("jsonrpc", "2.0");
-        jSONObject.put("method", "call");
-        jSONObject.put("params", params);
-        return jSONObject;
+    public static JsonObject getCallWith(JsonObject params) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("jsonrpc", "2.0");
+        jsonObject.addProperty("method", "call");
+        jsonObject.add("params", params);
+        return jsonObject;
     }
 
-    public static JSONObject postRequest(String url, JSONObject json) throws OeRpcException {
+    public static JsonObject postRequest(String url, JsonObject json) throws OeRpcException {
+        LOG.info("Hit: " + url);
         return HttpClient.SendHttpPost(url, json);
     }
 
@@ -149,5 +131,28 @@ public final class OeUtil {
 
     public static int hashCode(Object o) {
         return o != null ? o.hashCode() : 0;
+    }
+
+    public static JsonArray parseAsJsonArray(Object obj) {
+        return parseAsJsonElement(obj).getAsJsonArray();
+    }
+
+    public static JsonObject parseAsJsonObject(Object obj) {
+        return parseAsJsonElement(obj).getAsJsonObject();
+    }
+
+    public static JsonElement parseAsJsonElement(Object obj) {
+        if (!(obj instanceof String)) {
+            obj = new Gson().toJson(obj);
+        }
+        return new JsonParser().parse(obj.toString());
+    }
+
+    public static JsonObject margeJsonObject(JsonObject with, JsonObject into) {
+        Set<Map.Entry<String, JsonElement>> entries = with.entrySet();
+        for (Map.Entry<String, JsonElement> entry : entries) {
+            into.add(entry.getKey(), entry.getValue());
+        }
+        return into;
     }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
@@ -148,12 +149,12 @@ public class OeField implements Serializable {
         return domain;
     }
 
-    public void setDomain(String domain) {
-        this.domain = OeUtil.convertTuplesStringToArray(domain);
-    }
-
     public void setDomain(Object[] domain) {
         this.domain = domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = OeUtil.convertTupleStringToArray(domain);
     }
 
     public boolean isCompanyDependent() {

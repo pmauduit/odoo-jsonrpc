@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json;
 
 import com.google.gson.Gson;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.qfast.openerp.rpc.OeConst.JsonDataSet;
-import org.qfast.openerp.rpc.OeConst.JsonSession;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.entity.OeVersion;
 import org.qfast.openerp.rpc.exception.OeRpcException;
@@ -28,9 +28,12 @@ import org.qfast.openerp.rpc.util.OeUtil;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static org.qfast.openerp.rpc.OeConst.OeFun.CREARE;
+import static org.qfast.openerp.rpc.OeConst.JsonDataSet.CALL_KW;
+import static org.qfast.openerp.rpc.OeConst.JsonDataSet.SEARCH_READ;
+import static org.qfast.openerp.rpc.OeConst.JsonSession.AUTHENTICATE;
+import static org.qfast.openerp.rpc.OeConst.JsonSession.DESTROY;
+import static org.qfast.openerp.rpc.OeConst.OeFun.CREATE;
 import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH_COUNT;
 import static org.qfast.openerp.rpc.OeConst.OeFun.WRITE;
 import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
@@ -42,6 +45,7 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 public class OeExecutor implements Serializable {
 
     private static final long serialVersionUID = 7528230097059877102L;
+    private static volatile OeExecutor instance;
     private final String protocol;
     private final String host;
     private final int port;
@@ -49,72 +53,128 @@ public class OeExecutor implements Serializable {
     private final String username;
     private final String database;
     private final Integer userId;
-    private final OeVersion version;
-    private final String url;
+    private final URIBuilder url;
     private final String sessionId;
-    private final boolean v70;
-    private JSONObject jSONContext;
+    private OeVersion version;
+    private JsonObject jsonContext;
     private Map<String, Object> context;
 
-    public OeExecutor(String protocol, String host, int port, String database, String username, String password)
+    private OeExecutor(String protocol, String host, int port, String database, String username, String password)
             throws OeRpcException {
-
         this.database = database;
         this.username = username;
         this.password = password;
         this.protocol = protocol;
         this.port = port;
         this.host = host;
-        this.url = protocol + "://" + host + ":" + port + "/web";
-        JSONObject loginResult = doLogin();
-        this.jSONContext = getJsonContextFromLogin(loginResult);
-        this.context = OeUtil.convertJsonToMap(jSONContext);
-        this.sessionId = loginResult.getString("session_id");
-        this.userId = loginResult.getInt("uid");
-        this.version = getOeVersion();
-        this.v70 = version.getVersionNumber() == 7 && version.getSubVersion() == 0;
+        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
+        JsonObject loginResult = doLogin();
+        this.jsonContext = getJsonContextFromLogin(loginResult);
+        this.context = OeUtil.convertJsonToMap(jsonContext);
+        this.sessionId = loginResult.get("session_id").getAsString();
+        this.userId = loginResult.get("uid").getAsInt();
     }
 
-    public OeExecutor(String host, int port, String database, String username, String password) throws OeRpcException {
+    private OeExecutor(String host, int port, String database, String username, String password) throws OeRpcException {
         this("http", host, port, database, username, password);
     }
 
-    public OeExecutor(String host, String database, String username, String password) throws OeRpcException {
+    private OeExecutor(String host, String database, String username, String password) throws OeRpcException {
         this("http", host, 8069, database, username, password);
     }
 
-    private JSONObject doLogin() throws OeRpcException {
-        String reqUrl = url + "/" + JsonSession.AUTHENTICATE.getPath();
-        JSONObject params = new JSONObject();
-        params.put("db", database);
-        params.put("login", username);
-        params.put("password", password);
-        JSONObject response = postRequest(reqUrl, getCallWith(params));
+    public static OeExecutor getInstance(String protocol, String host, int port, String database, String username,
+                                         String password) throws OeRpcException {
+        if (instance == null) {
+            synchronized (OeExecutor.class) {
+                if (instance == null) {
+                    instance = new OeExecutor(protocol, host, port, database, username, password);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeExecutor getNewInstance(String protocol, String host, int port, String database,
+                                                         String username, String password) throws OeRpcException {
+        instance = new OeExecutor(protocol, host, port, database, username, password);
+        return instance;
+    }
+
+    public static OeExecutor getInstance(String host, int port, String database, String username, String password)
+            throws OeRpcException {
+        if (instance == null) {
+            synchronized (OeExecutor.class) {
+                if (instance == null) {
+                    instance = new OeExecutor(host, port, database, username, password);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeExecutor getNewInstance(String host, int port, String database, String username,
+                                                         String password) throws OeRpcException {
+        instance = new OeExecutor(host, port, database, username, password);
+        return instance;
+    }
+
+    public static OeExecutor getInstance(String host, String database, String username, String password)
+            throws OeRpcException {
+        if (instance == null) {
+            synchronized (OeExecutor.class) {
+                if (instance == null) {
+                    instance = new OeExecutor(host, database, username, password);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeExecutor getNewInstance(String host, String database, String username, String password)
+            throws OeRpcException {
+        instance = new OeExecutor(host, database, username, password);
+        return instance;
+    }
+
+    private JsonObject doLogin() throws OeRpcException {
+        String reqUrl = url.setPath(AUTHENTICATE.getPath()).setParameter("session_id", sessionId).toString();
+        JsonObject params = new JsonObject();
+        params.addProperty("db", database);
+        params.addProperty("login", username);
+        params.addProperty("password", password);
+        JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeRpcException.checkJsonResponse(response);
-        return response.getJSONObject("result");
+        return response.getAsJsonObject("result");
     }
 
     public void logout() throws OeRpcException {
-        String reqUrl = url + "/" + JsonSession.DESTROY.getPath();
-        JSONObject params = new JSONObject();
-        params.put("context", jSONContext);
-        JSONObject response = postRequest(reqUrl, getCallWith(params));
+        String reqUrl = url.setPath(DESTROY.getPath()).setParameter("session_id", sessionId).toString();
+        JsonObject params = new JsonObject();
+        params.add("context", jsonContext);
+        JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeRpcException.checkJsonResponse(response);
     }
 
-    private JSONObject getJsonContextFromLogin(JSONObject result) {
+    private JsonObject getJsonContextFromLogin(JsonObject result) {
         if (result != null) {
             String contextKeyName = "user_context";
             if (!result.has("user_context") && result.has("context")) {
                 contextKeyName = "context";
             }
-            return new JSONObject(result.getJSONObject(contextKeyName).toString());
+            return result.getAsJsonObject(contextKeyName);
         }
         return null;
     }
 
-    private OeVersion getOeVersion() throws OeRpcException {
-        return new OeServerVersion(protocol, host, port).getServerVersion();
+    public boolean isV70() throws OeRpcException {
+        version = getOeVersion();
+        return version.getVersionNumber() == 7 && version.getSubVersion() == 0;
+    }
+
+    public OeVersion getOeVersion() throws OeRpcException {
+        this.version = OeServerVersion.getInstance(protocol, host, port).getServerVersion();
+        return version;
     }
 
     public String getSessionId() {
@@ -126,45 +186,37 @@ public class OeExecutor implements Serializable {
     }
 
     public void setContext(Map<String, Object> context) {
-        setJSONContext(new JSONObject(context));
+        this.jsonContext = OeUtil.parseAsJsonObject(context);
         this.context = context;
     }
 
-    public JSONObject getJSONContext() {
-        return jSONContext;
+    public JsonObject getJsonContext() {
+        return jsonContext;
     }
 
-    public void setJSONContext(JSONObject jSONContext) {
-        setContext(OeUtil.convertJsonToMap(jSONContext));
-        this.jSONContext = jSONContext;
+    public void setJsonContext(JsonObject jsonContext) {
+        this.context = OeUtil.convertJsonToMap(jsonContext);
+        this.jsonContext = jsonContext;
     }
 
     public void updateContext(Map<String, Object> params) {
-        updateJSONContext(params);
+        updateJsonContext(params);
         context.putAll(params);
     }
 
     public void updateContext(String key, Object value) {
-        jSONContext.put(key, value);
+        jsonContext.addProperty(key, new Gson().toJson(value));
         context.put(key, value);
     }
 
-    public void updateJSONContext(Map<String, Object> params) {
+    public void updateJsonContext(Map<String, Object> params) {
         for (String key : params.keySet()) {
-            jSONContext.put(key, params.get(key));
+            jsonContext.addProperty(key, new Gson().toJson(params.get(key)));
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void updateJSONContext(JSONObject params) {
-        Set<String> keySet = params.keySet();
-        for (String key : keySet) {
-            jSONContext.put(key, params.get(key));
-        }
-    }
-
-    public OeVersion getVersion() {
-        return version;
+    public void updateJsonContext(JsonObject params) {
+        OeUtil.margeJsonObject(params, jsonContext);
     }
 
     public String getProtocol() {
@@ -187,81 +239,90 @@ public class OeExecutor implements Serializable {
         return userId;
     }
 
-    public Map<String, Object>[] doSearch(String model, List<Object> domain) throws OeRpcException {
-        return doSearch(model, domain, (String) null);
+    public String getUrl() {
+        return url.toString();
     }
 
-    public Map<String, Object>[] doSearch(String model, List<Object> domain, Integer limit) throws OeRpcException {
-        return doSearch(model, domain, null, limit);
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, String... columns) throws OeRpcException {
+        return searchRead(model, domain, (String) null, columns);
     }
 
-    public Map<String, Object>[] doSearch(String model, List<Object> domain, String order) throws OeRpcException {
-        return doSearch(model, domain, null, null, order);
-    }
-
-    public Map<String, Object>[] doSearch(String model, List<Object> domain, Integer offset, Integer limit)
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer limit, String... columns)
             throws OeRpcException {
-
-        return doSearch(model, domain, offset, limit, null);
+        return searchRead(model, domain, null, limit, columns);
     }
 
-    public Map<String, Object>[] doSearch(String model, List<Object> domain, Integer offset, Integer limit, String order)
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, String order, String... columns)
             throws OeRpcException {
-
-        return doSearchMap(model, domain, offset, limit, order, context);
+        return searchRead(model, domain, null, null, order, columns);
     }
 
-    public String doSearchStr(String model, List<Object> domain, Integer offset, Integer limit, String order,
-                              Map<String, Object> context) throws OeRpcException {
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit,
+                                            String... columns) throws OeRpcException {
+        return searchRead(model, domain, offset, limit, null, columns);
+    }
 
-        String reqUrl = url + "/" + JsonDataSet.SEARCH_READ.getPath();
-        JSONObject params = new JSONObject();
-        params.put("model", model);
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
+                                            String... columns) throws OeRpcException {
+        return searchReadMap(model, domain, offset, limit, order, context, columns);
+    }
+
+    public String searchReadStr(String model, List<Object> domain, Integer offset, Integer limit, String order,
+                                Map<String, Object> context, String... columns) throws OeRpcException {
+
+        String reqUrl = url.setPath(SEARCH_READ.getPath()).setParameter("session_id", sessionId).toString();
+        JsonObject params = new JsonObject();
+        params.addProperty("model", model);
+
+        if (columns != null && columns.length != 0) {
+            params.add("fields", OeUtil.parseAsJsonArray(columns));
+        } else {
+            params.add("fields", new JsonArray());
+        }
 
         if (domain != null) {
-            params.put("domain", new JSONArray(new Gson().toJson(domain)));
+            params.add("domain", OeUtil.parseAsJsonArray(domain));
         } else {
-            params.put("domain", new JSONArray());
+            params.add("domain", new JsonArray());
         }
 
         if (context != null) {
-            params.put("context", new JSONObject(context));
+            params.add("context", OeUtil.parseAsJsonObject(context));
         } else {
-            params.put("context", new JSONObject());
+            params.add("context", new JsonObject());
         }
 
-        params.put("offset", offset);
-        params.put("limit", limit);
+        params.addProperty("offset", offset);
+        params.addProperty("limit", limit);
 
         if (order != null) {
-            params.put("sort", order);
+            params.addProperty("sort", order);
         } else {
-            params.put("sort", "");
+            params.addProperty("sort", "");
         }
 
-        if (v70) {
-            params.put("session_id", sessionId);
+        if (isV70()) {
+            params.addProperty("session_id", sessionId);
         }
 
-        JSONObject response = postRequest(reqUrl, getCallWith(params));
-        System.out.println(response);
+        JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeRpcException.checkJsonResponse(response);
-        return response.getJSONObject("result").getJSONArray("records").toString();
+        return response.getAsJsonObject("result").getAsJsonArray("records").toString();
     }
 
-    public JSONArray doSearch(String model, List<Object> domain, Integer offset, Integer limit, String order,
-                              Map<String, Object> context) throws OeRpcException {
-        return new JSONArray(doSearchStr(model, domain, offset, limit, order, context));
+    public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
+                                Map<String, Object> context, String... columns) throws OeRpcException {
+        return OeUtil.parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
     }
 
-    public Map<String, Object>[] doSearchMap(String model, List<Object> domain, Integer offset, Integer limit,
-                                             String order, Map<String, Object> context) throws OeRpcException {
-        return OeUtil.convertJsonArrayToMapArray(doSearch(model, domain, offset, limit, order, context));
+    public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,
+                                               String order, Map<String, Object> context, String... columns)
+            throws OeRpcException {
+        return OeUtil.convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
     }
 
-    public Long doCount(String model, List<Object> domain) throws OeRpcException {
-        JSONArray argms = new JSONArray();
-        argms.put(domain);
+    public Long count(String model, List<Object> domain) throws OeRpcException {
+        JsonArray argms = OeUtil.parseAsJsonArray(domain);
         Object result = execute(model, SEARCH_COUNT.getName(), argms);
         if (!OeUtil.isNULL(result)) {
             return Long.parseLong(result.toString());
@@ -269,61 +330,59 @@ public class OeExecutor implements Serializable {
         return 0L;
     }
 
-    public Long doCount(OeModel model, List<Object> domain) throws OeRpcException {
-        return doCount(model.getName(), domain);
+    public Long count(OeModel model, List<Object> domain) throws OeRpcException {
+        return count(model.getName(), domain);
     }
 
-    public Long doCreate(String model, Map<String, Object> vals) throws OeRpcException {
-        JSONArray argms = new JSONArray();
-        argms.put(new JSONObject(new Gson().toJson(vals)));
-        Object result = execute(model, CREARE.getName(), argms);
+    public Long create(String model, Map<String, Object> vals) throws OeRpcException {
+        JsonArray argms = new JsonArray();
+        argms.add(OeUtil.parseAsJsonElement(vals));
+        Object result = execute(model, CREATE.getName(), argms);
         if (!OeUtil.isNULL(result)) {
             return Long.parseLong(result.toString());
         }
         return 0L;
     }
 
-    public Boolean doWrite(String model, Integer id, Map<String, Object> vals) throws OeRpcException {
-        JSONArray argms = new JSONArray();
-        argms.put(id);
-        argms.put(new JSONObject(new Gson().toJson(vals)));
+    public Boolean write(String model, Integer id, Map<String, Object> vals) throws OeRpcException {
+        JsonArray argms = new JsonArray();
+        argms.add(id);
+        argms.add(OeUtil.parseAsJsonElement(vals));
         Object result = execute(model, WRITE.getName(), argms);
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
-    public Long doCreate(OeModel model, Map<String, Object> vals)
-            throws OeRpcException {
-        return doCreate(model.getName(), vals);
+    public Long create(OeModel model, Map<String, Object> vals) throws OeRpcException {
+        return create(model.getName(), vals);
     }
 
     public Object execute(String model, String method) throws OeRpcException {
-        JSONArray args = new JSONArray();
-        args.put(jSONContext);
+        JsonArray args = new JsonArray();
+        args.add(jsonContext);
         return execute(model, method, args);
     }
 
-    public Object execute(String model, String method, JSONArray args)
-            throws OeRpcException {
-        return execute(model, method, args, new JSONObject());
+    public Object execute(String model, String method, JsonArray args) throws OeRpcException {
+        return execute(model, method, args, new JsonObject());
     }
 
-    public Object execute(String url, JSONObject jSONObj) throws OeRpcException {
-        String reqUrl = this.url + "/" + url;
-        return postRequest(reqUrl, getCallWith(jSONObj)).get("result");
+    public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {
+        String reqUrl = url.setPath(fun).setParameter("session_id", sessionId).toString();
+        return postRequest(reqUrl, getCallWith(jsonObj)).get("result");
     }
 
-    public Object execute(String model, String method, JSONArray args, JSONObject kwargs) throws OeRpcException {
-        String reqUrl = url + "/" + JsonDataSet.CALL_KW.getPath();
-        JSONObject params = new JSONObject();
-        params.put("model", model);
-        params.put("method", method);
-        params.put("args", args);
-        params.put("kwargs", kwargs);
-        params.put("context", jSONContext);
-        if (v70) {
-            params.put("session_id", sessionId);
+    public Object execute(String model, String method, JsonArray args, JsonObject kwargs) throws OeRpcException {
+        String reqUrl = url.setPath(CALL_KW.getPath()).setParameter("session_id", sessionId).toString();
+        JsonObject params = new JsonObject();
+        params.addProperty("model", model);
+        params.addProperty("method", method);
+        params.add("args", args);
+        params.add("kwargs", kwargs);
+        params.add("context", jsonContext);
+        if (isV70()) {
+            params.addProperty("session_id", sessionId);
         }
-        JSONObject response = postRequest(reqUrl, getCallWith(params));
+        JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeRpcException.checkJsonResponse(response);
 
         return response.get("result");

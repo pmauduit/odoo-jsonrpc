@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
 import org.qfast.openerp.rpc.entity.OeGroup;
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.qfast.openerp.rpc.OeConst.OeModel.GROUPS;
-import static org.qfast.openerp.rpc.OeConst._ID;
+import static org.qfast.openerp.rpc.OeConst._COL_ID;
 import static org.qfast.openerp.rpc.entity.OeGroup._USERS_ID_ID;
 
 /**
@@ -60,6 +61,6 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
     public Set<OeGroup> findByUserId(Integer userId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_USERS_ID_ID).eq(userId);
-        return (new HashSet<OeGroup>(super.find(cb, new String[]{_ID})));
+        return (new HashSet<OeGroup>(super.find(cb, new String[]{_COL_ID})));
     }
 }

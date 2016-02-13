@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.AttachmentService;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -27,8 +29,8 @@ import java.net.URISyntaxException;
  */
 public class Attachment extends AbstractOeEntity<AttachmentService> {
 
-    public static final String _FILE_NAME = "datas_fname", _NAME = "name", _DATA = "datas", _MODEL = "res_model",
-            _FILE_SIZE = "file_size";
+    public static final String _ID = OeConst._COL_ID, _FILE_NAME = "datas_fname", _NAME = "name", _DATA = "datas",
+            _MODEL = "res_model", _FILE_SIZE = "file_size";
     private static final long serialVersionUID = -3111917687766566032L;
     private Integer id;
     private String name;
@@ -71,10 +73,10 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
                 .setHost(executor.getHost())
                 .setPort(executor.getPort())
                 .setPath("/web/binary/saveas")
-                .setParameter("model", "ir.attachment")
-                .setParameter("field", "datas")
-                .setParameter("filename_field", "datas_fname")
-                .setParameter("id", String.valueOf(id))
+                .setParameter("model", oe.getName())
+                .setParameter("field", _DATA)
+                .setParameter("filename_field", _FILE_NAME)
+                .setParameter(_ID, String.valueOf(id))
                 .setParameter("session_id", executor.getSessionId())
                 .build().toString();
     }

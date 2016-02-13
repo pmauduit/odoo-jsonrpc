@@ -67,17 +67,17 @@ public class JaxRsClient {
 //        System.out.println(context);
         
 //        OeDatabase oeDatabase = new OeDatabase("http", "localhost", 8069, "admin");
-//        System.out.println(oeDatabase.doCreate("jsonDB2", true, "en_US", "123"));
+//        System.out.println(oeDatabase.create("jsonDB2", true, "en_US", "123"));
 //        System.out.println(Arrays.toString(oeDatabase.doList()));
 //        OeDatabaseLanguage language = new OeDatabaseLanguage("http", "localhost", 8069);
 //        System.out.println(Arrays.deepToString(language.doListLang()));
 //        System.out.println(oeDatabase.doDuplicate("db8", "db82"));
 //        OeExecutor executer = new OeExecutor("localhost", database, username, password);
 //        System.out.println(executer.getVersion());
-//        System.out.println(Arrays.toString(executer.doSearchMap("res.partner", null, null, null, null, null)));
+//        System.out.println(Arrays.toString(executer.searchReadMap("res.partner", null, null, null, null, null)));
 //        JSONObject jSONObject = new JSONObject();
 //        jSONObject.put("session_id", executer.getSessionId());
-//        jSONObject.put("context", executer.getJSONContext());
+//        jSONObject.put("context", executer.getJsonContext());
 //        JsonValue result = executer.execute(OeConst.JsonMenu.LOAD.getPath(), jSONObject);
 ////        System.out.println(result.getValueType().equals(JsonValue.ValueType.OBJECT));
 ////        System.out.println(result);

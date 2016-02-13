@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json.adaptor;
 
 import com.google.gson.Gson;
@@ -39,7 +40,7 @@ public class ObjectArrDeserializer implements JsonDeserializer<Object[]> {
                 if (asJsonPrimitive.isBoolean()) {
                     return null;
                 } else if (asJsonPrimitive.isString()) {
-                    return OeUtil.convertTuplesStringToArray(json.getAsString());
+                    return OeUtil.convertTupleStringToArray(json.getAsString());
                 }
             }
         }

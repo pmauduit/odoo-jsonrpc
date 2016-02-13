@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc;
 
 import static org.qfast.openerp.rpc.util.OeUtil.isNULL;
@@ -22,7 +23,10 @@ import static org.qfast.openerp.rpc.util.OeUtil.isNULL;
  */
 public class OeConst {
 
-    public static final String _ID = "id", _NAME = "name";
+    public static final String _COL_ID = "id", _COL_NAME = "name",
+            _RS_WEB = "/web", _RS_WEB_CLIENT = "/webclient", _RS_DATA_SET = "/dataset", _RS_VIEW = "/view",
+            _RS_TREE_VIEW = "/treeview", _RS_ACTION = "/action", _RS_EXPORT = "/export", _RS_PROXY = "/proxy",
+            _RS_MENU = "/menu", _RS_DATABASE = "/database", _RS_SESSION = "/session";
 
     public enum OeOperator {
 
@@ -32,26 +36,26 @@ public class OeConst {
         OR("|"),
         AND("&");
 
-        private final String symble;
+        private final String symbol;
 
         OeOperator(String operator) {
-            this.symble = operator;
+            this.symbol = operator;
         }
 
-        public String getSymble() {
-            return symble;
+        public String getSymbol() {
+            return symbol;
         }
 
         @Override
         public String toString() {
-            return symble;
+            return symbol;
         }
     }
 
     public enum OeModel {
 
         MODULES("ir.module.module"),
-        HR_TIMESHEET_SHEET("hr_timesheet_sheet.sheet"),
+        HR_TIME_SHEET_SHEET("hr_timesheet_sheet.sheet"),
         HR_ATTENDANCE("hr.attendance"),
         PARTNERS("res.partner"),
         COMPANY("res.company"),
@@ -200,7 +204,7 @@ public class OeConst {
     public enum OeFun {
 
         LOGIN("login"),
-        CREARE("create"),
+        CREATE("create"),
         READ("read"),
         WRITE("write"),
         UNLINK("unlink"),
@@ -308,185 +312,354 @@ public class OeConst {
         }
     }
 
+    public enum SortType {
+        ASC {
+            @Override
+            public String toString() {
+                return " ASC ";
+            }
+        }, DESC {
+            @Override
+            public String toString() {
+                return " DESC ";
+            }
+        }
+    }
+
     public enum JsonSession {
 
-        GET_LANG_LIST, AUTHENTICATE, GET_SESSION_INFO, CHANGE_PASSWORD, SC_LIST,
-        MODULES, SAVE_SESSION_ACTION, GET_SESSION_ACTION, CHECK, DESTROY;
+        GET_LANG_LIST {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, AUTHENTICATE {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, GET_SESSION_INFO {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CHANGE_PASSWORD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, SC_LIST {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        },
+        MODULES {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, SAVE_SESSION_ACTION {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, GET_SESSION_ACTION {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CHECK {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, DESTROY {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonSession value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "session/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_SESSION + this.toString();
         }
     }
 
     public enum JsonDatabase {
 
-        GET_LIST, CREATE, DUPLICATE, DROP, CHANGE_PASSWORD;
+        GET_LIST {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CREATE {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, DUPLICATE {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, DROP {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CHANGE_PASSWORD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonDatabase value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "database/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_DATABASE + this.toString();
         }
     }
 
     public enum JsonMenu {
 
-        GET_USER_ROOTS, LOAD, LOAD_NEEDACTION, ACTION;
+        GET_USER_ROOTS {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, LOAD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, LOAD_NEED_ACTION {
+            @Override
+            public String toString() {
+                return "/" + "load_needaction";
+            }
+        }, ACTION {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonMenu value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "menu/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_MENU + this.toString();
         }
     }
 
     public enum JsonWebClient {
 
-        VERSION_INFO, CSSLIST, JSLIST, QWEBLIST, BOOTSTRAP_TRANSLATIONS,
-        TRANSLATIONS;
+        VERSION_INFO {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CSS_LIST {
+            @Override
+            public String toString() {
+                return "/csslist";
+            }
+        }, JS_LIST {
+            @Override
+            public String toString() {
+                return "/jslist";
+            }
+        }, Q_WEB_LIST {
+            @Override
+            public String toString() {
+                return "/qweblist";
+            }
+        }, BOOTSTRAP_TRANSLATIONS {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        },
+        TRANSLATIONS {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonWebClient value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "webclient/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_WEB_CLIENT + this.toString();
         }
     }
 
     public enum JsonDataSet {
 
-        SEARCH_READ, LOAD, CALL, CALL_KW, CALL_BUTTON, EXEC_WORKFLOW, RESEQUENCE;
+        SEARCH_READ {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, LOAD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CALL {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CALL_KW {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, CALL_BUTTON {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, EXEC_WORKFLOW {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, RE_SEQUENCE {
+            @Override
+            public String toString() {
+                return "/resequence";
+            }
+        };
 
         public static JsonDataSet value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "dataset/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_DATA_SET + this.toString();
         }
     }
 
     public enum JsonView {
 
-        ADD_CUSTOM, UNDO_CUSTOM;
+        ADD_CUSTOM {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, UNDO_CUSTOM {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonView value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "view/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_VIEW + this.toString();
         }
     }
 
     public enum JsonTreeView {
 
-        ACTION;
+        ACTION {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonTreeView value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "treeview/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_TREE_VIEW + this.toString();
         }
     }
 
     public enum JsonAction {
 
-        LOAD, RUN;
+        LOAD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, RUN {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonAction value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "action/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_ACTION + this.toString();
         }
     }
 
     public enum JsonExport {
 
-        FORMATS, GET_FIELDS, NAMELIST;
+        FORMATS {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, GET_FIELDS {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        }, NAME_LIST {
+            @Override
+            public String toString() {
+                return "/namelist";
+            }
+        };
 
         public static JsonExport value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "export/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_EXPORT + this.toString();
         }
     }
 
     public enum JsonProxy {
 
-        LOAD;
+        LOAD {
+            @Override
+            public String toString() {
+                return "/" + name().toLowerCase();
+            }
+        };
 
         public static JsonProxy value(String name) {
             return valueOf(name.toUpperCase());
         }
 
         public String getPath() {
-            return "proxy/" + this.toString();
-        }
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+            return _RS_WEB + _RS_PROXY + this.toString();
         }
     }
 }

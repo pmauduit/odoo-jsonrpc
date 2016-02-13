@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
-import org.json.JSONArray;
 import org.qfast.openerp.rpc.entity.OeModule;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -48,12 +49,12 @@ public class OeModuleService extends AbstractOeService<OeModule> {
     }
 
     public boolean uninstall(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.BUTTON_IMMEDIATE_UNINSTALL.name, new JSONArray(ids));
+        executor.execute(name, Fun.BUTTON_IMMEDIATE_UNINSTALL.name, OeUtil.parseAsJsonArray(ids));
         return true;
     }
 
     public boolean install(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.BUTTON_IMMEDIATE_INSTALL.name, new JSONArray(ids));
+        executor.execute(name, Fun.BUTTON_IMMEDIATE_INSTALL.name, OeUtil.parseAsJsonArray(ids));
         return true;
     }
 

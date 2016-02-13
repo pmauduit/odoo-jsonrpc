@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 import org.qfast.openerp.rpc.OeConst.JsonMenu;
 import org.qfast.openerp.rpc.entity.OeGroup;
 import org.qfast.openerp.rpc.entity.OeMenu;
@@ -48,8 +49,8 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
     public static final String name = MENUS.getName();
     private static final long serialVersionUID = -6623029584982281200L;
 
-    public OeMenuService(OeExecutor executer) {
-        super(executer, OeMenu.class);
+    public OeMenuService(OeExecutor executor) {
+        super(executor, OeMenu.class);
     }
 
     @Override
@@ -57,14 +58,14 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return name;
     }
 
-    public JSONObject loadMenus() throws OeRpcException {
-        if (executor.getVersion().getVersionNumber() < 8) {
-            JSONObject params = new JSONObject();
-            params.put("session_id", executor.getSessionId());
-            params.put("context", executor.getJSONContext());
-            return (JSONObject) executor.execute(JsonMenu.LOAD.getPath(), params);
+    public JsonObject loadMenus() throws OeRpcException {
+        if (executor.getOeVersion().getVersionNumber() < 8) {
+            JsonObject params = new JsonObject();
+            params.addProperty("session_id", executor.getSessionId());
+            params.add("context", executor.getJsonContext());
+            return (JsonObject) executor.execute(JsonMenu.LOAD.getPath(), params);
         } else {
-            return (JSONObject) executor.execute(name, LOAD_MENUS.getName());
+            return (JsonObject) executor.execute(name, LOAD_MENUS.getName());
         }
     }
 
@@ -76,7 +77,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * @throws OeRpcException
      */
     public OeMenu loadOeMenus() throws OeRpcException {
-        JSONObject result = loadMenus();
+        JsonObject result = loadMenus();
         if (result != null) {
             return OeBinder.bind(result.toString(), OeMenu.class, this);
         } else {

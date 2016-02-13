@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.entity.OeLocale;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -35,21 +37,54 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 public class OeServerLocale implements Serializable {
 
     private static final long serialVersionUID = -2489079149616037822L;
+    private static volatile OeServerLocale instance;
     private final String protocol;
     private final String host;
     private final int port;
-    private final String url;
-    private final JSONObject emptyObject = new JSONObject();
+    private final URIBuilder url;
+    private final JsonObject emptyObject = new JsonObject();
 
-    public OeServerLocale(String protocol, String host, int port) {
+    private OeServerLocale(String protocol, String host, int port) {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
-        this.url = protocol + "://" + host + ":" + port + "/web/session";
+        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
     }
 
-    public OeServerLocale(OeDatabase oeDatabase) {
+    private OeServerLocale(OeDatabase oeDatabase) {
         this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
+    }
+
+    public static OeServerLocale getInstance(String protocol, String host, int port) {
+        if (instance == null) {
+            synchronized (OeServerLocale.class) {
+                if (instance == null) {
+                    instance = new OeServerLocale(protocol, host, port);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeServerLocale getNewInstance(String protocol, String host, int port) {
+        instance = new OeServerLocale(protocol, host, port);
+        return instance;
+    }
+
+    public static OeServerLocale getInstance(OeDatabase oeDatabase) {
+        if (instance == null) {
+            synchronized (OeServerLocale.class) {
+                if (instance == null) {
+                    instance = new OeServerLocale(oeDatabase);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeServerLocale getNewInstance(OeDatabase oeDatabase) {
+        instance = new OeServerLocale(oeDatabase);
+        return instance;
     }
 
     public String getProtocol() {
@@ -66,13 +101,13 @@ public class OeServerLocale implements Serializable {
 
     public Object[] doListLang() throws OeRpcException {
         try {
-            String reqUrl = url + "/" + GET_LANG_LIST.toString();
-            JSONObject response = postRequest(reqUrl, getCallWith(emptyObject));
+            String reqUrl = url.setPath(GET_LANG_LIST.toString()).toString();
+            JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
             OeRpcException.checkJsonResponse(response);
-            JSONArray result = response.getJSONArray("result");
-            Object[] langs = new Object[result.length()];
-            for (int i = 0; i < result.length(); i++) {
-                langs[i] = OeUtil.convertJsonArray(result.getJSONArray(i), Object[].class);
+            JsonArray result = response.getAsJsonArray("result");
+            Object[] langs = new Object[result.size()];
+            for (int i = 0; i < result.size(); i++) {
+                langs[i] = OeUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
             }
             return langs;
         } catch (Exception e) {

@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json;
 
-import org.json.JSONObject;
-import org.qfast.openerp.rpc.OeConst;
+import com.google.gson.JsonObject;
+import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.entity.OeVersion;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 
 import java.io.Serializable;
 
+import static org.qfast.openerp.rpc.OeConst.JsonWebClient.VERSION_INFO;
 import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
 import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 
@@ -31,21 +33,54 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 public class OeServerVersion implements Serializable {
 
     private static final long serialVersionUID = -5241159354557231546L;
-    private final String url;
+    private static volatile OeServerVersion instance;
+    private final URIBuilder url;
     private final String protocol;
     private final String host;
     private final int port;
-    private final JSONObject emptyObject = new JSONObject();
+    private final JsonObject emptyObject = new JsonObject();
 
-    public OeServerVersion(String protocol, String host, int port) {
+    private OeServerVersion(String protocol, String host, int port) {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
-        this.url = protocol + "://" + host + ":" + port + "/web";
+        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
     }
 
-    public OeServerVersion(OeDatabase oeDatabase) {
+    private OeServerVersion(OeDatabase oeDatabase) {
         this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
+    }
+
+    public static OeServerVersion getInstance(String protocol, String host, int port) {
+        if (instance == null) {
+            synchronized (OeServerVersion.class) {
+                if (instance == null) {
+                    instance = new OeServerVersion(protocol, host, port);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeServerVersion getNewInstance(String protocol, String host, int port) {
+        instance = new OeServerVersion(protocol, host, port);
+        return instance;
+    }
+
+    public static OeServerVersion getInstance(OeDatabase oeDatabase) {
+        if (instance == null) {
+            synchronized (OeServerVersion.class) {
+                if (instance == null) {
+                    instance = new OeServerVersion(oeDatabase);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeServerVersion getNewInstance(OeDatabase oeDatabase) {
+        instance = new OeServerVersion(oeDatabase);
+        return instance;
     }
 
     public String getProtocol() {
@@ -61,9 +96,9 @@ public class OeServerVersion implements Serializable {
     }
 
     public OeVersion getServerVersion() throws OeRpcException {
-        String reqUrl = url + "/" + OeConst.JsonWebClient.VERSION_INFO.getPath();
-        JSONObject response = postRequest(reqUrl, getCallWith(emptyObject));
+        String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
+        JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
         OeRpcException.checkJsonResponse(response);
-        return new OeVersion(response.getJSONObject("result"));
+        return new OeVersion(response.getAsJsonObject("result"));
     }
 }

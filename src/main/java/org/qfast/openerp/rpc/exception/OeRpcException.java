@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.exception;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * @author Ahmed El-mawaziny
@@ -45,27 +46,63 @@ public class OeRpcException extends Exception {
         this.cause = cause;
     }
 
-    public OeRpcException(JSONObject err) {
-        this(err.getInt("code"), err.getString("message"), getTypeError(err));
+    public OeRpcException(JsonObject err) {
+        this(getCodeNumber(err), getMessageErr(err), getTypeError(err));
     }
 
-    private static Throwable getTypeError(JSONObject err) {
-        if (!err.isNull("data") && !err.getJSONObject("data").isNull("debug")) {
-            String traceBack = err.getJSONObject("data").getString("debug").trim();
-            return new Throwable(traceBack.substring(traceBack.lastIndexOf('\n')));
-        } else {
-            return null;
+    private static int getCodeNumber(JsonObject err) {
+        if (err.has("code")) {
+            JsonElement code = err.get("code");
+            if (code.isJsonPrimitive() && code.getAsJsonPrimitive().isNumber()) {
+                return code.getAsInt();
+            }
         }
+        return 0;
     }
 
-    public static void checkJsonResponse(JSONObject response) throws OeRpcException, JSONException {
-        if (response.get("result") != null) {
-            JSONObject result = response.getJSONObject("result");
-            if (result.has("error")) {
-                throw new OeRpcException(result.getString("error"));
+    private static String getMessageErr(JsonObject err) {
+        if (err.has("message")) {
+            JsonElement message = err.get("message");
+            if (message.isJsonPrimitive() && message.getAsJsonPrimitive().isString()) {
+                return message.getAsString();
+            } else {
+                return message.toString();
+            }
+        }
+        return null;
+    }
+
+    private static Throwable getTypeError(JsonObject err) {
+        if (err.has("data")) {
+            JsonElement data = err.get("data");
+            if (!data.isJsonNull() && data.isJsonObject()) {
+                JsonObject dataJson = data.getAsJsonObject();
+                if (dataJson.has("debug")) {
+                    JsonElement debug = dataJson.get("debug");
+                    if (!debug.isJsonNull()) {
+                        String traceBack = debug.getAsString().trim();
+                        return new Throwable(traceBack.substring(traceBack.lastIndexOf('\n')));
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void checkJsonResponse(JsonObject response) throws OeRpcException {
+        if (response.has("result")) {
+            if (response.get("result").isJsonObject()) {
+                JsonObject result = response.getAsJsonObject("result");
+                if (result.has("error")) {
+                    throw new OeRpcException(result.get("error").getAsString());
+                }
             }
         } else if (response.has("error")) {
-            throw new OeRpcException(response.getJSONObject("error"));
+            if (response.get("result").isJsonObject()) {
+                throw new OeRpcException(response.getAsJsonObject("error"));
+            } else {
+                throw new OeRpcException(response.get("error").getAsString());
+            }
         }
     }
 

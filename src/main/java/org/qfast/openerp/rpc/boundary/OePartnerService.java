@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
-import org.json.JSONException;
 import org.qfast.openerp.rpc.entity.OePartner;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
@@ -56,7 +56,7 @@ public class OePartnerService extends AbstractOeService<OePartner> {
 
     @Override
     public List<OePartner> find(List<Object> sc, Integer offset, Integer limit, String order, Map<String, Object> context,
-                                String... columns) throws OeRpcException, JSONException {
+                                String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 }

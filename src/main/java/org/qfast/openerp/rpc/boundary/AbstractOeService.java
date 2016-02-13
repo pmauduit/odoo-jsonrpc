@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
-import com.google.gson.Gson;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
+import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,7 +31,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.qfast.openerp.rpc.OeConst._ID;
+import static org.qfast.openerp.rpc.OeConst.SortType.ASC;
+import static org.qfast.openerp.rpc.OeConst.SortType.DESC;
+import static org.qfast.openerp.rpc.OeConst._COL_ID;
 
 /**
  * AbstractOeService abstract class for boundary services of OpenERP. easy use
@@ -82,8 +84,8 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return custom Entity for OpenERP model or object
      * @throws OeRpcException if any exception happened on the OpenERP server
      */
-    public M findById(Integer id) throws OeRpcException {
-        List<M> list = findById(new Integer[]{id});
+    public M findById(Integer id, String... columns) throws OeRpcException {
+        List<M> list = find(new Integer[]{id}, columns);
         if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
@@ -98,7 +100,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return custom Entities for OpenERP models or objects
      * @throws OeRpcException
      */
-    public final List<M> findById(Integer... ids) throws OeRpcException {
+    public final List<M> findByIds(Integer... ids) throws OeRpcException {
         return find(ids);
     }
 
@@ -119,7 +121,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public final M findFirst(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
-        List<M> find = find(cb, 0, 1, _ID + " ASC", columns);
+        List<M> find = find(cb, 0, 1, _COL_ID + ASC, columns);
         if (find != null && !find.isEmpty()) {
             return find.get(0);
         }
@@ -141,7 +143,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public final M findLast(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
-        List<M> find = find(cb, 0, 1, _ID + " DESC", columns);
+        List<M> find = find(cb, 0, 1, _COL_ID + DESC, columns);
         if (find != null && !find.isEmpty()) {
             return find.get(0);
         }
@@ -199,8 +201,8 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * specific columns and OpenERP context
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, Map<String, Object> context,
-                              String... columns) throws OeRpcException {
+    public final List<M> find(OeCriteriaBuilder cb, Map<String, Object> context, String... columns)
+            throws OeRpcException {
         return find(cb.getCriteria(), null, null, null, context, columns);
     }
 
@@ -260,8 +262,8 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      */
     public List<M> find(Object[] ids, Map<String, Object> context, String... columns) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
-        cb.column(_ID).in(ids);
-        return find(cb, (String) null, columns);
+        cb.column(_COL_ID).in(ids);
+        return find(cb, context, columns);
     }
 
     /**
@@ -329,8 +331,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns)
-            throws OeRpcException {
+    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns) throws OeRpcException {
         return find(sc, offset, limit, null, columns);
     }
 
@@ -343,8 +344,8 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String order,
-                              String... columns) throws OeRpcException {
+    public final List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String order, String... columns)
+            throws OeRpcException {
         return find(cb.getCriteria(), offset, limit, order, columns);
     }
 
@@ -357,13 +358,13 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String order,
-                              String... columns) throws OeRpcException {
+    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String order, String... columns)
+            throws OeRpcException {
         return find(sc, offset, limit, order, executor.getContext(), columns);
     }
 
     /**
-     * find OpenERP models by calling {@link OeExecutor} doSearchMap method
+     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
      * give it the OpenERP model name and list of search criteria
      *
      * @param <E>     Executor boundary service type
@@ -381,9 +382,9 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     public final <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
                                                             String order, Map<String, Object> context,
                                                             String... columns) throws OeRpcException {
-        JSONArray result = executor.doSearch(getName(), sc, offset, limit, order, context);
-        List<M> oems = new ArrayList<M>(result.length());
-        for (int i = 0; i < result.length(); i++) {
+        JsonArray result = executor.searchRead(getName(), sc, offset, limit, order, context, columns);
+        List<M> oems = new ArrayList<M>(result.size());
+        for (int i = 0; i < result.size(); i++) {
             oems.add(OeBinder.bind(result.get(i).toString(), model, e));
         }
         return oems;
@@ -404,8 +405,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public Object execute(String method, Map<String, Object> kwargs)
-            throws OeRpcException {
+    public Object execute(String method, Map<String, Object> kwargs) throws OeRpcException {
         return execute(method, new Object[]{}, kwargs);
     }
 
@@ -425,11 +425,10 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param kwargs
      * @return
      * @throws OeRpcException
-     * @throws JSONException
      */
     public Object execute(String method, Object[] args, Map<String, Object> kwargs) throws OeRpcException {
-        JSONArray argsJSON = new JSONArray(new Gson().toJson(args));
-        JSONObject kwargsJSON = new JSONObject(new Gson().toJson(kwargs));
+        JsonArray argsJSON = OeUtil.parseAsJsonArray(args);
+        JsonObject kwargsJSON = OeUtil.parseAsJsonObject(kwargs);
         return executor.execute(getName(), method, argsJSON, kwargsJSON);
     }
 
@@ -448,7 +447,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public Long count(List<Object> sc) throws OeRpcException {
-        return executor.doCount(getName(), sc);
+        return executor.count(getName(), sc);
     }
 
     /**
@@ -457,7 +456,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public Long create(Map<String, Object> vals) throws OeRpcException {
-        return executor.doCreate(getName(), vals);
+        return executor.create(getName(), vals);
     }
 
     /**
@@ -467,6 +466,6 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public Boolean write(Integer id, Map<String, Object> vals) throws OeRpcException {
-        return executor.doWrite(getName(), id, vals);
+        return executor.write(getName(), id, vals);
     }
 }

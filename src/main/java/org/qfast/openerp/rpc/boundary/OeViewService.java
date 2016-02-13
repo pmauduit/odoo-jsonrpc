@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
-import org.json.JSONArray;
+import com.google.gson.JsonArray;
 import org.qfast.openerp.rpc.OeConst.OeActionType;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
@@ -106,10 +107,10 @@ public class OeViewService extends AbstractOeService<OeView> {
      */
     public OeView getFieldsView(String modelName, Integer viewId, String viewMode, Map<String, Object> context)
             throws OeRpcException {
-        JSONArray argms = new JSONArray();
-        argms.put(viewId);
-        argms.put(((viewMode == null) ? FORM.getName() : viewMode));
-        argms.put(executor.getJSONContext());
+        JsonArray argms = new JsonArray();
+        argms.add(viewId);
+        argms.add(((viewMode == null) ? FORM.getName() : viewMode));
+        argms.add(executor.getJsonContext());
         Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), argms);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }

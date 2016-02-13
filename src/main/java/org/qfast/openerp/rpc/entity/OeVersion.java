@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.io.Serializable;
@@ -44,17 +45,17 @@ public final class OeVersion implements Serializable {
         this.subVersion = subVersion;
     }
 
-    public OeVersion(JSONObject result) {
-        this.serverSerie = result.getString("server_serie");
-        this.serverVersion = result.getString("server_version");
-        JSONArray serverVersionInfo = result.getJSONArray("server_version_info");
-        this.versionType = serverVersionInfo.getString(3);
-        this.versionNumber = serverVersionInfo.getInt(0);
-        this.versionTypeNumber = serverVersionInfo.getInt(4);
-        if (serverVersionInfo.get(1) instanceof String) {
-            this.subVersion = Integer.parseInt(serverVersionInfo.getString(1).split("\\.")[1].split("\\D+")[0]);
+    public OeVersion(JsonObject result) {
+        this.serverSerie = result.get("server_serie").getAsString();
+        this.serverVersion = result.get("server_version").getAsString();
+        JsonArray serverVersionInfo = result.getAsJsonArray("server_version_info");
+        this.versionType = serverVersionInfo.get(3).getAsString();
+        this.versionNumber = serverVersionInfo.get(0).getAsInt();
+        this.versionTypeNumber = serverVersionInfo.get(4).getAsInt();
+        if (serverVersionInfo.get(1).getAsJsonPrimitive().isString()) {
+            this.subVersion = Integer.parseInt(serverVersionInfo.get(1).getAsString().split("\\.")[1].split("\\D+")[0]);
         } else {
-            this.subVersion = serverVersionInfo.getInt(1);
+            this.subVersion = serverVersionInfo.get(1).getAsInt();
         }
     }
 

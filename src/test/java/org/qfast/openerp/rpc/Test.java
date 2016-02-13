@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc;
 
+import com.google.gson.JsonArray;
 import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
+import org.qfast.openerp.rpc.util.OeUtil;
+
+import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH;
+import static org.qfast.openerp.rpc.OeConst.OeModel.PARTNERS;
 
 //import org.apache.commons.io.FileUtils;
 
@@ -26,28 +34,32 @@ import org.qfast.openerp.rpc.exception.OeRpcException;
 public class Test {
 
     private static final String protocol = "http";
-    private static final String host = "192.168.9.100";
+    private static final String host = "localhost";
     private static final int port = 8069;
     private static final String password = "1";
     private static final String username = "admin";
     private static final String database = "bpm";
 
     public static void main(String[] args) throws OeRpcException {
+        OeExecutor exe = OeExecutor.getInstance(protocol, host, port, database, username, password);
 
-//        XmlOeExecuter exe = new XmlOeExecuter(protocol, host, port, database,
-//                username, password);
-//
-//        Map<String, Object> context = new HashMap<>(1);
+        JsonArray argms = new JsonArray();
+        OeCriteriaBuilder cb = new OeCriteriaBuilder();
+        cb.column("name").ilike("a");
+        argms.add(OeUtil.parseAsJsonElement(cb.getCriteria()));
+        Object result = exe.execute(PARTNERS.getName(), SEARCH.getName(), argms);
+        System.out.println(result);
+//        Map<String, Object> context = new HashMap<String, Object>(1);
 //        context.put("lang", "ar_SY");
 //        exe.setContext(context);
 //        OeUserService service = new OeUserService(exe);
-//
 //        OeUser user = service.findById(1);
+//        System.out.println(user);
 //        System.out.println(user.getLanguage());
 //        System.out.println(user.getMenus());
 //        System.out.println(user.getLocale());
 //        System.out.println(new OeMenuService(exe).findById(217));
-//        Object[] ids = exe.doSearchMap(MENUS.getName(), cb.getCriteria());
+//        Object[] ids = exe.searchReadMap(MENUS.getName(), cb.getCriteria());
 //        System.out.println(Arrays.toString(ids));
 //        Object[] result = exe.doRead(USERS.getName(), new Object[]{1}, new String[]{});
 //        for (Object object : result) {
@@ -66,8 +78,8 @@ public class Test {
 //        System.out.println(doList);
 //        OeCriteriaBuilder cb = new OeCriteriaBuilder();
 //        cb.column("state").in(new String[]{"installed", "uninstalled"});
-//        Object[] result = exe.doSearchMap(OeConst.OeModel.MODULES.getName(), cb.getCriteria());
-//        Long result1 = exe.doCount(OeConst.OeModel.MODULES.getName(), cb.getCriteria());
+//        Object[] result = exe.searchReadMap(OeConst.OeModel.MODULES.getName(), cb.getCriteria());
+//        Long result1 = exe.count(OeConst.OeModel.MODULES.getName(), cb.getCriteria());
 //        System.out.println(result1);
 //        for (Object object : result) {
 //            System.out.println(object);
@@ -108,7 +120,7 @@ public class Test {
 //        Map<String, Object> values = new HashMap<String, Object>();
 //        values.put(Attachment._FILE_NAME, "Test");
 //        values.put(Attachment._MODEL, "bpm.messaging");
-//        values.put(Attachment._NAME, "Test");
+//        values.put(Attachment._COL_NAME, "Test");
 //        File f = new File("/home/ahmed/Downloads/commons-io-2.4-bin.tar.gz");
 //        values.put(Attachment._FILE_SIZE, f.length());
 //        values.put(Attachment._DATA, convertFileToString(f));
@@ -139,16 +151,16 @@ public class Test {
 //        OeUser oeUser = new OeUserService(exe).findById(exe.getUserId());
 //        System.out.println(oeUser.getMenus());
 //        JSONArray argms = new JSONArray();
-//        argms.put(exe.getJSONContext());
+//        argms.put(exe.getJsonContext());
 //        argms.put(new HashSet<>());
 //        JsonValue execute = exe.execute(OeConst.OeModel.PARTNERS.getName(), "search_count", argms);
 //        System.out.println(execute);
 //        OeViewService oeViewService = new OeViewService(exe);
 //        OeCriteriaBuilder cb = new OeCriteriaBuilder();
-//        System.out.println(exe.doCount(OeConst.OeModel.MENUS, cb.getCriteria()));
+//        System.out.println(exe.count(OeConst.OeModel.MENUS, cb.getCriteria()));
 //        Map<String, Object> vals = new HashMap<>();
 //        vals.put("name", "Ahmed Hassan");
-//        System.out.println(exe.doCreate(OeConst.OeModel.PARTNERS.getName(), vals));
+//        System.out.println(exe.create(OeConst.OeModel.PARTNERS.getName(), vals));
 //        OeView oeView = oeViewService.getFieldsView(OeConst.OeModel.PARTNERS, OeConst.OeViewMode.FORM);
 //        System.out.println(oeView);
 //        OeView oeView = oeViewService.getOeView(OeConst.OeActionType.ACTION_WINDOW, 60);
@@ -169,7 +181,7 @@ public class Test {
 //                System.out.println("Node: " + node.getName());
 //            }
 //        }
-//        System.out.println(Arrays.deepToString(OeUtil.convertTuplesStringToArray("('type', '=', 'receivable')")));
+//        System.out.println(Arrays.deepToString(OeUtil.convertTupleStringToArray("('type', '=', 'receivable')")));
 //        System.out.println(exe.getMajorVersion());
 //        System.out.println(exe.getMinorVersion());
 //        OeActionClientService service = new OeActionClientService(exe);
@@ -178,8 +190,8 @@ public class Test {
 //        System.out.println(service.findById(60));
 //        Map<String, Object> convertStringToMap = OeUtil.convertStringToMap("{              'default_model': 'res.users',              'default_res_id': uid,              'needaction_menu_ref': ['mail.mail_tomefeeds', 'mail.mail_starfeeds']            }");
 //        convertStringToMap.putAll(context);
-//        Object[] doSearchMap = exe.doSearchMap("mail.message", Collections.EMPTY_LIST, 0, 2, null, convertStringToMap);
-//        Object[] doRead = exe.doRead("mail.message", doSearchMap, null, convertStringToMap);
+//        Object[] searchReadMap = exe.searchReadMap("mail.message", Collections.EMPTY_LIST, 0, 2, null, convertStringToMap);
+//        Object[] doRead = exe.doRead("mail.message", searchReadMap, null, convertStringToMap);
 //        System.out.println(Arrays.deepToString(doRead));
 //    }
 //    public static String convertFileToString(File file) {

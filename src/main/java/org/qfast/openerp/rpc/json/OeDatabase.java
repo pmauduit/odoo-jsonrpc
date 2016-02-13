@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
+import static org.qfast.openerp.rpc.OeConst.JsonDatabase.CREATE;
+import static org.qfast.openerp.rpc.OeConst.JsonDatabase.DROP;
+import static org.qfast.openerp.rpc.OeConst.JsonDatabase.DUPLICATE;
+import static org.qfast.openerp.rpc.OeConst.JsonDatabase.GET_LIST;
 import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
 import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 
@@ -33,34 +37,83 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 public final class OeDatabase implements Serializable {
 
     private static final long serialVersionUID = 7443043973211482534L;
+    private static volatile OeDatabase instance;
     private final String protocol;
     private final String host;
     private final int port;
-    private final String url;
-    private final JSONObject emptyObject = new JSONObject();
+    private final URIBuilder url;
+    private final JsonObject emptyObject = new JsonObject();
     private Object adminPwd;
 
-    public OeDatabase(String protocol, String host, int port, Object adminPwd) {
+    private OeDatabase(String protocol, String host, int port, Object adminPwd) {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
         this.adminPwd = adminPwd;
-        this.url = protocol + "://" + host + ":" + port + "/web/database";
+        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
     }
 
-    public OeDatabase(String protocol, String host, int port) {
+    private OeDatabase(String protocol, String host, int port) {
         this(protocol, host, port, Boolean.FALSE);
     }
 
-    public OeDatabase(String host) {
+    private OeDatabase(String host) {
         this("http", host, 8069);
     }
 
+    public static OeDatabase getInstance(String protocol, String host, int port, Object adminPwd) {
+        if (instance == null) {
+            synchronized (OeDatabase.class) {
+                if (instance == null) {
+                    instance = new OeDatabase(protocol, host, port, adminPwd);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeDatabase getNewInstance(String protocol, String host, int port, Object adminPwd) {
+        instance = new OeDatabase(protocol, host, port, adminPwd);
+        return instance;
+    }
+
+    public static OeDatabase getInstance(String protocol, String host, int port) {
+        if (instance == null) {
+            synchronized (OeDatabase.class) {
+                if (instance == null) {
+                    instance = new OeDatabase(protocol, host, port);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeDatabase getNewInstance(String protocol, String host, int port) {
+        instance = new OeDatabase(protocol, host, port);
+        return instance;
+    }
+
+    public static OeDatabase getInstance(String host) {
+        if (instance == null) {
+            synchronized (OeDatabase.class) {
+                if (instance == null) {
+                    instance = new OeDatabase(host);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized static OeDatabase getNewInstance(String host) {
+        instance = new OeDatabase(host);
+        return instance;
+    }
+
     public final String[] doList() throws OeRpcException {
-        String reqUrl = url + "/get_list";
-        JSONObject response = postRequest(reqUrl, getCallWith(emptyObject));
+        String reqUrl = url.setPath(GET_LIST.getPath()).toString();
+        JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
         OeRpcException.checkJsonResponse(response);
-        return OeUtil.convertJsonArray(response.getJSONArray("result"), String[].class);
+        return OeUtil.convertJsonArray(response.getAsJsonArray("result"), String[].class);
     }
 
     public String getProtocol() {
@@ -83,103 +136,89 @@ public final class OeDatabase implements Serializable {
     }
 
     public boolean doCreate(String databaseName, boolean demo, String lang, String password) throws OeRpcException {
-        String reqUrl = url + "/create";
+        String reqUrl = url.setPath(CREATE.getPath()).toString();
 
-        JSONObject super_admin_pwd = new JSONObject();
-        super_admin_pwd.put("name", "super_admin_pwd");
-        super_admin_pwd.put("value", getAdminPwd().toString());
+        JsonObject super_admin_pwd = new JsonObject();
+        super_admin_pwd.addProperty("name", "super_admin_pwd");
+        super_admin_pwd.addProperty("value", getAdminPwd().toString());
 
-        JSONObject databaseNameObj = new JSONObject();
-        databaseNameObj.put("name", "db_name");
-        databaseNameObj.put("value", databaseName);
+        JsonObject databaseNameObj = new JsonObject();
+        databaseNameObj.addProperty("name", "db_name");
+        databaseNameObj.addProperty("value", databaseName);
 
-        JSONObject demoDataObj = new JSONObject();
-        demoDataObj.put("name", "demo_data");
-        demoDataObj.put("value", demo);
+        JsonObject demoDataObj = new JsonObject();
+        demoDataObj.addProperty("name", "demo_data");
+        demoDataObj.addProperty("value", demo);
 
-        JSONObject dbLangObj = new JSONObject();
-        dbLangObj.put("name", "db_lang");
-        dbLangObj.put("value", lang);
+        JsonObject dbLangObj = new JsonObject();
+        dbLangObj.addProperty("name", "db_lang");
+        dbLangObj.addProperty("value", lang);
 
-        JSONObject createAdminPwdObj = new JSONObject();
-        createAdminPwdObj.put("name", "create_admin_pwd");
-        createAdminPwdObj.put("value", password);
+        JsonObject createAdminPwdObj = new JsonObject();
+        createAdminPwdObj.addProperty("name", "create_admin_pwd");
+        createAdminPwdObj.addProperty("value", password);
 
-        JSONArray fieldsArr = new JSONArray();
-        fieldsArr.put(super_admin_pwd);
-        fieldsArr.put(databaseNameObj);
-        fieldsArr.put(demoDataObj);
-        fieldsArr.put(dbLangObj);
-        fieldsArr.put(createAdminPwdObj);
+        JsonArray fieldsArr = new JsonArray();
+        fieldsArr.add(super_admin_pwd);
+        fieldsArr.add(databaseNameObj);
+        fieldsArr.add(demoDataObj);
+        fieldsArr.add(dbLangObj);
+        fieldsArr.add(createAdminPwdObj);
 
-        JSONObject fields = new JSONObject();
-        fields.put("fields", fieldsArr);
+        JsonObject fields = new JsonObject();
+        fields.add("fields", fieldsArr);
 
-        JSONObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postRequest(reqUrl, getCallWith(fields));
         OeRpcException.checkJsonResponse(response);
-        return response.getBoolean("result");
+        return response.get("result").getAsBoolean();
     }
 
     public boolean doDrop(String databaseName) throws OeRpcException {
-        String reqUrl = url + "/drop";
-        JSONObject dropPwdObj = new JSONObject();
-        dropPwdObj.put("name", "drop_pwd");
-        dropPwdObj.put("value", getAdminPwd().toString());
+        String reqUrl = url.setPath(DROP.getPath()).toString();
+        JsonObject dropPwdObj = new JsonObject();
+        dropPwdObj.addProperty("name", "drop_pwd");
+        dropPwdObj.addProperty("value", getAdminPwd().toString());
 
-        JSONObject dropDbObj = new JSONObject();
-        dropDbObj.put("name", "drop_db");
-        dropDbObj.put("value", databaseName);
+        JsonObject dropDbObj = new JsonObject();
+        dropDbObj.addProperty("name", "drop_db");
+        dropDbObj.addProperty("value", databaseName);
 
-        JSONArray fieldsArr = new JSONArray();
-        fieldsArr.put(dropPwdObj);
-        fieldsArr.put(dropDbObj);
+        JsonArray fieldsArr = new JsonArray();
+        fieldsArr.add(dropPwdObj);
+        fieldsArr.add(dropDbObj);
 
-        JSONObject fields = new JSONObject();
-        fields.put("fields", fieldsArr);
+        JsonObject fields = new JsonObject();
+        fields.add("fields", fieldsArr);
 
-        JSONObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postRequest(reqUrl, getCallWith(fields));
         OeRpcException.checkJsonResponse(response);
-        return response.getBoolean("result");
-    }
-
-    public byte[] doDump(String databaseName) throws OeRpcException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void doDump(String databaseName, String backupPath)
-            throws OeRpcException, IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void doRestore(String newDbName, File backupFile)
-            throws IOException, OeRpcException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return response.get("result").getAsBoolean();
     }
 
     public boolean doDuplicate(String databaseName, String newDatabaseName) throws OeRpcException {
-        String reqUrl = url + "/duplicate";
+        String reqUrl = url.setPath(DUPLICATE.getPath()).toString();
 
-        JSONObject superAdminPwdObj = new JSONObject();
-        superAdminPwdObj.put("name", "super_admin_pwd");
-        superAdminPwdObj.put("value", getAdminPwd().toString());
+        JsonObject superAdminPwdObj = new JsonObject();
+        superAdminPwdObj.addProperty("name", "super_admin_pwd");
+        superAdminPwdObj.addProperty("value", getAdminPwd().toString());
 
-        JSONObject dbOriginalNameObj = new JSONObject();
-        dbOriginalNameObj.put("name", "db_original_name");
-        dbOriginalNameObj.put("value", databaseName);
+        JsonObject dbOriginalNameObj = new JsonObject();
+        dbOriginalNameObj.addProperty("name", "db_original_name");
+        dbOriginalNameObj.addProperty("value", databaseName);
 
-        JSONObject dbNameObj = new JSONObject();
-        dbNameObj.put("name", "db_name");
-        dbNameObj.put("value", newDatabaseName);
+        JsonObject dbNameObj = new JsonObject();
+        dbNameObj.addProperty("name", "db_name");
+        dbNameObj.addProperty("value", newDatabaseName);
 
-        JSONArray fieldsArr = new JSONArray();
-        fieldsArr.put(superAdminPwdObj);
-        fieldsArr.put(dbOriginalNameObj);
+        JsonArray fieldsArr = new JsonArray();
+        fieldsArr.add(superAdminPwdObj);
+        fieldsArr.add(dbOriginalNameObj);
 
-        JSONObject fields = new JSONObject();
-        fields.put("fields", fieldsArr);
+        JsonObject fields = new JsonObject();
+        fields.add("fields", fieldsArr);
 
-        JSONObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postRequest(reqUrl, getCallWith(fields));
         OeRpcException.checkJsonResponse(response);
-        return response.getBoolean("result");
+        return response.get("result").getAsBoolean();
     }
 }
