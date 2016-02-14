@@ -16,7 +16,7 @@
 
 package org.qfast.openerp.rpc.entities;
 
-import org.qfast.openerp.rpc.boundry.UserService;
+import org.qfast.openerp.rpc.boundary.UserService;
 import org.qfast.openerp.rpc.entity.OeUser;
 
 /**

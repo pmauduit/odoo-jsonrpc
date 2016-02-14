@@ -16,7 +16,7 @@
 
 package org.qfast.openerp.rpc;
 
-import org.qfast.openerp.rpc.boundry.UserService;
+import org.qfast.openerp.rpc.boundary.UserService;
 import org.qfast.openerp.rpc.entities.User;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;

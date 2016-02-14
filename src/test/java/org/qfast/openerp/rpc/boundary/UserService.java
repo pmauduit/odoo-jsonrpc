@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.boundry;
+package org.qfast.openerp.rpc.boundary;
 
-import org.qfast.openerp.rpc.boundary.OeUserService;
 import org.qfast.openerp.rpc.entities.User;
 import org.qfast.openerp.rpc.json.OeExecutor;
 
