@@ -43,6 +43,10 @@ public class OeModuleService extends AbstractOeService<OeModule> {
         super(executor, OeModule.class);
     }
 
+    public <C extends OeModule> OeModuleService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
+    }
+
     @Override
     protected String getName() {
         return name;

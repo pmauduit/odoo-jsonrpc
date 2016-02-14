@@ -49,6 +49,10 @@ public class OeViewService extends AbstractOeService<OeView> {
         super(executor, OeView.class);
     }
 
+    public <C extends OeView> OeViewService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
+    }
+
     @Override
     protected String getName() {
         return name;

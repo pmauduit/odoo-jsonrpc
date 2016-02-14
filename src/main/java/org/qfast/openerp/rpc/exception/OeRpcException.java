@@ -81,7 +81,7 @@ public class OeRpcException extends Exception {
                     JsonElement debug = dataJson.get("debug");
                     if (!debug.isJsonNull()) {
                         String traceBack = debug.getAsString().trim();
-                        return new Throwable(traceBack.substring(traceBack.lastIndexOf('\n')));
+                        return new Throwable(traceBack);
                     }
                 }
             }
@@ -98,7 +98,7 @@ public class OeRpcException extends Exception {
                 }
             }
         } else if (response.has("error")) {
-            if (response.get("result").isJsonObject()) {
+            if (response.get("error").isJsonObject()) {
                 throw new OeRpcException(response.getAsJsonObject("error"));
             } else {
                 throw new OeRpcException(response.get("error").getAsString());

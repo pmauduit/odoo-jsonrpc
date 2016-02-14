@@ -35,6 +35,7 @@ import static org.qfast.openerp.rpc.OeConst.JsonSession.AUTHENTICATE;
 import static org.qfast.openerp.rpc.OeConst.JsonSession.DESTROY;
 import static org.qfast.openerp.rpc.OeConst.OeFun.CREATE;
 import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH_COUNT;
+import static org.qfast.openerp.rpc.OeConst.OeFun.UNLINK;
 import static org.qfast.openerp.rpc.OeConst.OeFun.WRITE;
 import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
 import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
@@ -173,7 +174,7 @@ public class OeExecutor implements Serializable {
     }
 
     public OeVersion getOeVersion() throws OeRpcException {
-        this.version = OeServerVersion.getInstance(protocol, host, port).getServerVersion();
+        this.version = OeServerVersion.getInstance(protocol, host, port).getVersion();
         return version;
     }
 
@@ -267,6 +268,17 @@ public class OeExecutor implements Serializable {
         return searchReadMap(model, domain, offset, limit, order, context, columns);
     }
 
+    public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
+                                Map<String, Object> context, String... columns) throws OeRpcException {
+        return OeUtil.parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
+    }
+
+    public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,
+                                               String order, Map<String, Object> context, String... columns)
+            throws OeRpcException {
+        return OeUtil.convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
+    }
+
     public String searchReadStr(String model, List<Object> domain, Integer offset, Integer limit, String order,
                                 Map<String, Object> context, String... columns) throws OeRpcException {
 
@@ -310,15 +322,8 @@ public class OeExecutor implements Serializable {
         return response.getAsJsonObject("result").getAsJsonArray("records").toString();
     }
 
-    public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
-                                Map<String, Object> context, String... columns) throws OeRpcException {
-        return OeUtil.parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
-    }
-
-    public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,
-                                               String order, Map<String, Object> context, String... columns)
-            throws OeRpcException {
-        return OeUtil.convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
+    public Long count(OeModel model, List<Object> domain) throws OeRpcException {
+        return count(model.getName(), domain);
     }
 
     public Long count(String model, List<Object> domain) throws OeRpcException {
@@ -330,8 +335,8 @@ public class OeExecutor implements Serializable {
         return 0L;
     }
 
-    public Long count(OeModel model, List<Object> domain) throws OeRpcException {
-        return count(model.getName(), domain);
+    public Long create(OeModel model, Map<String, Object> vals) throws OeRpcException {
+        return create(model.getName(), vals);
     }
 
     public Long create(String model, Map<String, Object> vals) throws OeRpcException {
@@ -352,8 +357,11 @@ public class OeExecutor implements Serializable {
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
-    public Long create(OeModel model, Map<String, Object> vals) throws OeRpcException {
-        return create(model.getName(), vals);
+    public Boolean unlike(String model, Integer... ids) throws OeRpcException {
+        JsonArray argms = new JsonArray();
+        argms.add(OeUtil.parseAsJsonArray(ids));
+        Object result = execute(model, UNLINK.getName(), argms);
+        return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
     public Object execute(String model, String method) throws OeRpcException {
@@ -364,11 +372,6 @@ public class OeExecutor implements Serializable {
 
     public Object execute(String model, String method, JsonArray args) throws OeRpcException {
         return execute(model, method, args, new JsonObject());
-    }
-
-    public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {
-        String reqUrl = url.setPath(fun).setParameter("session_id", sessionId).toString();
-        return postRequest(reqUrl, getCallWith(jsonObj)).get("result");
     }
 
     public Object execute(String model, String method, JsonArray args, JsonObject kwargs) throws OeRpcException {
@@ -386,5 +389,10 @@ public class OeExecutor implements Serializable {
         OeRpcException.checkJsonResponse(response);
 
         return response.get("result");
+    }
+
+    public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {
+        String reqUrl = url.setPath(fun).setParameter("session_id", sessionId).toString();
+        return postRequest(reqUrl, getCallWith(jsonObj)).get("result");
     }
 }

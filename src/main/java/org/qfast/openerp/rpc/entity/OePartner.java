@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OePartnerService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
@@ -25,12 +27,15 @@ import java.util.Date;
  */
 public class OePartner extends AbstractOeEntity<OePartnerService> {
 
-    public static final String _PARTNER_CODE = "partner_code", _ACCOUNT_ID = "account_id", _IMAGE_SMALL = "image_small",
-            _NAME = "name", _FIRST_NAME = "first_name", _SECOND_NAME = "second_name", _SURNAME = "surname",
-            _EMAIL = "email", _DISPLAY_NAME = "display_name", _YEARLY_LIMIT = "yearly_limit",
-            _MONTHLY_LIMIT = "monthly_limit", _LATITUDE = "latitude", _LONGITUDE = "longitude",
-            _SERVICE_PROVIDER = "service_provider", _EMPLOYEE = "employee", _VALID_FROM = "valid_from",
-            _VALID_TO = "valid_to", _PASSWORD = "partner_password";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _PARTNER_CODE = "partner_code",
+            _ACCOUNT_ID = "account_id", _IMAGE_SMALL = "image_small", _FIRST_NAME = "first_name",
+            _SECOND_NAME = "second_name", _SURNAME = "surname", _EMAIL = "email", _DISPLAY_NAME = "display_name",
+            _YEARLY_LIMIT = "yearly_limit", _MONTHLY_LIMIT = "monthly_limit", _LATITUDE = "latitude",
+            _LONGITUDE = "longitude", _SERVICE_PROVIDER = "service_provider", _EMPLOYEE = "employee",
+            _VALID_FROM = "valid_from", _VALID_TO = "valid_to", _PASSWORD = "partner_password";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _PARTNER_CODE, _ACCOUNT_ID, _IMAGE_SMALL,
+            _FIRST_NAME, _SECOND_NAME, _SURNAME, _EMAIL, _DISPLAY_NAME, _YEARLY_LIMIT, _MONTHLY_LIMIT, _LATITUDE,
+            _LONGITUDE, _SERVICE_PROVIDER, _EMPLOYEE, _VALID_FROM, _VALID_TO, _PASSWORD};
     private static final long serialVersionUID = -4327707202428848696L;
     private Integer id;
     private String partnerCode;
@@ -57,6 +62,11 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
 
     public OePartner(OePartnerService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 
@@ -88,7 +89,6 @@ public final class OeUtil {
         return convertJsonToMap(new JsonObject().getAsJsonObject(jsonStr));
     }
 
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> convertJsonToMap(JsonObject jsonObject) {
         Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
         Map<String, Object> convertedMap = new HashMap<String, Object>(entries.size());
@@ -102,9 +102,9 @@ public final class OeUtil {
         return new Gson().fromJson(jsonArray, tArr);
     }
 
-    @SuppressWarnings("unchecked")
     public static Map<String, Object>[] convertJsonArrayToMapArray(JsonArray jsonArray) {
         int length = jsonArray.size();
+        @SuppressWarnings("unchecked")
         Map<String, Object>[] mapArr = new HashMap[length];
         for (int i = 0; i < length; i++) {
             mapArr[i] = convertJsonToMap(jsonArray.get(i).getAsJsonObject());
@@ -142,10 +142,14 @@ public final class OeUtil {
     }
 
     public static JsonElement parseAsJsonElement(Object obj) {
-        if (!(obj instanceof String)) {
-            obj = new Gson().toJson(obj);
+        try {
+            if (!(obj instanceof String)) {
+                obj = new Gson().toJson(obj);
+            }
+            return new JsonParser().parse(obj.toString());
+        } catch (JsonParseException e) {
+            throw new Error(obj.toString(), e);
         }
-        return new JsonParser().parse(obj.toString());
     }
 
     public static JsonObject margeJsonObject(JsonObject with, JsonObject into) {

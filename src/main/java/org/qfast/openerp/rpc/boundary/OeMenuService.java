@@ -53,6 +53,10 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         super(executor, OeMenu.class);
     }
 
+    public <C extends OeMenu> OeMenuService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
+    }
+
     @Override
     protected String getName() {
         return name;

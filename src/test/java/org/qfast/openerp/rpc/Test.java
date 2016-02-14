@@ -16,14 +16,10 @@
 
 package org.qfast.openerp.rpc;
 
-import com.google.gson.JsonArray;
+import org.qfast.openerp.rpc.boundry.UserService;
+import org.qfast.openerp.rpc.entities.User;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
-import org.qfast.openerp.rpc.util.OeUtil;
-
-import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH;
-import static org.qfast.openerp.rpc.OeConst.OeModel.PARTNERS;
 
 //import org.apache.commons.io.FileUtils;
 
@@ -43,18 +39,29 @@ public class Test {
     public static void main(String[] args) throws OeRpcException {
         OeExecutor exe = OeExecutor.getInstance(protocol, host, port, database, username, password);
 
-        JsonArray argms = new JsonArray();
-        OeCriteriaBuilder cb = new OeCriteriaBuilder();
-        cb.column("name").ilike("a");
-        argms.add(OeUtil.parseAsJsonElement(cb.getCriteria()));
-        Object result = exe.execute(PARTNERS.getName(), SEARCH.getName(), argms);
-        System.out.println(result);
+//        JsonArray argms = new JsonArray();
+//        argms.add(exe.getJsonContext());
+//        OeCriteriaBuilder cb = new OeCriteriaBuilder();
+//        cb.column("name").ilike("a");
+//        argms.add(OeUtil.parseAsJsonElement(cb.getCriteria()));
+//        Object result = exe.execute(PARTNERS.getName(), SEARCH.getName(), argms);
+//        System.out.println(result);
+
+//        Boolean unlike = exe.unlike(PARTNERS.getName(), 22);
+//        System.out.println("unlike = " + unlike);
+//        result = exe.execute(PARTNERS.getName(), SEARCH.getName(), argms);
+//        System.out.println(result);
 //        Map<String, Object> context = new HashMap<String, Object>(1);
 //        context.put("lang", "ar_SY");
 //        exe.setContext(context);
 //        OeUserService service = new OeUserService(exe);
 //        OeUser user = service.findById(1);
 //        System.out.println(user);
+
+        UserService service = new UserService(exe);
+        User user2 = (User) service.findById(1);
+        System.out.println(user2.isEan13());
+        System.out.println(user2.getDisplayName());
 //        System.out.println(user.getLanguage());
 //        System.out.println(user.getMenus());
 //        System.out.println(user.getLocale());

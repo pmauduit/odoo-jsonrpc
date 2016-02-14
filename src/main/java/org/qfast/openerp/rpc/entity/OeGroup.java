@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeGroupService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -26,7 +28,9 @@ import java.util.Set;
  */
 public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
-    public static final String _USERS_ID = "users", _USERS_ID_ID = _USERS_ID + ".id";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _USERS_ID = "users",
+            _USERS_ID_ID = _USERS_ID + ".id";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME};
     private static final long serialVersionUID = -1559525299933043517L;
     private Integer id;
     private String name;
@@ -37,6 +41,11 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
     public OeGroup(OeGroupService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeModuleService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
@@ -23,8 +25,9 @@ import org.qfast.openerp.rpc.util.OeUtil;
  */
 public class OeModule extends AbstractOeEntity<OeModuleService> {
 
-    public static final String _SHORT_DESC = "shortdesc", _SUMMARY = "summary", _ICON = "icon", _STATE = "state",
-            _AUTHOR = "author";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _SHORT_DESC = "shortdesc",
+            _SUMMARY = "summary", _ICON = "icon", _STATE = "state", _AUTHOR = "author";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _SHORT_DESC, _SUMMARY, _ICON, _STATE, _AUTHOR};
     private static final long serialVersionUID = 1263824647955242480L;
     private Integer id;
     private String icon;
@@ -39,6 +42,11 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
 
     public OeModule(OeModuleService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

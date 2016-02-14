@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
 import org.qfast.openerp.rpc.entity.Attachment;
@@ -38,6 +39,10 @@ public class AttachmentService extends AbstractOeService<Attachment> {
 
     public AttachmentService(OeExecutor executor) {
         super(executor, Attachment.class);
+    }
+
+    public <C extends Attachment> AttachmentService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
     }
 
     @Override

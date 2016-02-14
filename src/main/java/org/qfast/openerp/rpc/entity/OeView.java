@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
 import org.qfast.openerp.rpc.boundary.OeViewService;
@@ -30,12 +32,12 @@ import java.util.Map;
  */
 public class OeView extends AbstractOeEntity<OeViewService> implements Comparable<OeView> {
 
-    public static final String _CREATE_DATE = "create_date",
-            _WRITE_DATE = "write_date", _ARCH = "arch",
-            _FIELD_PARENT = "field_parent", _INHERIT_ID = "inherit_id",
-            _MODEL_DATA_ID = "model_data_id", _PRIORITY = "priority",
-            _APPLICATION = "application", _MODE = "mode", _MODEL = "model",
-            _TYPE = "type", _VIEW_ID = "view_id", _FIELDS = "fields";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _CREATE_DATE = "create_date",
+            _WRITE_DATE = "write_date", _ARCH = "arch", _FIELD_PARENT = "field_parent", _INHERIT_ID = "inherit_id",
+            _MODEL_DATA_ID = "model_data_id", _PRIORITY = "priority", _APPLICATION = "application", _MODE = "mode",
+            _MODEL = "model", _TYPE = "type", _VIEW_ID = "view_id", _FIELDS = "fields";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _WRITE_DATE, _ARCH, _FIELD_PARENT,
+            _INHERIT_ID, _MODEL_DATA_ID, _PRIORITY, _APPLICATION, _MODE, _MODEL, _TYPE, _VIEW_ID, _FIELDS};
     private static final long serialVersionUID = 8484756380717630025L;
     private Integer id;
     private Integer viewId;
@@ -59,6 +61,11 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
 
     public OeView(OeViewService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

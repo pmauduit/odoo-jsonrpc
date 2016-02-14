@@ -35,7 +35,7 @@ public class OeField implements Serializable {
     private static final long serialVersionUID = -8700005699990251758L;
     private String type;
     private Map<String, OeView> views;
-    @SerializedName("string")
+    @SerializedName(_LABEL)
     private String label;
     private boolean readOnly;
     private String help;
@@ -149,12 +149,12 @@ public class OeField implements Serializable {
         return domain;
     }
 
-    public void setDomain(Object[] domain) {
-        this.domain = domain;
-    }
-
     public void setDomain(String domain) {
         this.domain = OeUtil.convertTupleStringToArray(domain);
+    }
+
+    public void setDomain(Object[] domain) {
+        this.domain = domain;
     }
 
     public boolean isCompanyDependent() {

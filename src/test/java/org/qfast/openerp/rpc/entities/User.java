@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.entity;
+package org.qfast.openerp.rpc.entities;
 
-import org.qfast.openerp.rpc.boundary.AbstractOeService;
-
-import java.io.Serializable;
+import org.qfast.openerp.rpc.boundry.UserService;
+import org.qfast.openerp.rpc.entity.OeUser;
 
 /**
- * @param <T>
- * @author Ahmed El-mawaziny
+ * @author Ahmed El-mawaziny on 2/13/16.
  */
-public abstract class AbstractOeEntity<T extends AbstractOeService> implements Serializable {
+public class User extends OeUser {
 
-    private static final long serialVersionUID = -832746926128259160L;
-    protected T oe;
+    private boolean ean13;
 
-    public T getOe() {
-        return oe;
+    public boolean isEan13() {
+        UserService service = (UserService) oe;
+        System.out.println(service.sayHello());
+        return ean13;
     }
 
-    public void setOe(T oe) {
-        this.oe = oe;
+    public void setEan13(boolean ean13) {
+        this.ean13 = ean13;
     }
 
-    public abstract String[] getColumns();
+    @Override
+    public String toString() {
+        return "User{" +
+                "ean13=" + ean13 +
+                '}';
+    }
 }

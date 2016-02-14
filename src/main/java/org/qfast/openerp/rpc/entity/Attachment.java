@@ -16,31 +16,37 @@
 
 package org.qfast.openerp.rpc.entity;
 
+import com.google.gson.annotations.SerializedName;
 import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.AttachmentService;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeUtil;
 
-import java.net.URISyntaxException;
-
 /**
  * @author Ahmed El-mawaziny
  */
 public class Attachment extends AbstractOeEntity<AttachmentService> {
 
-    public static final String _ID = OeConst._COL_ID, _FILE_NAME = "datas_fname", _NAME = "name", _DATA = "datas",
-            _MODEL = "res_model", _FILE_SIZE = "file_size";
+    public static final String _ID = OeConst._COL_ID, _FILE_NAME = "datas_fname", _NAME = OeConst._COL_NAME,
+            _DATA = "data", _MODEL = "res_model", _FILE_SIZE = "file_size";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _DATA};
     private static final long serialVersionUID = -3111917687766566032L;
     private Integer id;
     private String name;
-    private String datas;
+    @SerializedName(_DATA)
+    private String data;
 
     public Attachment() {
     }
 
     public Attachment(AttachmentService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {
@@ -59,15 +65,15 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
         this.name = name;
     }
 
-    public String getDatas() {
-        return datas;
+    public String getData() {
+        return data;
     }
 
-    public void setDatas(String datas) {
-        this.datas = datas;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public String getUrl() throws URISyntaxException {
+    public String getUrl() {
         OeExecutor executor = oe.getExecutor();
         return new URIBuilder().setScheme(executor.getProtocol())
                 .setHost(executor.getHost())
@@ -78,7 +84,7 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
                 .setParameter("filename_field", _FILE_NAME)
                 .setParameter(_ID, String.valueOf(id))
                 .setParameter("session_id", executor.getSessionId())
-                .build().toString();
+                .toString();
     }
 
     @Override
@@ -95,6 +101,6 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
 
     @Override
     public String toString() {
-        return "Attachment{" + "id=" + id + ", name=" + name + ", datas=" + datas + '}';
+        return "Attachment{" + "id=" + id + ", name=" + name + ", data=" + data + '}';
     }
 }

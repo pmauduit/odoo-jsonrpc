@@ -43,6 +43,10 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
         super(executor, OeGroup.class);
     }
 
+    public <C extends OeGroup> OeGroupService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
+    }
+
     @Override
     protected String getName() {
         return name;

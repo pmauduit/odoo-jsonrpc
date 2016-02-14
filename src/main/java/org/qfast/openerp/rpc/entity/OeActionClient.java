@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.boundary.OeActionClientService;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -26,7 +28,9 @@ import java.util.Map;
  */
 public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
 
-    public static final String _TYPE = "type", _HELP = "help", _RES_MODEL = "res_model", _CONTEXT = "context";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _TYPE = "type", _HELP = "help",
+            _RES_MODEL = "res_model", _CONTEXT = "context";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _HELP, _RES_MODEL, _CONTEXT};
     private static final long serialVersionUID = -1963097797139212178L;
     private Integer id;
     private String name;
@@ -40,6 +44,11 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
 
     public OeActionClient(OeActionClientService oe) {
         super.oe = oe;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {
@@ -82,12 +91,12 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return context;
     }
 
-    public void setContext(String context) {
-        this.context = OeUtil.convertStringToMap(context);
-    }
-
     public void setContext(Map<String, Object> context) {
         this.context = context;
+    }
+
+    public void setContext(String context) {
+        this.context = OeUtil.convertStringToMap(context);
     }
 
     public String getType() {

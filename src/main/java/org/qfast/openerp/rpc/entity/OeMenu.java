@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeMenuService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -26,8 +28,10 @@ import java.util.Arrays;
  */
 public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparable<OeMenu> {
 
-    public static final String _SEQUENCE = "sequence", _GROUPS_ID = "groups_id", _GROUPS_ID_ID = _GROUPS_ID + ".id",
-            _PARENT_ID = "parent_id", _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _SEQUENCE = "sequence",
+            _GROUPS_ID = "groups_id", _GROUPS_ID_ID = _GROUPS_ID + ".id", _PARENT_ID = "parent_id",
+            _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _ACTION, _SEQUENCE, _PARENT_ID, _CHILDREN};
     private static final long serialVersionUID = -3622021175633536095L;
     private Integer id;
     private String name;
@@ -42,6 +46,11 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
 
     public OeMenu(OeMenuService service) {
         oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

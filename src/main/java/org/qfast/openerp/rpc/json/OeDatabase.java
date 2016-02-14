@@ -34,7 +34,7 @@ import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
 /**
  * @author Ahmed El-mawaziny
  */
-public final class OeDatabase implements Serializable {
+public class OeDatabase implements Serializable {
 
     private static final long serialVersionUID = 7443043973211482534L;
     private static volatile OeDatabase instance;

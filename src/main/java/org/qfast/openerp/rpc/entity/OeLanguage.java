@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.Direction;
 import org.qfast.openerp.rpc.boundary.OeLanguageService;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -26,8 +28,11 @@ import java.util.Locale;
  */
 public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
-    public static final String _CODE = "code", _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _CODE = "code",
+            _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
             _DIRECTION = "direction", _ISO_CODE = "iso_code";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CODE, _DATE_FORMAT, _TIME_FORMAT,
+            _DIRECTION, _ISO_CODE};
     private static final long serialVersionUID = -2806061495597715017L;
     private Integer id;
     private String name;
@@ -42,6 +47,11 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
     public OeLanguage(OeLanguageService oe) {
         super.oe = oe;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {

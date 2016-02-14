@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeUserService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -29,38 +31,21 @@ import java.util.Locale;
  * @author Ahmed El-mawaziny
  */
 public class OeUser extends AbstractOeEntity<OeUserService> {
-    /*
-     has_image, street, customer, city, __last_update, state_id, create_date, 
-     supplier, signature, login_date, parent_id, partner_id, 
-     alias_force_thread_id, alias_id, image, notify_email, display_name, comment,
-     message_is_follower, action_id, property_account_receivable, create_uid, 
-     invoice_ids, date, write_date, user_ids, title, alias_contact, signup_token,
-     opt_out, alias_domain, contract_ids, signup_url, country_id, ref, tz, 
-     message_unread, ean13, child_ids, phone, total_invoiced, employee_ids, 
-     alias_user_id, display_employees_suggestions, type, password, 
-     alias_parent_thread_id, function, calendar_last_notif_ack, credit_limit, 
-     contracts_count, display_groups_suggestions, login, credit, alias_defaults, 
-     signup_valid, bank_ids, write_uid, image_medium, fax, signup_expiration, 
-     signup_type, category_id, company_ids, alias_name, message_ids, email, 
-     active, groups_id, mobile, company_id, property_supplier_payment_term, 
-     debit_limit, last_reconciliation_date, alias_model_id, state, vat, 
-     journal_item_count, image_small, vat_subjected, lang, alias_parent_model_id,
-     id, message_follower_ids, property_account_position, share, ref_companies, 
-     name, birthdate, user_id, debit, contact_address, message_last_post, 
-     employee, property_payment_term, street2, zip, tz_offset, website, 
-     use_parent_address, property_account_payable, color, is_company, 
-     new_password, property_product_pricelist, message_summary, 
-     commercial_partner_id
-     */
 
-    public static final String _LOGIN = "login", _PASSWORD = "password", _LOGIN_DATE = "login_date",
-            _ACTIVE = "active", _LANG = "lang";
+    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _LOGIN = "login",
+            _PASSWORD = "password", _PASSWORD_CRYPT = "password_crypt", _IMAGE = "image", _IMAGE_MEDIUM = "image_medium",
+            _IMAGE_SMALL = "image_small", _LOGIN_DATE = "login_date", _ACTIVE = "active", _LANG = "lang",
+            _DISPLAY_NAME = "display_name", _SIGNATURE = "signature", _TZ_OFFSET = "tz_offset", _TZ = "tz",
+            _EMAIL = "email", _USER_ID = "user_id", _GROUPS_ID = "groups_id", _PARTNER_ID = "partner_id",
+            _COMPANY_ID = "company_id", _SUPPLIER = "supplier", _CUSTOMER = "customer", _HAS_IMAGE = "has_image";
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _PASSWORD_CRYPT, _IMAGE, _IMAGE_MEDIUM, _IMAGE_SMALL,
+            _LOGIN_DATE, _ACTIVE, _LANG, _DISPLAY_NAME, _SIGNATURE, _TZ_OFFSET, _TZ, _EMAIL, _USER_ID, _GROUPS_ID,
+            _PARTNER_ID, _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
     private static final long serialVersionUID = 4881734215550044357L;
     private Integer id;
     @SerializedName(_LOGIN)
     private String username;
     private String password;
-    private String newPassword;
     private String passwordCrypt;
     private String image;
     private String imageMedium;
@@ -92,6 +77,11 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     public OeUser(OeUserService service) {
         super.oe = service;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
     }
 
     public Integer getId() {
@@ -158,14 +148,6 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     public void setMenus(List<OeMenu> menus) {
         this.menus = menus;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
     }
 
     public String getPasswordCrypt() {
@@ -353,7 +335,6 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
         return "OeUser{" + "id=" + id
                 + ", username=" + username
                 + ", password=" + password
-                + ", newPassword=" + newPassword
                 + ", passwordCrypt=" + passwordCrypt
                 + ", image=" + image
                 + ", imageMedium=" + imageMedium

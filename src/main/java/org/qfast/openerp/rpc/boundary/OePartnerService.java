@@ -43,6 +43,10 @@ public class OePartnerService extends AbstractOeService<OePartner> {
         super(executor, OePartner.class);
     }
 
+    public <C extends OePartner> OePartnerService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
+    }
+
     @Override
     public String getName() {
         return name;

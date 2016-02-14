@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
 import org.qfast.openerp.rpc.entity.OeLanguage;
@@ -36,6 +37,10 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
 
     public OeLanguageService(OeExecutor executor) {
         super(executor, OeLanguage.class);
+    }
+
+    public <C extends OeLanguage> OeLanguageService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
     }
 
     @Override

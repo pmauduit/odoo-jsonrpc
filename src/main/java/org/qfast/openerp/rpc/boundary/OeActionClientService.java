@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.boundary;
 
 import org.qfast.openerp.rpc.entity.OeActionClient;
@@ -34,6 +35,10 @@ public class OeActionClientService extends AbstractOeService<OeActionClient> {
 
     public OeActionClientService(OeExecutor executor) {
         super(executor, OeActionClient.class);
+    }
+
+    public <C extends OeActionClient> OeActionClientService(OeExecutor executor, Class<C> model) {
+        super(executor, model);
     }
 
     @Override

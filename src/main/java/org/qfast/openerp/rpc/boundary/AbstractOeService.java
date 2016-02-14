@@ -56,9 +56,10 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param executor OpenERP Executor {@link OeExecutor}
      * @param model    model class
      */
-    public AbstractOeService(OeExecutor executor, Class<M> model) {
+    @SuppressWarnings("unchecked")
+    public <C extends M> AbstractOeService(OeExecutor executor, Class<C> model) {
         this.executor = executor;
-        this.model = model;
+        this.model = (Class<M>) model;
     }
 
     /**
@@ -383,6 +384,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
                                                             String order, Map<String, Object> context,
                                                             String... columns) throws OeRpcException {
         JsonArray result = executor.searchRead(getName(), sc, offset, limit, order, context, columns);
+        System.out.println(result);
         List<M> oems = new ArrayList<M>(result.size());
         for (int i = 0; i < result.size(); i++) {
             oems.add(OeBinder.bind(result.get(i).toString(), model, e));
@@ -467,5 +469,33 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      */
     public Boolean write(Integer id, Map<String, Object> vals) throws OeRpcException {
         return executor.write(getName(), id, vals);
+    }
+
+    /**
+     * @param id
+     * @param vals
+     * @return
+     * @throws OeRpcException
+     */
+    public Boolean update(Integer id, Map<String, Object> vals) throws OeRpcException {
+        return write(id, vals);
+    }
+
+    /**
+     * @param ids
+     * @return
+     * @throws OeRpcException
+     */
+    public Boolean unlike(Integer... ids) throws OeRpcException {
+        return executor.unlike(getName(), ids);
+    }
+
+    /**
+     * @param ids
+     * @return
+     * @throws OeRpcException
+     */
+    public Boolean delete(Integer... ids) throws OeRpcException {
+        return unlike(ids);
     }
 }
