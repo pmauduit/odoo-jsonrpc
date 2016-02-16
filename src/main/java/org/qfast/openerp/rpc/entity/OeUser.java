@@ -38,9 +38,9 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
             _DISPLAY_NAME = "display_name", _SIGNATURE = "signature", _TZ_OFFSET = "tz_offset", _TZ = "tz",
             _EMAIL = "email", _USER_ID = "user_id", _GROUPS_ID = "groups_id", _PARTNER_ID = "partner_id",
             _COMPANY_ID = "company_id", _SUPPLIER = "supplier", _CUSTOMER = "customer", _HAS_IMAGE = "has_image";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _PASSWORD_CRYPT, _IMAGE, _IMAGE_MEDIUM, _IMAGE_SMALL,
-            _LOGIN_DATE, _ACTIVE, _LANG, _DISPLAY_NAME, _SIGNATURE, _TZ_OFFSET, _TZ, _EMAIL, _USER_ID, _GROUPS_ID,
-            _PARTNER_ID, _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _LOGIN, _PASSWORD, _PASSWORD_CRYPT, _IMAGE,
+            _IMAGE_MEDIUM, _IMAGE_SMALL, _LOGIN_DATE, _ACTIVE, _LANG, _DISPLAY_NAME, _SIGNATURE, _TZ_OFFSET, _TZ,
+            _EMAIL, _USER_ID, _GROUPS_ID, _PARTNER_ID, _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
     private static final long serialVersionUID = 4881734215550044357L;
     private Integer id;
     @SerializedName(_LOGIN)

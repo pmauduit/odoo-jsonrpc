@@ -25,7 +25,7 @@ import java.io.Serializable;
 /**
  * @author Ahmed El-mawaziny
  */
-public final class OeVersion implements Serializable {
+public class OeVersion implements Serializable {
 
     private static final long serialVersionUID = -493333266795016076L;
     private final String serverSerie;

@@ -27,6 +27,7 @@ import org.qfast.openerp.rpc.entity.OeView;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeBinder;
+import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class OeViewService extends AbstractOeService<OeView> {
         JsonArray argms = new JsonArray();
         argms.add(viewId);
         argms.add(((viewMode == null) ? FORM.getName() : viewMode));
-        argms.add(executor.getJsonContext());
+        argms.add(OeUtil.parseAsJsonElement(context));
         Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), argms);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }
@@ -148,8 +149,8 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @return
      * @throws OeRpcException
      */
-    public OeView getFieldsView(OeModel oeModel, Integer viewId,
-                                OeViewMode viewMode, Map<String, Object> context) throws OeRpcException {
+    public OeView getFieldsView(OeModel oeModel, Integer viewId, OeViewMode viewMode, Map<String, Object> context)
+            throws OeRpcException {
         return getFieldsView(oeModel.getName(), viewId, viewMode.getName(), context);
     }
 

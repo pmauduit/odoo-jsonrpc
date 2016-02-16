@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.util;
 
 import com.google.gson.Gson;
@@ -36,7 +37,7 @@ import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 public class OeBinder {
 
     @SuppressWarnings("unchecked")
-    public static <T extends AbstractOeEntity, E extends AbstractOeService> T bind(String result, Class<T> tClass, E oe) {
+    public static <T extends AbstractOeEntity, E extends AbstractOeService> T bind(String result, Class<T> tClaz, E oe) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
                 .registerTypeAdapter(Integer.class, new IntegerDeserializer())
@@ -46,7 +47,7 @@ public class OeBinder {
                 .registerTypeAdapter(Boolean.class, new BooleanDeserializer())
                 .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
                 .create();
-        T instance = gson.fromJson(result, tClass);
+        T instance = gson.fromJson(result, tClaz);
         instance.setOe(oe);
         return instance;
     }

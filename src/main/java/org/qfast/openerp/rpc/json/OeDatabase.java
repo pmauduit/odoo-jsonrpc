@@ -43,7 +43,7 @@ public class OeDatabase implements Serializable {
     private final int port;
     private final URIBuilder url;
     private final JsonObject emptyObject = new JsonObject();
-    private Object adminPwd;
+    private final Object adminPwd;
 
     private OeDatabase(String protocol, String host, int port, Object adminPwd) {
         this.protocol = protocol;
@@ -129,9 +129,6 @@ public class OeDatabase implements Serializable {
     }
 
     private Object getAdminPwd() {
-        if (adminPwd == null) {
-            adminPwd = Boolean.FALSE;
-        }
         return adminPwd;
     }
 

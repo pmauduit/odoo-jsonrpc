@@ -16,7 +16,6 @@
 
 package org.qfast.openerp.rpc.json;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.http.client.utils.URIBuilder;
@@ -206,13 +205,13 @@ public class OeExecutor implements Serializable {
     }
 
     public void updateContext(String key, Object value) {
-        jsonContext.addProperty(key, new Gson().toJson(value));
+        jsonContext.add(key, OeUtil.parseAsJsonElement(value));
         context.put(key, value);
     }
 
     public void updateJsonContext(Map<String, Object> params) {
         for (String key : params.keySet()) {
-            jsonContext.addProperty(key, new Gson().toJson(params.get(key)));
+            jsonContext.add(key, OeUtil.parseAsJsonElement(params.get(key)));
         }
     }
 
