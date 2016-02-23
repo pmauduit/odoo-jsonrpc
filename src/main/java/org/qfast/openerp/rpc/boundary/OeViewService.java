@@ -74,7 +74,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @return
      * @throws OeRpcException
      */
-    public OeView getOeView(OeActionType actionType, Integer actionId) throws OeRpcException {
+    public OeView getOeView(OeActionType actionType, Long actionId) throws OeRpcException {
         return getOeView(actionType.getName(), actionId);
     }
 
@@ -84,7 +84,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @return
      * @throws OeRpcException
      */
-    public OeView getOeView(String actionType, Integer actionId) throws OeRpcException {
+    public OeView getOeView(String actionType, Long actionId) throws OeRpcException {
         OeModel modelName;
         OeViewMode viewMode = FORM;
         if (actionType.equals(ACTION_WINDOW.getName())) {
@@ -112,11 +112,11 @@ public class OeViewService extends AbstractOeService<OeView> {
      */
     public OeView getFieldsView(String modelName, Integer viewId, String viewMode, Map<String, Object> context)
             throws OeRpcException {
-        JsonArray argms = new JsonArray();
-        argms.add(viewId);
-        argms.add(((viewMode == null) ? FORM.getName() : viewMode));
-        argms.add(OeUtil.parseAsJsonElement(context));
-        Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), argms);
+        JsonArray args = new JsonArray();
+        args.add(viewId);
+        args.add(((viewMode == null) ? FORM.getName() : viewMode));
+        args.add(OeUtil.parseAsJsonElement(context));
+        Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), args);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }
 

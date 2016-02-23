@@ -34,7 +34,7 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CODE, _DATE_FORMAT, _TIME_FORMAT,
             _DIRECTION, _ISO_CODE};
     private static final long serialVersionUID = -2806061495597715017L;
-    private Integer id;
+    private Long id;
     private String name;
     private String dateFormat;
     private String timeFormat;
@@ -54,11 +54,11 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

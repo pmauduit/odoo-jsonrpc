@@ -316,12 +316,12 @@ public class OeConst {
         ASC {
             @Override
             public String toString() {
-                return " ASC ";
+                return " ASC";
             }
         }, DESC {
             @Override
             public String toString() {
-                return " DESC ";
+                return " DESC";
             }
         }
     }

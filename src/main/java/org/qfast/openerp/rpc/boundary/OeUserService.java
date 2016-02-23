@@ -65,11 +65,11 @@ public class OeUserService extends AbstractOeService<OeUser> {
      * @return Collection Set of OeMenu
      * @throws OeRpcException
      */
-    public OeMenu findMenusByUserId(Integer userId) throws OeRpcException {
+    public OeMenu findMenusByUserId(Long userId) throws OeRpcException {
         return new OeMenuService(executor).findByUserId(userId);
     }
 
-    public List<OeMenu> findMenusByUserIdAllInOne(Integer userId) throws OeRpcException {
+    public List<OeMenu> findMenusByUserIdAllInOne(Long userId) throws OeRpcException {
         return new OeMenuService(executor).findByUserIdAllInOne(userId);
     }
 

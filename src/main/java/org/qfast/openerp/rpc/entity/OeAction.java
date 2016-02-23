@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import org.qfast.openerp.rpc.OeConst.OeActionType;
@@ -26,27 +27,27 @@ import java.io.Serializable;
 public class OeAction implements Serializable {
 
     private static final long serialVersionUID = -1502331199963285133L;
-    private Integer id;
+    private Long id;
     private OeActionType type;
 
     public OeAction() {
     }
 
-    public OeAction(Integer id, OeActionType type) {
+    public OeAction(Long id, OeActionType type) {
         this.id = id;
         this.type = type;
     }
 
-    public OeAction(Integer id, String type) {
+    public OeAction(Long id, String type) {
         this.id = id;
         this.type = OeActionType.value(type);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,12 +55,12 @@ public class OeAction implements Serializable {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = OeActionType.value(type);
-    }
-
     public void setType(OeActionType type) {
         this.type = type;
+    }
+
+    public void setType(String type) {
+        this.type = OeActionType.value(type);
     }
 
     @Override

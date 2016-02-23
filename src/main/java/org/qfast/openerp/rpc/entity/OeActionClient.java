@@ -32,7 +32,7 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
             _RES_MODEL = "res_model", _CONTEXT = "context";
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _HELP, _RES_MODEL, _CONTEXT};
     private static final long serialVersionUID = -1963097797139212178L;
-    private Integer id;
+    private Long id;
     private String name;
     private String help;
     private String resModel;
@@ -51,11 +51,11 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -91,12 +91,12 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return context;
     }
 
-    public void setContext(Map<String, Object> context) {
-        this.context = context;
-    }
-
     public void setContext(String context) {
         this.context = OeUtil.convertStringToMap(context);
+    }
+
+    public void setContext(Map<String, Object> context) {
+        this.context = context;
     }
 
     public String getType() {

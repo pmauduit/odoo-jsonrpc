@@ -24,6 +24,7 @@ import org.qfast.openerp.rpc.json.adaptor.BooleanDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.DateDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.FloatDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.IntegerDeserializer;
+import org.qfast.openerp.rpc.json.adaptor.LongDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.ObjectArrDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.StringDeserializer;
 
@@ -41,6 +42,7 @@ public class OeBinder {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
                 .registerTypeAdapter(Integer.class, new IntegerDeserializer())
+                .registerTypeAdapter(Long.class, new LongDeserializer())
                 .registerTypeAdapter(String.class, new StringDeserializer())
                 .registerTypeAdapter(Date.class, new DateDeserializer())
                 .registerTypeAdapter(Float.class, new FloatDeserializer())

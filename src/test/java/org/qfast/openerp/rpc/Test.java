@@ -16,10 +16,10 @@
 
 package org.qfast.openerp.rpc;
 
-import org.qfast.openerp.rpc.boundary.UserService;
-import org.qfast.openerp.rpc.entities.User;
+import org.qfast.openerp.rpc.boundary.OePartnerService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
 //import org.apache.commons.io.FileUtils;
 
@@ -38,13 +38,17 @@ public class Test {
 
     public static void main(String[] args) throws OeRpcException {
         OeExecutor exe = OeExecutor.getInstance(protocol, host, port, database, username, password);
-
+        OePartnerService service = new OePartnerService(exe);
+        OeCriteriaBuilder cb = new OeCriteriaBuilder();
+        cb.column("id").eq(1);
+        System.out.println(service.count(cb));
 //        JsonArray argms = new JsonArray();
 //        argms.add(exe.getJsonContext());
 //        OeCriteriaBuilder cb = new OeCriteriaBuilder();
 //        cb.column("name").ilike("a");
 //        argms.add(OeUtil.parseAsJsonElement(cb.getCriteria()));
-//        Object result = exe.execute(PARTNERS.getName(), SEARCH.getName(), argms);
+//        argms.add(new JsonArray());
+//        Object result = exe.execute(OeConst.OeModel.PARTNERS.getName(), OeConst.OeFun.SEARCH.getName(), argms);
 //        System.out.println(result);
 
 //        Boolean unlike = exe.unlike(PARTNERS.getName(), 22);
@@ -58,10 +62,10 @@ public class Test {
 //        OeUser user = service.findById(1);
 //        System.out.println(user);
 
-        UserService service = new UserService(exe);
-        User user2 = (User) service.findById(1);
-        System.out.println(user2.isEan13());
-        System.out.println(user2.getDisplayName());
+//        UserService service = new UserService(exe);
+//        User user2 = (User) service.findById(1);
+//        System.out.println(user2.isEan13());
+//        System.out.println(user2.getDisplayName());
 //        System.out.println(user.getLanguage());
 //        System.out.println(user.getMenus());
 //        System.out.println(user.getLocale());

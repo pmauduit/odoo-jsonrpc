@@ -33,7 +33,7 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
             _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _ACTION, _SEQUENCE, _PARENT_ID, _CHILDREN};
     private static final long serialVersionUID = -3622021175633536095L;
-    private Integer id;
+    private Long id;
     private String name;
     private Object[] parentId;
     private OeMenu parentMenu;
@@ -53,11 +53,11 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,9 +88,9 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
         this.parentId = parentId;
     }
 
-    public Integer getParentMenuId() {
+    public Long getParentMenuId() {
         if (parentId != null) {
-            return ((Double) parentId[0]).intValue();
+            return ((Double) parentId[0]).longValue();
         }
         return null;
     }
@@ -121,7 +121,7 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
     public OeAction getAction() {
         if (action != null) {
             String[] actionArr = action.split(",");
-            return new OeAction(Integer.parseInt(actionArr[1]), actionArr[0]);
+            return new OeAction(Long.parseLong(actionArr[1]), actionArr[0]);
         }
         return null;
     }

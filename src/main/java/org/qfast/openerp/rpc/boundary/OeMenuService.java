@@ -95,7 +95,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
-    public List<OeMenu> findByUserIdAllInOne(Integer userId) throws OeRpcException {
+    public List<OeMenu> findByUserIdAllInOne(Long userId) throws OeRpcException {
         if (OeUtil.equals(userId, executor.getUserId())) {
             List<OeMenu> oeMenus = new ArrayList<OeMenu>(10);
             addChildren(oeMenus, loadOeMenus().getChildren());
@@ -105,7 +105,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
             Set<OeGroup> oeGroups = oeGroupService.findByUserId(userId);
             oeGroupService = null;
             Set<OeMenu> menus = new TreeSet<OeMenu>();
-            Integer[] oeGroupsId = new Integer[oeGroups.size()];
+            Long[] oeGroupsId = new Long[oeGroups.size()];
             int i = 0;
             for (OeGroup oeGroup : oeGroups) {
                 oeGroupsId[i] = oeGroup.getId();
@@ -124,12 +124,12 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         }
     }
 
-    public OeMenu findByUserId(Integer userId) throws OeRpcException {
+    public OeMenu findByUserId(Long userId) throws OeRpcException {
         if (!OeUtil.equals(userId, executor.getUserId())) {
             OeGroupService oeGroupService = new OeGroupService(executor);
             Set<OeGroup> oeGroups = oeGroupService.findByUserId(userId);
             oeGroupService = null;
-            Integer[] oeGroupsId = new Integer[oeGroups.size()];
+            Long[] oeGroupsId = new Long[oeGroups.size()];
             int i = 0;
             for (OeGroup oeGroup : oeGroups) {
                 oeGroupsId[i] = oeGroup.getId();
@@ -145,7 +145,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         }
     }
 
-    private void setMenuChildren(OeMenu parentMenu, Integer[] oeGroupsId) throws OeRpcException {
+    private void setMenuChildren(OeMenu parentMenu, Long[] oeGroupsId) throws OeRpcException {
         Set<OeMenu> menus = new HashSet<OeMenu>(10);
         menus.addAll(findByGroupIdParentId(parentMenu.getId(), oeGroupsId));
         menus.addAll(findByNoGroupParentId(parentMenu.getId()));
@@ -161,7 +161,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return (new HashSet<OeMenu>(super.find(cb)));
     }
 
-    public Set<OeMenu> findByNoGroupParentId(Integer parentId) throws OeRpcException {
+    public Set<OeMenu> findByNoGroupParentId(Long parentId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_GROUPS_ID).eq(null)
                 .andColumn((parentId != null) ? _PARENT_ID_ID : _PARENT_ID)
@@ -169,14 +169,13 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return (new HashSet<OeMenu>(super.find(cb)));
     }
 
-    public Set<OeMenu> findByGroupId(Integer... groupId) throws OeRpcException {
+    public Set<OeMenu> findByGroupId(Long... groupId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_GROUPS_ID_ID).in(groupId);
         return (new HashSet<OeMenu>(super.find(cb)));
     }
 
-    public Set<OeMenu> findByGroupIdParentId(Integer parentId,
-                                             Integer... groupId) throws OeRpcException {
+    public Set<OeMenu> findByGroupIdParentId(Long parentId, Long... groupId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_GROUPS_ID_ID).in(groupId)
                 .andColumn((parentId != null ? _PARENT_ID_ID : _PARENT_ID))

@@ -37,7 +37,7 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
             _FIRST_NAME, _SECOND_NAME, _SURNAME, _EMAIL, _DISPLAY_NAME, _YEARLY_LIMIT, _MONTHLY_LIMIT, _LATITUDE,
             _LONGITUDE, _SERVICE_PROVIDER, _EMPLOYEE, _VALID_FROM, _VALID_TO, _PASSWORD};
     private static final long serialVersionUID = -4327707202428848696L;
-    private Integer id;
+    private Long id;
     private String partnerCode;
     private String accountId;
     private String imageSmall;
@@ -69,11 +69,11 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

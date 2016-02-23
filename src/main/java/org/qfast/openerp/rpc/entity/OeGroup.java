@@ -32,7 +32,7 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
             _USERS_ID_ID = _USERS_ID + ".id";
     public static final String[] COLUMNS = new String[]{_ID, _NAME};
     private static final long serialVersionUID = -1559525299933043517L;
-    private Integer id;
+    private Long id;
     private String name;
     private Set<OeMenu> menus;
 
@@ -48,11 +48,11 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

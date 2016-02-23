@@ -29,7 +29,7 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
             _SUMMARY = "summary", _ICON = "icon", _STATE = "state", _AUTHOR = "author";
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _SHORT_DESC, _SUMMARY, _ICON, _STATE, _AUTHOR};
     private static final long serialVersionUID = 1263824647955242480L;
-    private Integer id;
+    private Long id;
     private String icon;
     private String name;
     private String shortDesc;
@@ -49,11 +49,11 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,9 +107,7 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 41 * hash + this.id;
-        return hash;
+        return OeUtil.hashCode(id);
     }
 
     @Override

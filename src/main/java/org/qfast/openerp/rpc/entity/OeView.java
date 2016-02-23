@@ -39,8 +39,8 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _WRITE_DATE, _ARCH, _FIELD_PARENT,
             _INHERIT_ID, _MODEL_DATA_ID, _PRIORITY, _APPLICATION, _MODE, _MODEL, _TYPE, _VIEW_ID, _FIELDS};
     private static final long serialVersionUID = 8484756380717630025L;
-    private Integer id;
-    private Integer viewId;
+    private Long id;
+    private Long viewId;
     private String name;
     private Date createDate;
     private Date writeDate;
@@ -68,26 +68,26 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         if (id == null) {
             id = viewId;
         }
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
         this.viewId = id;
     }
 
-    public Integer getViewId() {
+    public Long getViewId() {
         if (viewId == null) {
             viewId = id;
         }
         return viewId;
     }
 
-    public void setViewId(Integer viewId) {
+    public void setViewId(Long viewId) {
         this.viewId = viewId;
         this.id = viewId;
     }

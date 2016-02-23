@@ -58,11 +58,11 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
-    public Set<OeMenu> findMenusByGroupId(Integer groupId) throws OeRpcException {
+    public Set<OeMenu> findMenusByGroupId(Long groupId) throws OeRpcException {
         return new OeMenuService(executor).findByGroupId(groupId);
     }
 
-    public Set<OeGroup> findByUserId(Integer userId) throws OeRpcException {
+    public Set<OeGroup> findByUserId(Long userId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_USERS_ID_ID).eq(userId);
         return (new HashSet<OeGroup>(super.find(cb, new String[]{_COL_ID})));

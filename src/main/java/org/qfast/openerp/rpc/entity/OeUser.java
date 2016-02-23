@@ -42,7 +42,7 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
             _IMAGE_MEDIUM, _IMAGE_SMALL, _LOGIN_DATE, _ACTIVE, _LANG, _DISPLAY_NAME, _SIGNATURE, _TZ_OFFSET, _TZ,
             _EMAIL, _USER_ID, _GROUPS_ID, _PARTNER_ID, _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
     private static final long serialVersionUID = 4881734215550044357L;
-    private Integer id;
+    private Long id;
     @SerializedName(_LOGIN)
     private String username;
     private String password;
@@ -84,11 +84,11 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -41,7 +41,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
             _VIEW_ID, _SEARCH_VIEW_ID, _AUTO_REFRESH, _VIEW_MODE, _MULTI, _TARGET, _AUTO_SEARCH, _FILTER, _SRC_MODEL,
             _LIMIT, _VIEW_TYPE, _RES_ID};
     private static final long serialVersionUID = -6747437395841876695L;
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String help;
@@ -49,7 +49,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     private String context;
     private String usage;
     private Object[] domain;
-    private Integer viewId;
+    private Long viewId;
     private Object[] searchViewId;
     private Boolean autoRefresh;
     private String viewMode;
@@ -60,7 +60,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     private String srcModel;
     private Integer limit;
     private String viewType;
-    private Integer resId;
+    private Long resId;
 
     public OeActionWindow() {
     }
@@ -74,11 +74,11 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
         return COLUMNS;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -146,11 +146,11 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
         this.domain = domain;
     }
 
-    public Integer getViewId() {
+    public Long getViewId() {
         return viewId;
     }
 
-    public void setViewId(Integer viewId) {
+    public void setViewId(Long viewId) {
         this.viewId = viewId;
     }
 
@@ -254,11 +254,11 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
         return OeViewMode.value(viewType);
     }
 
-    public Integer getResId() {
+    public Long getResId() {
         return resId;
     }
 
-    public void setResId(Integer resId) {
+    public void setResId(Long resId) {
         this.resId = resId;
     }
 
