@@ -16,22 +16,25 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeModuleService;
 import org.qfast.openerp.rpc.util.OeUtil;
+
+import java.util.Arrays;
 
 /**
  * @author Ahmed El-mawaziny
  */
 public class OeModule extends AbstractOeEntity<OeModuleService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _SHORT_DESC = "shortdesc",
-            _SUMMARY = "summary", _ICON = "icon", _STATE = "state", _AUTHOR = "author";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _SHORT_DESC, _SUMMARY, _ICON, _STATE, _AUTHOR};
+    public static final String _SHORT_DESC = "shortdesc", _SUMMARY = "summary", _ICON = "icon", _STATE = "state",
+            _AUTHOR = "author";
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _SHORT_DESC, _SUMMARY, _ICON, _STATE, _AUTHOR};
+
     private static final long serialVersionUID = 1263824647955242480L;
-    private Long id;
+
     private String icon;
-    private String name;
     private String shortDesc;
     private String summary;
     private String state;
@@ -49,28 +52,12 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
         return COLUMNS;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getIcon() {
         return icon;
     }
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSummary() {
@@ -117,12 +104,20 @@ public class OeModule extends AbstractOeEntity<OeModuleService> {
 
     @Override
     public String toString() {
-        return "OEModule{" + "id=" + id
-                + ", icon=" + icon
-                + ", name=" + name
-                + ", shortDesc=" + shortDesc
-                + ", summary=" + summary
-                + ", state=" + state
-                + ", author=" + author + '}';
+        return "OeModule{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", author='" + author + '\'' +
+                ", icon='" + icon + '\'' +
+                ", shortDesc='" + shortDesc + '\'' +
+                ", summary='" + summary + '\'' +
+                ", state='" + state + '\'' +
+                '}';
     }
 }

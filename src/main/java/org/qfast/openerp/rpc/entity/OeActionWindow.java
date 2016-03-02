@@ -16,7 +16,6 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
 import org.qfast.openerp.rpc.boundary.OeActionWindowService;
@@ -32,17 +31,19 @@ import java.util.Map;
  */
 public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _TYPE = "type", _HELP = "help",
-            _RES_MODEL = "res_model", _CONTEXT = "context", _USAGE = "usage", _DOMAIN = "domain", _VIEW_ID = "view_id",
-            _SEARCH_VIEW_ID = "search_view_id", _AUTO_REFRESH = "auto_refresh", _VIEW_MODE = "view_mode",
-            _MULTI = "multi", _TARGET = "target", _AUTO_SEARCH = "auto_search", _FILTER = "filter",
-            _SRC_MODEL = "src_model", _LIMIT = "limit", _VIEW_TYPE = "view_type", _RES_ID = "res_id";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _TYPE, _HELP, _RES_MODEL, _CONTEXT, _USAGE, _DOMAIN,
-            _VIEW_ID, _SEARCH_VIEW_ID, _AUTO_REFRESH, _VIEW_MODE, _MULTI, _TARGET, _AUTO_SEARCH, _FILTER, _SRC_MODEL,
+    public static final String _TYPE = "type", _HELP = "help", _RES_MODEL = "res_model", _CONTEXT = "context",
+            _USAGE = "usage", _DOMAIN = "domain", _VIEW_ID = "view_id", _SEARCH_VIEW_ID = "search_view_id",
+            _AUTO_REFRESH = "auto_refresh", _VIEW_MODE = "view_mode", _MULTI = "multi", _TARGET = "target",
+            _AUTO_SEARCH = "auto_search", _FILTER = "filter", _SRC_MODEL = "src_model", _LIMIT = "limit",
+            _VIEW_TYPE = "view_type", _RES_ID = "res_id";
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _TYPE, _HELP, _RES_MODEL, _CONTEXT, _USAGE, _DOMAIN, _VIEW_ID, _SEARCH_VIEW_ID,
+            _AUTO_REFRESH, _VIEW_MODE, _MULTI, _TARGET, _AUTO_SEARCH, _FILTER, _SRC_MODEL,
             _LIMIT, _VIEW_TYPE, _RES_ID};
+
     private static final long serialVersionUID = -6747437395841876695L;
-    private Long id;
-    private String name;
+
     private String type;
     private String help;
     private String resModel;
@@ -72,22 +73,6 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     @Override
     public String[] getColumns() {
         return COLUMNS;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getHelp() {
@@ -276,25 +261,31 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
 
     @Override
     public String toString() {
-        return "OeActionWindow{" + "id=" + id
-                + ", name=" + name
-                + ", type=" + type
-                + ", help=" + help
-                + ", resModel=" + resModel
-                + ", context=" + context
-                + ", usage=" + usage
-                + ", domain=" + Arrays.deepToString(domain)
-                + ", viewId=" + viewId
-                + ", searchViewId=" + Arrays.deepToString(searchViewId)
-                + ", autoRefresh=" + autoRefresh
-                + ", viewMode=" + viewMode
-                + ", multi=" + multi
-                + ", target=" + target
-                + ", autoSearch=" + autoSearch
-                + ", filter=" + filter
-                + ", srcModel=" + srcModel
-                + ", limit=" + limit
-                + ", viewType=" + viewType
-                + ", resId=" + resId + '}';
+        return "OeActionWindow{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", autoRefresh=" + autoRefresh +
+                ", type='" + type + '\'' +
+                ", help='" + help + '\'' +
+                ", resModel='" + resModel + '\'' +
+                ", context='" + context + '\'' +
+                ", usage='" + usage + '\'' +
+                ", domain=" + Arrays.toString(domain) +
+                ", viewId=" + viewId +
+                ", searchViewId=" + Arrays.toString(searchViewId) +
+                ", viewMode='" + viewMode + '\'' +
+                ", multi=" + multi +
+                ", target='" + target + '\'' +
+                ", autoSearch=" + autoSearch +
+                ", filter=" + filter +
+                ", srcModel='" + srcModel + '\'' +
+                ", limit=" + limit +
+                ", viewType='" + viewType + '\'' +
+                ", resId=" + resId +
+                '}';
     }
 }

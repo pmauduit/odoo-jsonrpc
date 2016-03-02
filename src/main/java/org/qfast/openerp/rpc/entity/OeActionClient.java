@@ -16,11 +16,11 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.boundary.OeActionClientService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -28,16 +28,21 @@ import java.util.Map;
  */
 public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _TYPE = "type", _HELP = "help",
-            _RES_MODEL = "res_model", _CONTEXT = "context";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _HELP, _RES_MODEL, _CONTEXT};
+    public static final String _TYPE = "type", _HELP = "help", _RES_MODEL = "res_model", _CONTEXT = "context",
+            _TAG = "tag", _PARAMS = "params", _PARAMS_STORE = "params_store", _USAGE = "usage";
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _HELP, _RES_MODEL, _CONTEXT, _TYPE, _TAG, _PARAMS, _PARAMS_STORE, _USAGE};
+
     private static final long serialVersionUID = -1963097797139212178L;
-    private Long id;
-    private String name;
+
     private String help;
     private String resModel;
+    private Map<String, Object> params;
     private Map<String, Object> context;
     private String type;
+    private String tag;
+    private String usage;
 
     public OeActionClient() {
     }
@@ -49,22 +54,6 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
     @Override
     public String[] getColumns() {
         return COLUMNS;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getHelp() {
@@ -91,12 +80,12 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return context;
     }
 
-    public void setContext(String context) {
-        this.context = OeUtil.convertStringToMap(context);
-    }
-
     public void setContext(Map<String, Object> context) {
         this.context = context;
+    }
+
+    public void setContext(String context) {
+        this.context = OeUtil.convertStringToMap(context);
     }
 
     public String getType() {
@@ -105,6 +94,30 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 
     @Override
@@ -121,11 +134,22 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
 
     @Override
     public String toString() {
-        return "OeActionClient{" + "id=" + id
-                + ", name=" + name
-                + ", help=" + help
-                + ", resModel=" + resModel
-                + ", context=" + context
-                + ", type=" + type + '}';
+        return "OeActionClient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", context=" + context +
+                ", help='" + help + '\'' +
+                ", resModel='" + resModel + '\'' +
+                ", params=" + params +
+                ", type=" + type + '\'' +
+                ", tag='" + tag + '\'' +
+                ", usage='" + usage + '\'' +
+                '}';
     }
 }

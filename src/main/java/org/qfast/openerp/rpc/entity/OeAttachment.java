@@ -18,7 +18,7 @@ package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
 import org.apache.http.client.utils.URIBuilder;
-import org.qfast.openerp.rpc.boundary.AttachmentService;
+import org.qfast.openerp.rpc.boundary.OeAttachmentService;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeUtil;
 
@@ -27,16 +27,16 @@ import java.util.Arrays;
 /**
  * @author Ahmed El-mawaziny
  */
-public class Attachment extends AbstractOeEntity<AttachmentService> {
+public class OeAttachment extends AbstractOeEntity<OeAttachmentService> {
 
     public static final String _FILE_NAME = "datas_fname", _DATA = "datas", _MODEL = "res_model",
             _FILE_SIZE = "file_size", _FILE_TYPE = "file_type", _RES_NAME = "res_name", _DB_DATAS = "db_datas",
             _COMPANY_ID = "company_id", _TYPE = "type", _STORE_FNAME = "store_fname", _DESCRIPTION = "description",
             _FILE_TYPE_ICON = "file_type_icon", _URL = "url", _RES_ID = "res_id", _DATAS_FNAME = "datas_fname";
 
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _FILE_NAME, _DATA, _MODEL, _FILE_SIZE, _FILE_TYPE,
-            _RES_NAME, _DB_DATAS, _COMPANY_ID, _TYPE, _STORE_FNAME, _DESCRIPTION, _FILE_TYPE_ICON, _URL, _RES_ID,
-            _DATAS_FNAME};
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _FILE_NAME, _DATA, _MODEL, _FILE_SIZE, _FILE_TYPE, _RES_NAME, _DB_DATAS,
+            _COMPANY_ID, _TYPE, _STORE_FNAME, _DESCRIPTION, _FILE_TYPE_ICON, _URL, _RES_ID, _DATAS_FNAME};
 
     private static final long serialVersionUID = -3111917687766566032L;
 
@@ -60,10 +60,10 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
     private String dataFileName;
     private String type;
 
-    public Attachment() {
+    public OeAttachment() {
     }
 
-    public Attachment(AttachmentService service) {
+    public OeAttachment(OeAttachmentService service) {
         super.oe = service;
     }
 
@@ -203,19 +203,18 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() != obj.getClass() && OeUtil.equals(this.id, ((Attachment) obj).id);
+        return obj != null && getClass() != obj.getClass() && OeUtil.equals(this.id, ((OeAttachment) obj).id);
     }
 
     @Override
     public String toString() {
-        return "Attachment{" +
+        return "OeAttachment{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", createDate='" + createDate + '\'' +
-                ", lastUpdate='" + lastUpdate + '\'' +
-                ", writeDate='" + writeDate + '\'' +
-                ", createUid='" + Arrays.toString(createUid) + '\'' +
-                ", writeUid='" + Arrays.toString(writeUid) + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
                 ", companyId=" + Arrays.toString(companyId) +
                 ", data='" + data + '\'' +
                 ", model='" + model + '\'' +
@@ -223,7 +222,6 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
                 ", fileType='" + fileType + '\'' +
                 ", resName='" + resName + '\'' +
                 ", dbData='" + dbData + '\'' +
-                ", displayName='" + displayName + '\'' +
                 ", storeFileName='" + storeFileName + '\'' +
                 ", description='" + description + '\'' +
                 ", fileTypeIcon='" + fileTypeIcon + '\'' +
@@ -231,7 +229,7 @@ public class Attachment extends AbstractOeEntity<AttachmentService> {
                 ", resId=" + resId +
                 ", dataFileName='" + dataFileName + '\'' +
                 ", type='" + type + '\'' +
-                ", genUrl='" + getUrl() + '\'' +
+                ", url=" + getUrl() +
                 '}';
     }
 }

@@ -127,7 +127,7 @@ public class Test {
 //        values.put(ServiceRequest._ATTACHMENTS, new Object[][]{{6, false, o2}});
 //        Boolean create = service.write(2, values);
 //        System.out.println("create = " + create);
-//        AttachmentService service1 = new AttachmentService(exe);
+//        OeAttachmentService service1 = new OeAttachmentService(exe);
 //        Map<String, Object> values = new HashMap<String, Object>();
 //        values.put(Attachment._FILE_NAME, "Test");
 //        values.put(Attachment._MODEL, "bpm.messaging");
@@ -139,8 +139,8 @@ public class Test {
 //        System.out.println("create = " + create);
 //        ServiceRequest findById = service.findById(1);
 //        System.out.println("findById = " + findById);
-//        AttachmentService service = new AttachmentService(exe);
-//        Attachment findByPartnerId = service.findById(11);
+//        OeAttachmentService service = new OeAttachmentService(exe);
+//        OeAttachment findByPartnerId = service.findById(11);
 //        System.out.println(findByPartnerId);
 //        BpmServiceService service = new BpmServiceService(exe);
 //        List<BpmService> findById = service.findByGroupId(1);

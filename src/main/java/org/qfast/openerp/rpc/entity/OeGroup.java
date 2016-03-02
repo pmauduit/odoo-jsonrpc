@@ -16,11 +16,11 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeGroupService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -28,12 +28,13 @@ import java.util.Set;
  */
 public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _USERS_ID = "users",
-            _USERS_ID_ID = _USERS_ID + ".id";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME};
+    public static final String _USERS_ID = "users", _USERS_ID_ID = _USERS_ID + ".id";
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE};
+
     private static final long serialVersionUID = -1559525299933043517L;
-    private Long id;
-    private String name;
+
     private Set<OeMenu> menus;
 
     public OeGroup() {
@@ -89,6 +90,14 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
 
     @Override
     public String toString() {
-        return "OeGroup{" + "id=" + id + ", name=" + name + '}';
+        return "OeGroup{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) + '}';
     }
 }

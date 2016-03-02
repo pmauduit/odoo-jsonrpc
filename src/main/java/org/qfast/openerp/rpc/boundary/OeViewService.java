@@ -55,7 +55,7 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return name;
     }
 

@@ -23,7 +23,9 @@ import static org.qfast.openerp.rpc.util.OeUtil.isNULL;
  */
 public class OeConst {
 
-    public static final String _COL_ID = "id", _COL_NAME = "name",
+    public static final String _COL_ID = "id", _COL_NAME = "name", _COL_CREATE_DATE = "create_date",
+            _COL_WRITE_UID = "write_uid", _COL_CREATE_UID = "create_uid", _COL_DISPLAY_NAME = "display_name",
+            _COL_LAST_UPDATE = "__last_update", _COL_WRITE_DATE = "write_date",
             _RS_WEB = "/web", _RS_WEB_CLIENT = "/webclient", _RS_DATA_SET = "/dataset", _RS_VIEW = "/view",
             _RS_TREE_VIEW = "/treeview", _RS_ACTION = "/action", _RS_EXPORT = "/export", _RS_PROXY = "/proxy",
             _RS_MENU = "/menu", _RS_DATABASE = "/database", _RS_SESSION = "/session";

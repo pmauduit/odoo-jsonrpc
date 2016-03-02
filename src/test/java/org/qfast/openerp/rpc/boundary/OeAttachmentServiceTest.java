@@ -17,7 +17,7 @@
 package org.qfast.openerp.rpc.boundary;
 
 import com.google.gson.JsonArray;
-import org.qfast.openerp.rpc.entity.Attachment;
+import org.qfast.openerp.rpc.entity.OeAttachment;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
@@ -39,7 +39,7 @@ import static org.qfast.openerp.rpc.util.OeUtil.convertJsonArray;
 /**
  * @author Ahmed El-mawaziny on 2/16/16.
  */
-public class AttachmentServiceTest {
+public class OeAttachmentServiceTest {
 
     private static final String PROTOCOL = "http";
     private static final String HOST = "localhost";
@@ -48,12 +48,12 @@ public class AttachmentServiceTest {
     private static final String USERNAME = "admin";
     private static final String DATABASE = "bpm";
     private static OeExecutor executor;
-    private static AttachmentService service;
+    private static OeAttachmentService service;
 
     @org.junit.BeforeClass
     public static void beforeClass() throws Exception {
         executor = OeExecutor.getInstance(PROTOCOL, HOST, PORT, DATABASE, USERNAME, PASSWORD);
-        service = new AttachmentService(executor);
+        service = new OeAttachmentService(executor);
     }
 
     @org.junit.AfterClass
@@ -76,8 +76,8 @@ public class AttachmentServiceTest {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             Long id = ids[0];
-            Attachment attachment = service.findById(id);
-            assertEquals(id, attachment.getId());
+            OeAttachment oeAttachment = service.findById(id);
+            assertEquals(id, oeAttachment.getId());
         }
     }
 
@@ -85,24 +85,24 @@ public class AttachmentServiceTest {
     public void testFindByIds() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            List<Attachment> attachments = service.findByIds(ids, Attachment._ID);
-            assertEquals(ids.length, attachments.size());
+            List<OeAttachment> oeAttachments = service.findByIds(ids, OeAttachment._ID);
+            assertEquals(ids.length, oeAttachments.size());
             List<Long> idsAsList = Arrays.asList(ids);
-            for (Attachment attachment : attachments) {
-                assertTrue(idsAsList.contains(attachment.getId()));
+            for (OeAttachment oeAttachment : oeAttachments) {
+                assertTrue(idsAsList.contains(oeAttachment.getId()));
             }
         }
     }
 
     @org.junit.Test
     public void testFindAll() throws Exception {
-        List<Attachment> attachments = service.findAll(Attachment._ID);
+        List<OeAttachment> oeAttachments = service.findAll(OeAttachment._ID);
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            assertEquals(ids.length, attachments.size());
+            assertEquals(ids.length, oeAttachments.size());
             List<Long> idsAsList = Arrays.asList(ids);
-            for (Attachment attachment : attachments) {
-                assertTrue(idsAsList.contains(attachment.getId()));
+            for (OeAttachment oeAttachment : oeAttachments) {
+                assertTrue(idsAsList.contains(oeAttachment.getId()));
             }
         }
     }
@@ -115,7 +115,7 @@ public class AttachmentServiceTest {
             for (Long id : ids) {
                 min = Math.min(min, id);
             }
-            Attachment first = service.findFirst();
+            OeAttachment first = service.findFirst();
             if (first != null) {
                 assertEquals(min, first.getId());
             }
@@ -130,7 +130,7 @@ public class AttachmentServiceTest {
             for (Long id : ids) {
                 max = Math.max(max, id);
             }
-            Attachment last = service.findLast(Attachment._ID);
+            OeAttachment last = service.findLast(OeAttachment._ID);
             if (last != null) {
                 assertEquals(max, last.getId());
             }
@@ -141,7 +141,7 @@ public class AttachmentServiceTest {
     public void testFindAny() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            Attachment any = service.findAny(Attachment._ID);
+            OeAttachment any = service.findAny(OeAttachment._ID);
             List<Long> idsList = Arrays.asList(ids);
             assertTrue(idsList.contains(any.getId()));
         }
@@ -149,7 +149,7 @@ public class AttachmentServiceTest {
 
     @org.junit.Test
     public void testFindRang() throws Exception {
-        List<Attachment> rang = service.findRang(0, 1, new String[]{Attachment._ID});
+        List<OeAttachment> rang = service.findRang(0, 1, new String[]{OeAttachment._ID});
         if (rang != null)
             assertTrue(rang.size() == 1);
     }
@@ -164,7 +164,7 @@ public class AttachmentServiceTest {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             OeCriteriaBuilder cb = new OeCriteriaBuilder();
-            cb.column(Attachment._ID).eq(ids[0]);
+            cb.column(OeAttachment._ID).eq(ids[0]);
             assertTrue(1 == service.count(cb));
         }
     }
@@ -172,9 +172,9 @@ public class AttachmentServiceTest {
     @org.junit.Test
     public void testCreate() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
-        values.put(Attachment._NAME, "Test");
-        values.put(Attachment._FILE_NAME, "Test");
-        values.put(Attachment._MODEL, PARTNERS.getName());
+        values.put(OeAttachment._NAME, "Test");
+        values.put(OeAttachment._FILE_NAME, "Test");
+        values.put(OeAttachment._MODEL, PARTNERS.getName());
         Long id = service.create(values);
         assertNotNull(id);
         assertTrue(0L != id);
@@ -189,22 +189,22 @@ public class AttachmentServiceTest {
         Long[] ids = getIds();
         String name = "Updated record";
         if (ids != null && ids.length != 0) {
-            Attachment attachment = service.findById(ids[0], Attachment._NAME);
-            String oldName = attachment.getName();
+            OeAttachment oeAttachment = service.findById(ids[0], OeAttachment._NAME);
+            String oldName = oeAttachment.getName();
             Map<String, Object> values = new HashMap<String, Object>(1);
-            values.put(Attachment._NAME, name);
+            values.put(OeAttachment._NAME, name);
             Boolean updated = service.update(ids[0], values);
             assertTrue(updated);
-            attachment = service.findById(ids[0], Attachment._NAME);
-            assertEquals(name, attachment.getName());
+            oeAttachment = service.findById(ids[0], OeAttachment._NAME);
+            assertEquals(name, oeAttachment.getName());
 
             //rollback the updated value
             values = new HashMap<String, Object>(1);
-            values.put(Attachment._NAME, oldName);
+            values.put(OeAttachment._NAME, oldName);
             updated = service.update(ids[0], values);
             assertTrue(updated);
-            attachment = service.findById(ids[0], Attachment._NAME);
-            assertEquals(oldName, attachment.getName());
+            oeAttachment = service.findById(ids[0], OeAttachment._NAME);
+            assertEquals(oldName, oeAttachment.getName());
         }
     }
 

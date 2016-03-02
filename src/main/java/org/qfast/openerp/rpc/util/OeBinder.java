@@ -25,10 +25,12 @@ import org.qfast.openerp.rpc.json.adaptor.DateDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.FloatDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.IntegerDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.LongDeserializer;
+import org.qfast.openerp.rpc.json.adaptor.MapDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.ObjectArrDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.StringDeserializer;
 
 import java.util.Date;
+import java.util.Map;
 
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
@@ -47,6 +49,7 @@ public class OeBinder {
                 .registerTypeAdapter(Date.class, new DateDeserializer())
                 .registerTypeAdapter(Float.class, new FloatDeserializer())
                 .registerTypeAdapter(Boolean.class, new BooleanDeserializer())
+                .registerTypeAdapter(Map.class, new MapDeserializer())
                 .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
                 .create();
         T instance = gson.fromJson(result, tClaz);

@@ -17,7 +17,6 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
 import org.qfast.openerp.rpc.boundary.OeViewService;
@@ -32,16 +31,17 @@ import java.util.Map;
  */
 public class OeView extends AbstractOeEntity<OeViewService> implements Comparable<OeView> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _CREATE_DATE = "create_date",
-            _WRITE_DATE = "write_date", _ARCH = "arch", _FIELD_PARENT = "field_parent", _INHERIT_ID = "inherit_id",
+    public static final String _ARCH = "arch", _FIELD_PARENT = "field_parent", _INHERIT_ID = "inherit_id",
             _MODEL_DATA_ID = "model_data_id", _PRIORITY = "priority", _APPLICATION = "application", _MODE = "mode",
             _MODEL = "model", _TYPE = "type", _VIEW_ID = "view_id", _FIELDS = "fields";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _WRITE_DATE, _ARCH, _FIELD_PARENT,
-            _INHERIT_ID, _MODEL_DATA_ID, _PRIORITY, _APPLICATION, _MODE, _MODEL, _TYPE, _VIEW_ID, _FIELDS};
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _ARCH, _FIELD_PARENT, _INHERIT_ID, _MODEL_DATA_ID, _PRIORITY, _APPLICATION,
+            _MODE, _MODEL, _TYPE, _VIEW_ID, _FIELDS};
+
     private static final long serialVersionUID = 8484756380717630025L;
-    private Long id;
+
     private Long viewId;
-    private String name;
     private Date createDate;
     private Date writeDate;
     private String arch;
@@ -53,7 +53,7 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     private String mode;
     private String model;
     private String viewMode;
-    @SerializedName("fields")
+    @SerializedName(_FIELDS)
     private Map<String, OeField> oeFields;
 
     public OeView() {
@@ -68,6 +68,7 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
         return COLUMNS;
     }
 
+    @Override
     public Long getId() {
         if (id == null) {
             id = viewId;
@@ -75,8 +76,9 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
         return id;
     }
 
+    @Override
     public void setId(Long id) {
-        this.id = id;
+        super.setId(id);
         this.viewId = id;
     }
 
@@ -90,14 +92,6 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     public void setViewId(Long viewId) {
         this.viewId = viewId;
         this.id = viewId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Date getCreateDate() {
@@ -228,20 +222,28 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
 
     @Override
     public String toString() {
-        return "OeView{" + "id=" + id
-                + ", viewId=" + viewId
-                + ", name=" + name
-                + ", createDate=" + createDate
-                + ", writeDate=" + writeDate
-                + ", arch=" + arch
-                + ", fieldParent=" + fieldParent
-                + ", inheritId=" + Arrays.deepToString(inheritId)
-                + ", modelDataId=" + modelDataId
-                + ", priority=" + priority
-                + ", application=" + application
-                + ", mode=" + mode
-                + ", model=" + model
-                + ", type=" + viewMode
-                + ", oeFields=" + oeFields + '}';
+        return "OeView{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", application='" + application + '\'' +
+                ", viewId=" + viewId +
+                ", createDate=" + createDate +
+                ", writeDate=" + writeDate +
+                ", arch='" + arch + '\'' +
+                ", fieldParent='" + fieldParent + '\'' +
+                ", inheritId=" + Arrays.toString(inheritId) +
+                ", modelDataId=" + modelDataId +
+                ", priority=" + priority +
+                ", mode='" + mode + '\'' +
+                ", model='" + model + '\'' +
+                ", viewMode='" + viewMode + '\'' +
+                ", oeFields=" + oeFields +
+                '}';
     }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.entity;
 
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -26,6 +27,7 @@ import java.util.Locale;
 public class OeLocale implements Serializable {
 
     private static final long serialVersionUID = -3338490817706642655L;
+
     private Locale locale;
     private String name;
 

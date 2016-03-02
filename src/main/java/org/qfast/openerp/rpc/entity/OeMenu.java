@@ -16,7 +16,6 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeMenuService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -28,13 +27,14 @@ import java.util.Arrays;
  */
 public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparable<OeMenu> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _SEQUENCE = "sequence",
-            _GROUPS_ID = "groups_id", _GROUPS_ID_ID = _GROUPS_ID + ".id", _PARENT_ID = "parent_id",
-            _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _ACTION, _SEQUENCE, _PARENT_ID, _CHILDREN};
+    public static final String _SEQUENCE = "sequence", _GROUPS_ID = "groups_id", _GROUPS_ID_ID = _GROUPS_ID + ".id",
+            _PARENT_ID = "parent_id", _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _ACTION, _SEQUENCE, _PARENT_ID, _CHILDREN};
+
     private static final long serialVersionUID = -3622021175633536095L;
-    private Long id;
-    private String name;
+
     private Object[] parentId;
     private OeMenu parentMenu;
     private Integer sequence;
@@ -51,22 +51,6 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
     @Override
     public String[] getColumns() {
         return COLUMNS;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public OeMenu getParentMenu() throws OeRpcException {
@@ -157,12 +141,20 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
 
     @Override
     public String toString() {
-        return "Menu{" + "id=" + id
-                + ", name=" + name
-                + ", parentId=" + Arrays.toString(parentId)
-                + ", parentMenu=" + parentMenu
-                + ", children=" + Arrays.toString(children)
-                + ", action=" + getAction()
-                + ", sequence=" + sequence + "}\n";
+        return "OeMenu{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", action='" + action + '\'' +
+                ", parentId=" + Arrays.toString(parentId) +
+                ", parentMenu=" + parentMenu +
+                ", sequence=" + sequence +
+                ", children=" + Arrays.toString(children) +
+                '}';
     }
 }

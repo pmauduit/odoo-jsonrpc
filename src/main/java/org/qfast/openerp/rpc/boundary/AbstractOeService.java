@@ -17,6 +17,7 @@
 package org.qfast.openerp.rpc.boundary;
 
 import com.google.gson.JsonArray;
+import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
@@ -60,6 +61,19 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         this.model = (Class<M>) model;
     }
 
+    public static <OeM extends AbstractOeEntity, E extends AbstractOeService> OeM findById(OeExecutor executor,
+                                                                                           Class<OeM> m, Class<E> e,
+                                                                                           Long id) throws Exception {
+        E eInstance = e.getDeclaredConstructor(OeExecutor.class).newInstance(executor);
+        OeCriteriaBuilder cb = new OeCriteriaBuilder();
+        cb.column(OeConst._COL_ID).eq(id);
+        JsonArray result = executor.searchReadArr(eInstance.getName(), cb.getCriteria());
+        if (result != null && !result.isJsonNull() && result.size() != 0) {
+            return OeBinder.bind(result.get(0).toString(), m, eInstance);
+        }
+        throw new OeRpcException(m.getSimpleName() + " Not found with id=" + id, null);
+    }
+
     /**
      * Get OpenERP Executor
      *
@@ -74,7 +88,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @return OpenERP model name
      */
-    protected abstract String getName();
+    public abstract String getName();
 
     /**
      * find OpenERP Model or Object by id and return custom Entity
@@ -140,7 +154,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @throws OeRpcException
      */
     public final M findLast(String... columns) throws OeRpcException {
-        return findLast(new OeCriteriaBuilder());
+        return findLast(new OeCriteriaBuilder(), columns);
     }
 
     /**

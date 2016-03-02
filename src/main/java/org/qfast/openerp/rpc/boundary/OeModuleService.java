@@ -48,17 +48,17 @@ public class OeModuleService extends AbstractOeService<OeModule> {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
     public boolean uninstall(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.BUTTON_IMMEDIATE_UNINSTALL.name, OeUtil.parseAsJsonArray(ids));
+        executor.execute(name, Fun.UNINSTALL.name, OeUtil.parseAsJsonArray(ids));
         return true;
     }
 
     public boolean install(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.BUTTON_IMMEDIATE_INSTALL.name, OeUtil.parseAsJsonArray(ids));
+        executor.execute(name, Fun.INSTALL.name, OeUtil.parseAsJsonArray(ids));
         return true;
     }
 
@@ -70,8 +70,9 @@ public class OeModuleService extends AbstractOeService<OeModule> {
 
     public enum Fun {
 
-        BUTTON_IMMEDIATE_UNINSTALL("button_immediate_uninstall"),
-        BUTTON_IMMEDIATE_INSTALL("button_immediate_install");
+        UNINSTALL("button_immediate_uninstall"),
+        INSTALL("button_immediate_install");
+
         private final String name;
 
         Fun(String name) {

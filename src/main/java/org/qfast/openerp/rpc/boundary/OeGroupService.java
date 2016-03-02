@@ -48,7 +48,7 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return name;
     }
 

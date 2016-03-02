@@ -17,7 +17,6 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.OeUserService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -32,17 +31,19 @@ import java.util.Locale;
  */
 public class OeUser extends AbstractOeEntity<OeUserService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _LOGIN = "login",
-            _PASSWORD = "password", _PASSWORD_CRYPT = "password_crypt", _IMAGE = "image", _IMAGE_MEDIUM = "image_medium",
-            _IMAGE_SMALL = "image_small", _LOGIN_DATE = "login_date", _ACTIVE = "active", _LANG = "lang",
-            _DISPLAY_NAME = "display_name", _SIGNATURE = "signature", _TZ_OFFSET = "tz_offset", _TZ = "tz",
+    public static final String _LOGIN = "login", _PASSWORD = "password", _PASSWORD_CRYPT = "password_crypt",
+            _IMAGE = "image", _IMAGE_MEDIUM = "image_medium", _IMAGE_SMALL = "image_small", _LOGIN_DATE = "login_date",
+            _ACTIVE = "active", _LANG = "lang", _SIGNATURE = "signature", _TZ_OFFSET = "tz_offset", _TZ = "tz",
             _EMAIL = "email", _USER_ID = "user_id", _GROUPS_ID = "groups_id", _PARTNER_ID = "partner_id",
             _COMPANY_ID = "company_id", _SUPPLIER = "supplier", _CUSTOMER = "customer", _HAS_IMAGE = "has_image";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _LOGIN, _PASSWORD, _PASSWORD_CRYPT, _IMAGE,
-            _IMAGE_MEDIUM, _IMAGE_SMALL, _LOGIN_DATE, _ACTIVE, _LANG, _DISPLAY_NAME, _SIGNATURE, _TZ_OFFSET, _TZ,
-            _EMAIL, _USER_ID, _GROUPS_ID, _PARTNER_ID, _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _LOGIN, _PASSWORD, _PASSWORD_CRYPT, _IMAGE, _IMAGE_MEDIUM, _IMAGE_SMALL,
+            _LOGIN_DATE, _ACTIVE, _LANG, _SIGNATURE, _TZ_OFFSET, _TZ, _EMAIL, _USER_ID, _GROUPS_ID, _PARTNER_ID,
+            _COMPANY_ID, _SUPPLIER, _CUSTOMER, _HAS_IMAGE};
+
     private static final long serialVersionUID = 4881734215550044357L;
-    private Long id;
+
     @SerializedName(_LOGIN)
     private String username;
     private String password;
@@ -50,8 +51,6 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
     private String image;
     private String imageMedium;
     private String imageSmall;
-    private String displayName;
-    private String name;
     private String signature;
     private String tzOffset;
     private String tz;
@@ -82,14 +81,6 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
     @Override
     public String[] getColumns() {
         return COLUMNS;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -180,22 +171,6 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     public void setImageSmall(String imageSmall) {
         this.imageSmall = imageSmall;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSignature() {
@@ -332,33 +307,40 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
 
     @Override
     public String toString() {
-        return "OeUser{" + "id=" + id
-                + ", username=" + username
-                + ", password=" + password
-                + ", passwordCrypt=" + passwordCrypt
-                + ", image=" + image
-                + ", imageMedium=" + imageMedium
-                + ", imageSmall=" + imageSmall
-                + ", displayName=" + displayName
-                + ", name=" + name
-                + ", signature=" + signature
-                + ", tzOffset=" + tzOffset
-                + ", tz=" + tz
-                + ", email=" + email
-                + ", lang=" + lang
-                + ", userId=" + userId
-                + ", groupsId=" + Arrays.toString(groupsId)
-                + ", partnerId=" + Arrays.toString(partnerId)
-                + ", parentId=" + Arrays.toString(parentId)
-                + ", companyId=" + Arrays.toString(companyId)
-                + ", loginDate=" + loginDate
-                + ", menus=" + menus
-                + ", locale=" + locale
-                + ", language=" + language
-                + ", supplier=" + supplier
-                + ", customer=" + customer
-                + ", employee=" + employee
-                + ", hasImage=" + hasImage
-                + ", active=" + active + '}';
+        return "OeUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", active=" + active +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", passwordCrypt='" + passwordCrypt + '\'' +
+                ", image='" + image + '\'' +
+                ", imageMedium='" + imageMedium + '\'' +
+                ", imageSmall='" + imageSmall + '\'' +
+                ", signature='" + signature + '\'' +
+                ", tzOffset='" + tzOffset + '\'' +
+                ", tz='" + tz + '\'' +
+                ", email='" + email + '\'' +
+                ", lang='" + lang + '\'' +
+                ", userId=" + userId +
+                ", groupsId=" + Arrays.toString(groupsId) +
+                ", partnerId=" + Arrays.toString(partnerId) +
+                ", parentId=" + Arrays.toString(parentId) +
+                ", companyId=" + Arrays.toString(companyId) +
+                ", loginDate=" + loginDate +
+                ", menus=" + menus +
+                ", locale=" + locale +
+                ", language=" + language +
+                ", supplier=" + supplier +
+                ", customer=" + customer +
+                ", employee=" + employee +
+                ", hasImage=" + hasImage +
+                '}';
     }
 }

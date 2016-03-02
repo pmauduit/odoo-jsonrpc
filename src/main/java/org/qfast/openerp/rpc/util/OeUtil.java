@@ -122,7 +122,7 @@ public final class OeUtil {
 
     public static JsonObject postRequest(String url, JsonObject json) throws OeRpcException {
         LOG.info("Hit: " + url);
-        return HttpClient.SendHttpPost(url, json);
+        return HttpClient.postHttp(url, json);
     }
 
     public static boolean equals(Object a, Object b) {
@@ -158,5 +158,21 @@ public final class OeUtil {
             into.add(entry.getKey(), entry.getValue());
         }
         return into;
+    }
+
+    public static String clearMap(String map) {
+        map = map.trim().substring(1, map.length() - 1);
+        String[] strings = map.split(",");
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        String coma = "";
+        for (String s : strings) {
+            if (!isNULL(s)) {
+                sb.append(coma).append(s.trim().replace("u'", "'"));
+                coma = ",";
+            }
+        }
+        sb.append("}");
+        return sb.toString();
     }
 }

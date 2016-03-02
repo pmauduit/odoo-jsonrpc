@@ -43,7 +43,7 @@ public final class HttpClient {
 
     private static final Logger LOG = Logger.getLogger(HttpClient.class.getName());
 
-    public static JsonObject SendHttpPost(String URL, JsonObject jsonObjSend) {
+    public static JsonObject postHttp(String URL, JsonObject jsonObjSend) {
         try {
             CloseableHttpClient httpclient = HttpClientBuilder.create().build();
             try {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.qfast.openerp.rpc.json.adaptor;
 
 import com.google.gson.Gson;
@@ -34,7 +35,7 @@ public class DateDeserializer implements JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        if (json != null) {
+        if (json != null && !json.isJsonNull()) {
             if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
                 return null;
             }

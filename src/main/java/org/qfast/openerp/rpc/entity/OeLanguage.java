@@ -16,11 +16,11 @@
 
 package org.qfast.openerp.rpc.entity;
 
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.OeConst.Direction;
 import org.qfast.openerp.rpc.boundary.OeLanguageService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -28,14 +28,14 @@ import java.util.Locale;
  */
 public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _CODE = "code",
-            _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
+    public static final String _CODE = "code", _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
             _DIRECTION = "direction", _ISO_CODE = "iso_code";
-    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CODE, _DATE_FORMAT, _TIME_FORMAT,
-            _DIRECTION, _ISO_CODE};
+
+    public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
+            _DISPLAY_NAME, _LAST_UPDATE, _CODE, _DATE_FORMAT, _TIME_FORMAT, _DIRECTION, _ISO_CODE};
+
     private static final long serialVersionUID = -2806061495597715017L;
-    private Long id;
-    private String name;
+
     private String dateFormat;
     private String timeFormat;
     private String direction;
@@ -52,22 +52,6 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
     @Override
     public String[] getColumns() {
         return COLUMNS;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCode() {
@@ -132,12 +116,20 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
     @Override
     public String toString() {
-        return "OeLanguage{" + "id=" + id
-                + ", name=" + name
-                + ", dataFormat=" + dateFormat
-                + ", timeFormat=" + timeFormat
-                + ", direction=" + direction
-                + ", code=" + code
-                + ", isoCode=" + isoCode + '}';
+        return "OeLanguage{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdate=" + lastUpdate +
+                ", writeDate=" + writeDate +
+                ", createUid=" + Arrays.toString(createUid) +
+                ", writeUid=" + Arrays.toString(writeUid) +
+                ", code='" + code + '\'' +
+                ", dateFormat='" + dateFormat + '\'' +
+                ", timeFormat='" + timeFormat + '\'' +
+                ", direction='" + direction + '\'' +
+                ", isoCode='" + isoCode + '\'' +
+                '}';
     }
 }

@@ -262,14 +262,18 @@ public class OeExecutor implements Serializable {
         return searchRead(model, domain, offset, limit, null, columns);
     }
 
-    public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
-                                            String... columns) throws OeRpcException {
+    public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit,
+                                            String order, String... columns) throws OeRpcException {
         return searchReadMap(model, domain, offset, limit, order, context, columns);
     }
 
     public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
                                 Map<String, Object> context, String... columns) throws OeRpcException {
         return OeUtil.parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
+    }
+
+    public JsonArray searchReadArr(String model, List<Object> domain, String... columns) throws OeRpcException {
+        return OeUtil.parseAsJsonArray(searchReadStr(model, domain, null, null, null, context, columns));
     }
 
     public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,

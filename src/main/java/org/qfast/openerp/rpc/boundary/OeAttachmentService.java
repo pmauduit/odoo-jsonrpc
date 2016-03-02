@@ -16,7 +16,7 @@
 
 package org.qfast.openerp.rpc.boundary;
 
-import org.qfast.openerp.rpc.entity.Attachment;
+import org.qfast.openerp.rpc.entity.OeAttachment;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 
@@ -32,16 +32,16 @@ import static org.qfast.openerp.rpc.OeConst.OeModel.ATTACHMENT;
  * @author Ahmed El-mawaziny
  * @since 1.0
  */
-public class AttachmentService extends AbstractOeService<Attachment> {
+public class OeAttachmentService extends AbstractOeService<OeAttachment> {
 
     public static final String name = ATTACHMENT.getName();
     private static final long serialVersionUID = 2405055031124590124L;
 
-    public AttachmentService(OeExecutor executor) {
-        super(executor, Attachment.class);
+    public OeAttachmentService(OeExecutor executor) {
+        super(executor, OeAttachment.class);
     }
 
-    public <C extends Attachment> AttachmentService(OeExecutor executor, Class<C> model) {
+    public <C extends OeAttachment> OeAttachmentService(OeExecutor executor, Class<C> model) {
         super(executor, model);
     }
 
@@ -51,8 +51,8 @@ public class AttachmentService extends AbstractOeService<Attachment> {
     }
 
     @Override
-    public List<Attachment> find(List<Object> sc, Integer offset, Integer limit, String order,
-                                 Map<String, Object> context, String... columns) throws OeRpcException {
+    public List<OeAttachment> find(List<Object> sc, Integer offset, Integer limit, String order,
+                                   Map<String, Object> context, String... columns) throws OeRpcException {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 }

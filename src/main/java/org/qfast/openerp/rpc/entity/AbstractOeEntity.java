@@ -17,11 +17,21 @@
 package org.qfast.openerp.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.boundary.AbstractOeService;
+import org.qfast.openerp.rpc.boundary.OeUserService;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import static org.qfast.openerp.rpc.OeConst._COL_CREATE_DATE;
+import static org.qfast.openerp.rpc.OeConst._COL_CREATE_UID;
+import static org.qfast.openerp.rpc.OeConst._COL_DISPLAY_NAME;
+import static org.qfast.openerp.rpc.OeConst._COL_ID;
+import static org.qfast.openerp.rpc.OeConst._COL_LAST_UPDATE;
+import static org.qfast.openerp.rpc.OeConst._COL_NAME;
+import static org.qfast.openerp.rpc.OeConst._COL_WRITE_DATE;
+import static org.qfast.openerp.rpc.OeConst._COL_WRITE_UID;
+import static org.qfast.openerp.rpc.boundary.AbstractOeService.findById;
 
 /**
  * @param <T>
@@ -29,16 +39,19 @@ import java.util.Date;
  */
 public abstract class AbstractOeEntity<T extends AbstractOeService> implements Serializable {
 
-    public static final String _ID = OeConst._COL_ID, _NAME = OeConst._COL_NAME, _CREATE_DATE = "create_date", _WRITE_UID = "write_uid", _CREATE_UID = "create_uid",
-            _DISPLAY_NAME = "display_name", _LAST_UPDATE = "__last_update", _WRITE_DATE = "write_date";
+    public static final String _ID = _COL_ID, _NAME = _COL_NAME, _CREATE_DATE = _COL_CREATE_DATE,
+            _WRITE_UID = _COL_WRITE_UID, _CREATE_UID = _COL_CREATE_UID, _DISPLAY_NAME = _COL_DISPLAY_NAME,
+            _LAST_UPDATE = _COL_LAST_UPDATE, _WRITE_DATE = _COL_WRITE_DATE;
+
     private static final long serialVersionUID = -832746926128259160L;
+
     protected Long id;
     protected String name;
     protected Object[] writeUid;
     protected Object[] createUid;
     protected Date createDate;
     protected Date writeDate;
-    @SerializedName("__last_update")
+    @SerializedName(_LAST_UPDATE)
     protected Date lastUpdate;
     protected String displayName;
     protected T oe;
@@ -115,5 +128,13 @@ public abstract class AbstractOeEntity<T extends AbstractOeService> implements S
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public OeUser getCreateUser() throws Exception {
+        return findById(oe.getExecutor(), OeUser.class, OeUserService.class, ((Double) createUid[0]).longValue());
+    }
+
+    public OeUser getWriteUser() throws Exception {
+        return findById(oe.getExecutor(), OeUser.class, OeUserService.class, ((Double) writeUid[0]).longValue());
     }
 }
