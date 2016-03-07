@@ -27,7 +27,7 @@ import java.util.Map;
 import static org.qfast.openerp.rpc.OeConst.OeModel.MODULES;
 
 /**
- * OeUserService for find OpenERP user (ir.module.module) by findById, finAll or
+ * OeModuleService for find OpenERP module (ir.module.module) by findById, finAll or
  * custom search criteria
  *
  * @author Ahmed El-mawaziny

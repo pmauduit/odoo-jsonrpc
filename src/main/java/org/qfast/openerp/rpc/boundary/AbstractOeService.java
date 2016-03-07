@@ -420,7 +420,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         List<M> oeModels = new ArrayList<M>(result.size());
 //        Set<Map.Entry<String, JsonElement>> entries = OeUtil.parseAsJsonObject(result.get(0).toString()).entrySet();
 //        for (Map.Entry<String, JsonElement> entry : entries)
-//            System.out.print(entry.getKey() + ",");
+//            System.out.println(entry.getKey() + " = "+ entry.getValue());
         for (int i = 0; i < result.size(); i++) {
             oeModels.add(OeBinder.bind(result.get(i).toString(), model, e));
         }

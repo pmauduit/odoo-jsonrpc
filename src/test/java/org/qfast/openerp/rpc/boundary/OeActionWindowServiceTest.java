@@ -17,7 +17,7 @@
 package org.qfast.openerp.rpc.boundary;
 
 import com.google.gson.JsonArray;
-import org.qfast.openerp.rpc.entity.OeActionClient;
+import org.qfast.openerp.rpc.entity.OeActionWindow;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
@@ -32,14 +32,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH;
-import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_CLIENT;
-import static org.qfast.openerp.rpc.OeConst.OeModel.PARTNERS;
+import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_WINDOW;
 import static org.qfast.openerp.rpc.util.OeUtil.convertJsonArray;
 
 /**
- * @author Ahmed El-mawaziny on 2/16/16.
+ * @author Ahmed El-mawaziny on 3/2/16.
  */
-public class OeActionClientServiceTest {
+public class OeActionWindowServiceTest {
 
     private static final String PROTOCOL = "http";
     private static final String HOST = "localhost";
@@ -48,12 +47,12 @@ public class OeActionClientServiceTest {
     private static final String USERNAME = "admin";
     private static final String DATABASE = "bpm";
     private static OeExecutor executor;
-    private static OeActionClientService service;
+    private static OeActionWindowService service;
 
     @org.junit.BeforeClass
     public static void beforeClass() throws Exception {
         executor = OeExecutor.getInstance(PROTOCOL, HOST, PORT, DATABASE, USERNAME, PASSWORD);
-        service = new OeActionClientService(executor);
+        service = new OeActionWindowService(executor);
     }
 
     @org.junit.AfterClass
@@ -63,7 +62,7 @@ public class OeActionClientServiceTest {
 
     @org.junit.Test
     public void testGetName() throws Exception {
-        assertEquals(ACTION_CLIENT.toString(), service.getName());
+        assertEquals(ACTION_WINDOW.toString(), service.getName());
     }
 
     @org.junit.Test
@@ -76,8 +75,8 @@ public class OeActionClientServiceTest {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             Long id = ids[0];
-            OeActionClient oeActionClient = service.findById(ids[0]);
-            assertEquals(id, oeActionClient.getId());
+            OeActionWindow oeActionWindow = service.findById(ids[0]);
+            assertEquals(id, oeActionWindow.getId());
         }
     }
 
@@ -85,24 +84,24 @@ public class OeActionClientServiceTest {
     public void testFindByIds() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            List<OeActionClient> oeActionClients = service.findByIds(ids, OeActionClient._ID);
-            assertEquals(ids.length, oeActionClients.size());
+            List<OeActionWindow> oeActionWindows = service.findByIds(ids, OeActionWindow._ID);
+            assertEquals(ids.length, oeActionWindows.size());
             List<Long> idsAsList = Arrays.asList(ids);
-            for (OeActionClient oeActionClient : oeActionClients) {
-                assertTrue(idsAsList.contains(oeActionClient.getId()));
+            for (OeActionWindow oeActionWindow : oeActionWindows) {
+                assertTrue(idsAsList.contains(oeActionWindow.getId()));
             }
         }
     }
 
     @org.junit.Test
     public void testFindAll() throws Exception {
-        List<OeActionClient> oeActionClients = service.findAll(OeActionClient._ID);
+        List<OeActionWindow> oeActionWindows = service.findAll(OeActionWindow._ID);
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            assertEquals(ids.length, oeActionClients.size());
+            assertEquals(ids.length, oeActionWindows.size());
             List<Long> idsAsList = Arrays.asList(ids);
-            for (OeActionClient oeActionClient : oeActionClients) {
-                assertTrue(idsAsList.contains(oeActionClient.getId()));
+            for (OeActionWindow oeActionWindow : oeActionWindows) {
+                assertTrue(idsAsList.contains(oeActionWindow.getId()));
             }
         }
     }
@@ -115,7 +114,7 @@ public class OeActionClientServiceTest {
             for (Long id : ids) {
                 min = Math.min(min, id);
             }
-            OeActionClient first = service.findFirst();
+            OeActionWindow first = service.findFirst();
             if (first != null) {
                 assertEquals(min, first.getId());
             }
@@ -130,7 +129,7 @@ public class OeActionClientServiceTest {
             for (Long id : ids) {
                 max = Math.max(max, id);
             }
-            OeActionClient last = service.findLast(OeActionClient._ID);
+            OeActionWindow last = service.findLast(OeActionWindow._ID);
             if (last != null) {
                 assertEquals(max, last.getId());
             }
@@ -141,7 +140,7 @@ public class OeActionClientServiceTest {
     public void testFindAny() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
-            OeActionClient any = service.findAny(OeActionClient._ID);
+            OeActionWindow any = service.findAny(OeActionWindow._ID);
             List<Long> idsList = Arrays.asList(ids);
             assertTrue(idsList.contains(any.getId()));
         }
@@ -149,7 +148,7 @@ public class OeActionClientServiceTest {
 
     @org.junit.Test
     public void testFindRang() throws Exception {
-        List<OeActionClient> rang = service.findRang(0, 1, new String[]{OeActionClient._ID});
+        List<OeActionWindow> rang = service.findRang(0, 1, new String[]{OeActionWindow._ID});
         if (rang != null)
             assertTrue(rang.size() == 1);
     }
@@ -164,7 +163,7 @@ public class OeActionClientServiceTest {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             OeCriteriaBuilder cb = new OeCriteriaBuilder();
-            cb.column(OeActionClient._ID).eq(ids[0]);
+            cb.column(OeActionWindow._ID).eq(ids[0]);
             assertTrue(1 == service.count(cb));
         }
     }
@@ -172,10 +171,9 @@ public class OeActionClientServiceTest {
     @org.junit.Test
     public void testCreate() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
-        values.put(OeActionClient._NAME, "Test");
-        values.put(OeActionClient._TYPE, ACTION_CLIENT.getName());
-        values.put(OeActionClient._RES_MODEL, PARTNERS.getName());
-        values.put(OeActionClient._TAG, "reload");
+        values.put(OeActionWindow._NAME, "Test");
+        values.put(OeActionWindow._TYPE, ACTION_WINDOW.getName());
+        values.put(OeActionWindow._RES_MODEL, ACTION_WINDOW.getName());
         Long id = service.create(values);
         assertNotNull(id);
         assertTrue(0L != id);
@@ -190,22 +188,22 @@ public class OeActionClientServiceTest {
         Long[] ids = getIds();
         String name = "Updated record";
         if (ids != null && ids.length != 0) {
-            OeActionClient oeActionClient = service.findById(ids[0], OeActionClient._NAME);
-            String oldName = oeActionClient.getName();
+            OeActionWindow oeActionWindow = service.findById(ids[0], OeActionWindow._NAME);
+            String oldName = oeActionWindow.getName();
             Map<String, Object> values = new HashMap<String, Object>(1);
-            values.put(OeActionClient._NAME, name);
+            values.put(OeActionWindow._NAME, name);
             Boolean updated = service.update(ids[0], values);
             assertTrue(updated);
-            oeActionClient = service.findById(ids[0], OeActionClient._NAME);
-            assertEquals(name, oeActionClient.getName());
+            oeActionWindow = service.findById(ids[0], OeActionWindow._NAME);
+            assertEquals(name, oeActionWindow.getName());
 
             //rollback the updated value
             values = new HashMap<String, Object>(1);
-            values.put(OeActionClient._NAME, oldName);
+            values.put(OeActionWindow._NAME, oldName);
             updated = service.update(ids[0], values);
             assertTrue(updated);
-            oeActionClient = service.findById(ids[0], OeActionClient._NAME);
-            assertEquals(oldName, oeActionClient.getName());
+            oeActionWindow = service.findById(ids[0], OeActionWindow._NAME);
+            assertEquals(oldName, oeActionWindow.getName());
         }
     }
 

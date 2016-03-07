@@ -50,7 +50,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     private String context;
     private String usage;
     private Object[] domain;
-    private Long viewId;
+    private Object[] viewId;
     private Object[] searchViewId;
     private Boolean autoRefresh;
     private String viewMode;
@@ -131,11 +131,11 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
         this.domain = domain;
     }
 
-    public Long getViewId() {
+    public Object[] getViewId() {
         return viewId;
     }
 
-    public void setViewId(Long viewId) {
+    public void setViewId(Object[] viewId) {
         this.viewId = viewId;
     }
 
