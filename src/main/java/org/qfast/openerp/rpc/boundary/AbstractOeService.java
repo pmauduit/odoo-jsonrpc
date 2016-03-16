@@ -504,7 +504,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public Boolean write(Long id, Map<String, Object> values) throws OeRpcException {
+    public Boolean write(Object id, Map<String, Object> values) throws OeRpcException {
         return executor.write(getName(), id, values);
     }
 
@@ -514,7 +514,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public Boolean update(Long id, Map<String, Object> values) throws OeRpcException {
+    public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
         return write(id, values);
     }
 

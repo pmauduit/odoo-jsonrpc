@@ -29,18 +29,25 @@ import java.util.Locale;
 public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
 
     public static final String _CODE = "code", _DATE_FORMAT = "date_format", _TIME_FORMAT = "time_format",
-            _DIRECTION = "direction", _ISO_CODE = "iso_code";
+            _DIRECTION = "direction", _ISO_CODE = "iso_code", _ACTIVE = "active", _THOUSANDS_SEP = "thousands_sep",
+            _TRANSLATABLE = "translatable", _DECIMAL_POINT = "decimal_point", _GROUPING = "grouping";
 
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
-            _DISPLAY_NAME, _LAST_UPDATE, _CODE, _DATE_FORMAT, _TIME_FORMAT, _DIRECTION, _ISO_CODE};
+            _DISPLAY_NAME, _LAST_UPDATE, _CODE, _DATE_FORMAT, _TIME_FORMAT, _DIRECTION, _ISO_CODE, _ACTIVE,
+            _THOUSANDS_SEP, _TRANSLATABLE, _DECIMAL_POINT, _GROUPING};
 
     private static final long serialVersionUID = -2806061495597715017L;
 
     private String dateFormat;
     private String timeFormat;
     private String direction;
+    private String thousandsSep;
+    private String decimalPoint;
     private String isoCode;
     private String code;
+    private boolean active;
+    private boolean translatable;
+    private Object[] grouping;
 
     public OeLanguage() {
     }
@@ -102,6 +109,46 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
         this.isoCode = isoCode;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getThousandsSep() {
+        return thousandsSep;
+    }
+
+    public void setThousandsSep(String thousandsSep) {
+        this.thousandsSep = thousandsSep;
+    }
+
+    public String getDecimalPoint() {
+        return decimalPoint;
+    }
+
+    public void setDecimalPoint(String decimalPoint) {
+        this.decimalPoint = decimalPoint;
+    }
+
+    public boolean isTranslatable() {
+        return translatable;
+    }
+
+    public void setTranslatable(boolean translatable) {
+        this.translatable = translatable;
+    }
+
+    public Object[] getGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(Object[] grouping) {
+        this.grouping = grouping;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -125,11 +172,16 @@ public class OeLanguage extends AbstractOeEntity<OeLanguageService> {
                 ", writeDate=" + writeDate +
                 ", createUid=" + Arrays.toString(createUid) +
                 ", writeUid=" + Arrays.toString(writeUid) +
-                ", code='" + code + '\'' +
                 ", dateFormat='" + dateFormat + '\'' +
                 ", timeFormat='" + timeFormat + '\'' +
                 ", direction='" + direction + '\'' +
+                ", thousandsSep='" + thousandsSep + '\'' +
+                ", decimalPoint='" + decimalPoint + '\'' +
                 ", isoCode='" + isoCode + '\'' +
+                ", code='" + code + '\'' +
+                ", active=" + active +
+                ", translatable=" + translatable +
+                ", grouping=" + Arrays.toString(grouping) +
                 '}';
     }
 }

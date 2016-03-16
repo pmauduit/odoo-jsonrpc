@@ -353,9 +353,9 @@ public class OeExecutor implements Serializable {
         return 0L;
     }
 
-    public Boolean write(String model, Long id, Map<String, Object> values) throws OeRpcException {
+    public Boolean write(String model, Object id, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
-        args.add(id);
+        args.add(OeUtil.parseAsJsonElement(id));
         args.add(OeUtil.parseAsJsonElement(values));
         Object result = execute(model, WRITE.getName(), args);
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());

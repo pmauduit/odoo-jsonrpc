@@ -21,6 +21,7 @@ import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +60,24 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      * @return
      * @throws OeRpcException
      */
-    public OeLanguage findByCode(String code) throws OeRpcException {
+    public OeLanguage findByCode(String code, String... columns) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_CODE).eq(code);
-        return findAny(cb);
+        return findAny(cb, columns);
+    }
+
+    @Override
+    public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
+        return super.update(new Object[]{id}, values);
+    }
+
+    @Override
+    public Boolean unlike(Long... ids) throws OeRpcException {
+        Map<String, Object> values = new HashMap<String, Object>(1);
+        values.put(OeLanguage._ACTIVE, false);
+        for (Long id : ids) {
+            update(id, values);
+        }
+        return super.unlike(ids);
     }
 }
