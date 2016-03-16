@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2016 QFast Ahmed El-mawaziny
+  ~ Copyright 2016 QFast
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -22,16 +22,16 @@
     <artifactId>odoo-jsonrpc</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    
+
     <name>odoo-jsonrpc</name>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <skipTests>true</skipTests>
     </properties>
-    
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -40,14 +40,14 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-    
+
     <developers>
         <developer>
             <id>amawaziny@gmail.com</id>
             <name>Ahmed El-mawaziny</name>
         </developer>
     </developers>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -66,7 +66,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>

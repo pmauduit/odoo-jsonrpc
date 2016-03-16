@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 QFast Ahmed El-mawaziny
+ * Copyright 2016 QFast
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

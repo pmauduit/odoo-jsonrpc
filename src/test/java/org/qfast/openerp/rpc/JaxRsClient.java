@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 QFast Ahmed El-mawaziny
+ * Copyright 2016 QFast
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public class JaxRsClient {
 //                .add("login", username)
 //                .add("password", password).build());
 //        System.out.println(context);
-        
+
 //        OeDatabase oeDatabase = new OeDatabase("http", "localhost", 8069, "admin");
 //        System.out.println(oeDatabase.create("jsonDB2", true, "en_US", "123"));
 //        System.out.println(Arrays.toString(oeDatabase.doList()));
@@ -89,7 +89,7 @@ public class JaxRsClient {
 //                .create();
 //        OeMenu fromJson = gson.fromJson(result.toString(), OeMenu.class);
 //        System.out.println("fromJson = " + fromJson);
-        
+
 //        System.out.println(executer.execute(name, OeMenuService.Fun.LOAD_MENUS.getName()));
     }
 }
