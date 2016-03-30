@@ -52,7 +52,7 @@ public class OeExecutor implements Serializable {
     private final String password;
     private final String username;
     private final String database;
-    private final Integer userId;
+    private final Long userId;
     private final URIBuilder url;
     private final String sessionId;
     private OeVersion version;
@@ -72,7 +72,7 @@ public class OeExecutor implements Serializable {
         this.jsonContext = getJsonContextFromLogin(loginResult);
         this.context = OeUtil.convertJsonToMap(jsonContext);
         this.sessionId = loginResult.get("session_id").getAsString();
-        this.userId = loginResult.get("uid").getAsInt();
+        this.userId = loginResult.get("uid").getAsLong();
     }
 
     private OeExecutor(String host, int port, String database, String username, String password) throws OeRpcException {
@@ -235,7 +235,7 @@ public class OeExecutor implements Serializable {
         return database;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

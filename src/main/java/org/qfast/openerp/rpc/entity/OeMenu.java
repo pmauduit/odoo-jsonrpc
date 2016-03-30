@@ -16,6 +16,7 @@
 
 package org.qfast.openerp.rpc.entity;
 
+import com.google.gson.annotations.SerializedName;
 import org.qfast.openerp.rpc.boundary.OeMenuService;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.util.OeUtil;
@@ -28,10 +29,16 @@ import java.util.Arrays;
 public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparable<OeMenu> {
 
     public static final String _SEQUENCE = "sequence", _GROUPS_ID = "groups_id", _GROUPS_ID_ID = _GROUPS_ID + ".id",
-            _PARENT_ID = "parent_id", _PARENT_ID_ID = _PARENT_ID + ".id", _CHILDREN = "children", _ACTION = "action";
+            _PARENT_ID = "parent_id", _PARENT_ID_ID = _PARENT_ID + ".id", _CHILD_ID = "child_id", _ACTION = "action",
+            _WEB_ICON_DATA = "web_icon_data", _WEB_ICON_HOVER = "web_icon_hover", _ICON_PICT = "icon_pict",
+            _WEB_ICON_HOVER_DATA = "web_icon_hover_data", _COMPLETE_NAME = "complete_name", _ICON = "icon",
+            _MAIL_GROUP_ID = "mail_group_id", _NEED_ACTION_ENABLED = "needaction_enabled",
+            _PARENT_RIGHT = "parent_right", _WEB_ICON = "web_icon", _PARENT_LEFT = "parent_left";
 
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
-            _DISPLAY_NAME, _LAST_UPDATE, _ACTION, _SEQUENCE, _PARENT_ID, _CHILDREN};
+            _DISPLAY_NAME, _LAST_UPDATE, _ACTION, _SEQUENCE, _PARENT_ID, _CHILD_ID, _WEB_ICON_DATA, _WEB_ICON_HOVER,
+            _ICON_PICT, _WEB_ICON_HOVER_DATA, _COMPLETE_NAME, _ICON, _MAIL_GROUP_ID, _NEED_ACTION_ENABLED,
+            _PARENT_RIGHT, _WEB_ICON, _PARENT_LEFT};
 
     private static final long serialVersionUID = -3622021175633536095L;
 
@@ -40,6 +47,18 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
     private Integer sequence;
     private OeMenu[] children;
     private String action;
+    private String icon;
+    private String webIcon;
+    private String webIconData;
+    private String webIconHover;
+    private String webIconHoverDate;
+    private String iconPict;
+    private String completeName;
+    private Object[] mailGroupId;
+    @SerializedName(_NEED_ACTION_ENABLED)
+    private boolean needActionEnabled;
+    private Integer parentRight;
+    private Integer parentLeft;
 
     public OeMenu() {
     }
@@ -114,6 +133,94 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
         this.action = action;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getWebIcon() {
+        return webIcon;
+    }
+
+    public void setWebIcon(String webIcon) {
+        this.webIcon = webIcon;
+    }
+
+    public String getWebIconData() {
+        return webIconData;
+    }
+
+    public void setWebIconData(String webIconData) {
+        this.webIconData = webIconData;
+    }
+
+    public String getWebIconHover() {
+        return webIconHover;
+    }
+
+    public void setWebIconHover(String webIconHover) {
+        this.webIconHover = webIconHover;
+    }
+
+    public String getWebIconHoverDate() {
+        return webIconHoverDate;
+    }
+
+    public void setWebIconHoverDate(String webIconHoverDate) {
+        this.webIconHoverDate = webIconHoverDate;
+    }
+
+    public String getIconPict() {
+        return iconPict;
+    }
+
+    public void setIconPict(String iconPict) {
+        this.iconPict = iconPict;
+    }
+
+    public String getCompleteName() {
+        return completeName;
+    }
+
+    public void setCompleteName(String completeName) {
+        this.completeName = completeName;
+    }
+
+    public Object[] getMailGroupId() {
+        return mailGroupId;
+    }
+
+    public void setMailGroupId(Object[] mailGroupId) {
+        this.mailGroupId = mailGroupId;
+    }
+
+    public boolean isNeedActionEnabled() {
+        return needActionEnabled;
+    }
+
+    public void setNeedActionEnabled(boolean needActionEnabled) {
+        this.needActionEnabled = needActionEnabled;
+    }
+
+    public Integer getParentRight() {
+        return parentRight;
+    }
+
+    public void setParentRight(Integer parentRight) {
+        this.parentRight = parentRight;
+    }
+
+    public Integer getParentLeft() {
+        return parentLeft;
+    }
+
+    public void setParentLeft(Integer parentLeft) {
+        this.parentLeft = parentLeft;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -150,11 +257,22 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
                 ", writeDate=" + writeDate +
                 ", createUid=" + Arrays.toString(createUid) +
                 ", writeUid=" + Arrays.toString(writeUid) +
-                ", action='" + action + '\'' +
                 ", parentId=" + Arrays.toString(parentId) +
                 ", parentMenu=" + parentMenu +
                 ", sequence=" + sequence +
                 ", children=" + Arrays.toString(children) +
+                ", action='" + action + '\'' +
+                ", icon='" + icon + '\'' +
+                ", webIcon='" + webIcon + '\'' +
+                ", webIconData='" + webIconData + '\'' +
+                ", webIconHover='" + webIconHover + '\'' +
+                ", webIconHoverDate='" + webIconHoverDate + '\'' +
+                ", iconPict='" + iconPict + '\'' +
+                ", completeName='" + completeName + '\'' +
+                ", mailGroupId=" + Arrays.toString(mailGroupId) +
+                ", needActionEnabled=" + needActionEnabled +
+                ", parentRight=" + parentRight +
+                ", parentLeft=" + parentLeft +
                 '}';
     }
 }

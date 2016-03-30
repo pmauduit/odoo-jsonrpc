@@ -99,21 +99,22 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         if (OeUtil.equals(userId, executor.getUserId())) {
             List<OeMenu> oeMenus = new ArrayList<OeMenu>(10);
             addChildren(oeMenus, loadOeMenus().getChildren());
+            oeMenus.addAll(findByNoGroup());
             return oeMenus;
         } else {
             OeGroupService oeGroupService = new OeGroupService(executor);
             Set<OeGroup> oeGroups = oeGroupService.findByUserId(userId);
             oeGroupService = null;
-            Set<OeMenu> menus = new TreeSet<OeMenu>();
+            Set<OeMenu> oeMenus = new TreeSet<OeMenu>();
             Long[] oeGroupsId = new Long[oeGroups.size()];
             int i = 0;
             for (OeGroup oeGroup : oeGroups) {
                 oeGroupsId[i] = oeGroup.getId();
                 i++;
             }
-            menus.addAll(findByGroupId(oeGroupsId));
-            menus.addAll(findByNoGroup());
-            return new ArrayList<OeMenu>(menus);
+            oeMenus.addAll(findByGroupId(oeGroupsId));
+            oeMenus.addAll(findByNoGroup());
+            return new ArrayList<OeMenu>(oeMenus);
         }
     }
 
