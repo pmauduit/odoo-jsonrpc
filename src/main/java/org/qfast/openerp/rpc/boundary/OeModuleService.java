@@ -16,6 +16,7 @@
 
 package org.qfast.openerp.rpc.boundary;
 
+import com.google.gson.JsonArray;
 import org.qfast.openerp.rpc.entity.OeModule;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
@@ -52,13 +53,15 @@ public class OeModuleService extends AbstractOeService<OeModule> {
         return name;
     }
 
-    public boolean uninstall(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.UNINSTALL.name, OeUtil.parseAsJsonArray(ids));
+    public boolean install(Object... ids) throws OeRpcException {
+        executor.execute(name, Fun.INSTALL.name, OeUtil.parseAsJsonArray(ids));
         return true;
     }
 
-    public boolean install(Object[] ids) throws OeRpcException {
-        executor.execute(name, Fun.INSTALL.name, OeUtil.parseAsJsonArray(ids));
+    public boolean uninstall(Object... ids) throws OeRpcException {
+        JsonArray args = new JsonArray();
+        args.add(OeUtil.parseAsJsonArray(ids));
+        executor.execute(name, Fun.UNINSTALL.name, args);
         return true;
     }
 
@@ -70,8 +73,8 @@ public class OeModuleService extends AbstractOeService<OeModule> {
 
     public enum Fun {
 
-        UNINSTALL("button_immediate_uninstall"),
-        INSTALL("button_immediate_install");
+        INSTALL("button_immediate_install"),
+        UNINSTALL("button_immediate_uninstall");
 
         private final String name;
 
