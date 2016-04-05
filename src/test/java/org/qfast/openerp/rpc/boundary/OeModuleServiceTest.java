@@ -38,15 +38,8 @@ import static org.qfast.openerp.rpc.util.OeUtil.convertJsonArray;
 /**
  * @author Ahmed El-mawaziny on 4/4/16.
  */
-public class OeModuleServiceTest {
+public class OeModuleServiceTest extends AbstractBaseTest {
 
-    private static final String PROTOCOL = "http";
-    private static final String HOST = "localhost";
-    private static final int PORT = 8069;
-    private static final String PASSWORD = "1";
-    private static final String USERNAME = "admin";
-    private static final String DATABASE = "bpm";
-    private static OeExecutor executor;
     private static OeModuleService service;
 
     @org.junit.BeforeClass
@@ -55,23 +48,18 @@ public class OeModuleServiceTest {
         service = new OeModuleService(executor);
     }
 
-    @org.junit.AfterClass
-    public static void afterClass() throws Exception {
-        executor.logout();
-    }
-
     @org.junit.Test
-    public void getName() throws Exception {
+    public void testGetName() throws Exception {
         assertEquals(MODULES.toString(), service.getName());
     }
 
     @org.junit.Test
-    public void getExecutor() throws Exception {
+    public void testGetExecutor() throws Exception {
         assertTrue(executor == service.getExecutor());
     }
 
     @org.junit.Test
-    public void install() throws Exception {
+    public void testInstall() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length > 0) {
             Long moduleId = ids[0];
@@ -84,7 +72,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void findById() throws Exception {
+    public void testFindById() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             Long id = ids[0];
@@ -107,7 +95,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void findAll() throws Exception {
+    public void testFindAll() throws Exception {
         List<OeModule> oeModules = service.findAll(OeModule._ID);
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
@@ -120,7 +108,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void findFirst() throws Exception {
+    public void testFindFirst() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             Long min = ids[0];
@@ -135,7 +123,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void findLast() throws Exception {
+    public void testFindLast() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             Long max = ids[0];
@@ -150,7 +138,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void findAny() throws Exception {
+    public void testFindAny() throws Exception {
         Long[] ids = getIds();
         if (ids != null && ids.length != 0) {
             OeModule any = service.findAny(OeModule._ID);
@@ -167,12 +155,12 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void count() throws Exception {
+    public void testCount() throws Exception {
         assertTrue(getIds().length == service.count());
     }
 
     @org.junit.Test
-    public void create() throws Exception {
+    public void testCreate() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         values.put(OeModule._NAME, "Test");
         Long id = service.create(values);
@@ -185,7 +173,7 @@ public class OeModuleServiceTest {
     }
 
     @org.junit.Test
-    public void update() throws Exception {
+    public void testUpdate() throws Exception {
         Long[] ids = getIds();
         String name = "Updated record";
         if (ids != null && ids.length != 0) {

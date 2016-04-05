@@ -38,26 +38,14 @@ import static org.qfast.openerp.rpc.util.OeUtil.convertJsonArray;
 /**
  * @author Ahmed El-mawaziny on 3/2/16.
  */
-public class OeActionWindowServiceTest {
+public class OeActionWindowServiceTest extends AbstractBaseTest {
 
-    private static final String PROTOCOL = "http";
-    private static final String HOST = "localhost";
-    private static final int PORT = 8069;
-    private static final String PASSWORD = "1";
-    private static final String USERNAME = "admin";
-    private static final String DATABASE = "bpm";
-    private static OeExecutor executor;
     private static OeActionWindowService service;
 
     @org.junit.BeforeClass
     public static void beforeClass() throws Exception {
         executor = OeExecutor.getInstance(PROTOCOL, HOST, PORT, DATABASE, USERNAME, PASSWORD);
         service = new OeActionWindowService(executor);
-    }
-
-    @org.junit.AfterClass
-    public static void afterClass() throws Exception {
-        executor.logout();
     }
 
     @org.junit.Test

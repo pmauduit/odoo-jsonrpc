@@ -1,0 +1,38 @@
+/*
+ * Copyright 2016 QFast
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.qfast.openerp.rpc.boundary;
+
+import org.qfast.openerp.rpc.json.OeExecutor;
+
+/**
+ * @author Ahmed El-mawaziny on 4/5/16.
+ */
+public abstract class AbstractBaseTest {
+
+    protected static final String PROTOCOL = "http";
+    protected static final String HOST = "localhost";
+    protected static final int PORT = 8069;
+    protected static final String USERNAME = "admin";
+    protected static final String PASSWORD = "123";
+    protected static final String DATABASE = "db8";
+    protected static OeExecutor executor;
+
+    @org.junit.AfterClass
+    public static void afterClass() throws Exception {
+        executor.logout();
+    }
+}
