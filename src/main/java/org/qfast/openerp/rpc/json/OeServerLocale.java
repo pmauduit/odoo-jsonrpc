@@ -21,15 +21,15 @@ import com.google.gson.JsonObject;
 import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.entity.OeLocale;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.util.OeUtil;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.qfast.openerp.rpc.OeConst.JsonSession.GET_LANG_LIST;
-import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
-import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.getCallWith;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.postRequest;
 
 /**
  * @author Ahmed El-mawaziny
@@ -105,11 +105,11 @@ public class OeServerLocale implements Serializable {
         try {
             String reqUrl = url.setPath(GET_LANG_LIST.toString()).toString();
             JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
-            OeRpcException.checkJsonResponse(response);
+            OeJsonUtil.checkJsonResponse(response);
             JsonArray result = response.getAsJsonArray("result");
             Object[] langs = new Object[result.size()];
             for (int i = 0; i < result.size(); i++) {
-                langs[i] = OeUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
+                langs[i] = OeJsonUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
             }
             return langs;
         } catch (Exception e) {

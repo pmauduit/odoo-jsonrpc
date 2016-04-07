@@ -16,18 +16,18 @@
 
 package org.qfast.openerp.rpc.boundary;
 
-import com.google.gson.JsonObject;
 import org.qfast.openerp.rpc.OeConst.JsonMenu;
 import org.qfast.openerp.rpc.entity.OeGroup;
 import org.qfast.openerp.rpc.entity.OeMenu;
 import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -62,14 +62,14 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return name;
     }
 
-    public JsonObject loadMenus() throws OeRpcException {
+    public Map<String, Object> loadMenus() throws OeRpcException {
         if (executor.getOeVersion().getVersionNumber() < 8) {
-            JsonObject params = new JsonObject();
-            params.addProperty("session_id", executor.getSessionId());
-            params.add("context", executor.getJsonContext());
-            return (JsonObject) executor.execute(JsonMenu.LOAD.getPath(), params);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("session_id", executor.getSessionId());
+            params.put("context", executor.getJsonContext());
+            return executor.execute(JsonMenu.LOAD.getPath(), params);
         } else {
-            return (JsonObject) executor.execute(name, LOAD_MENUS.getName());
+            return executor.execute(name, LOAD_MENUS.getName());
         }
     }
 
@@ -81,7 +81,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * @throws OeRpcException
      */
     public OeMenu loadOeMenus() throws OeRpcException {
-        JsonObject result = loadMenus();
+        Map<String, Object> result = loadMenus();
         if (result != null) {
             return OeBinder.bind(result.toString(), OeMenu.class, this);
         } else {

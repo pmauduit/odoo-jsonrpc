@@ -16,16 +16,18 @@
 
 package org.qfast.openerp.rpc.json;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.entity.OeVersion;
 import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.io.Serializable;
 
 import static org.qfast.openerp.rpc.OeConst.JsonWebClient.VERSION_INFO;
-import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
-import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.getCallWith;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.postRequest;
 
 /**
  * @author Ahmed El-mawaziny
@@ -104,7 +106,22 @@ public class OeServerVersion implements Serializable {
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
         JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
-        OeRpcException.checkJsonResponse(response);
-        return new OeVersion(response.getAsJsonObject("result"));
+        OeJsonUtil.checkJsonResponse(response);
+
+        JsonObject result = response.getAsJsonObject("result");
+        String serverSerie = result.get("server_serie").getAsString();
+        String serverVersion = result.get("server_version").getAsString();
+        JsonArray serverVersionInfo = result.getAsJsonArray("server_version_info");
+        String versionType = serverVersionInfo.get(3).getAsString();
+        int versionNumber = serverVersionInfo.get(0).getAsInt();
+        int versionTypeNumber = serverVersionInfo.get(4).getAsInt();
+        int subVersion;
+        if (serverVersionInfo.get(1).getAsJsonPrimitive().isString()) {
+            subVersion = Integer.parseInt(serverVersionInfo.get(1).getAsString().split("\\.")[1].split("\\D+")[0]);
+        } else {
+            subVersion = serverVersionInfo.get(1).getAsInt();
+        }
+
+        return new OeVersion(serverSerie, serverVersion, versionType, versionNumber, versionTypeNumber, subVersion);
     }
 }

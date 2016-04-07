@@ -23,7 +23,6 @@ import org.qfast.openerp.rpc.boundary.OeViewService;
 import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -42,8 +41,6 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     private static final long serialVersionUID = 8484756380717630025L;
 
     private Long viewId;
-    private Date createDate;
-    private Date writeDate;
     private String arch;
     private String fieldParent;
     private Object[] inheritId;
@@ -92,22 +89,6 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     public void setViewId(Long viewId) {
         this.viewId = viewId;
         this.id = viewId;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getWriteDate() {
-        return writeDate;
-    }
-
-    public void setWriteDate(Date writeDate) {
-        this.writeDate = writeDate;
     }
 
     public String getArch() {

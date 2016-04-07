@@ -18,6 +18,7 @@ package org.qfast.openerp.rpc.entity;
 
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.boundary.OeActionClientService;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.Arrays;
@@ -80,12 +81,12 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return context;
     }
 
-    public void setContext(Map<String, Object> context) {
-        this.context = context;
+    public void setContext(String context) {
+        this.context = OeJsonUtil.convertStringToMap(context);
     }
 
-    public void setContext(String context) {
-        this.context = OeUtil.convertStringToMap(context);
+    public void setContext(Map<String, Object> context) {
+        this.context = context;
     }
 
     public String getType() {

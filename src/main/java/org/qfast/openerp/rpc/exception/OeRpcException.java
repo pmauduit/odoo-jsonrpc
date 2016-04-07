@@ -16,8 +16,9 @@
 
 package org.qfast.openerp.rpc.exception;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
+
+import java.util.Map;
 
 /**
  * @author Ahmed El-mawaziny
@@ -46,64 +47,42 @@ public class OeRpcException extends Exception {
         this.cause = cause;
     }
 
-    public OeRpcException(JsonObject err) {
+    public OeRpcException(Map<String, Object> err) {
         this(getCodeNumber(err), getMessageErr(err), getTypeError(err));
     }
 
-    private static int getCodeNumber(JsonObject err) {
-        if (err.has("code")) {
-            JsonElement code = err.get("code");
-            if (code.isJsonPrimitive() && code.getAsJsonPrimitive().isNumber()) {
-                return code.getAsInt();
+    private static int getCodeNumber(Map<String, Object> err) {
+        if (err.containsKey("code")) {
+            Object code = err.get("code");
+            if (code instanceof Number) {
+                return (Integer) code;
             }
         }
         return 0;
     }
 
-    private static String getMessageErr(JsonObject err) {
-        if (err.has("message")) {
-            JsonElement message = err.get("message");
-            if (message.isJsonPrimitive() && message.getAsJsonPrimitive().isString()) {
-                return message.getAsString();
-            } else {
-                return message.toString();
-            }
+    private static String getMessageErr(Map<String, Object> err) {
+        if (err.containsKey("message")) {
+            return String.valueOf(err.get("message"));
         }
         return null;
     }
 
-    private static Throwable getTypeError(JsonObject err) {
-        if (err.has("data")) {
-            JsonElement data = err.get("data");
-            if (!data.isJsonNull() && data.isJsonObject()) {
-                JsonObject dataJson = data.getAsJsonObject();
-                if (dataJson.has("debug")) {
-                    JsonElement debug = dataJson.get("debug");
-                    if (!debug.isJsonNull()) {
-                        String traceBack = debug.getAsString().trim();
+    private static Throwable getTypeError(Map<String, Object> err) {
+        if (err.containsKey("data")) {
+            Object data = err.get("data");
+            if (data != null) {
+                Map dataJson = OeJsonUtil.convertJsonToMap(OeJsonUtil.parseAsJsonObject(data));
+                if (dataJson.containsKey("debug")) {
+                    Object debug = dataJson.get("debug");
+                    if (debug != null) {
+                        String traceBack = debug.toString().trim();
                         return new Throwable(traceBack);
                     }
                 }
             }
         }
         return null;
-    }
-
-    public static void checkJsonResponse(JsonObject response) throws OeRpcException {
-        if (response.has("result")) {
-            if (response.get("result").isJsonObject()) {
-                JsonObject result = response.getAsJsonObject("result");
-                if (result.has("error")) {
-                    throw new OeRpcException(result.get("error").getAsString());
-                }
-            }
-        } else if (response.has("error")) {
-            if (response.get("error").isJsonObject()) {
-                throw new OeRpcException(response.getAsJsonObject("error"));
-            } else {
-                throw new OeRpcException(response.get("error").getAsString());
-            }
-        }
     }
 
     public int getCode() {

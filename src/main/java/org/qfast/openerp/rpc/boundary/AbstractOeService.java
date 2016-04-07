@@ -16,12 +16,11 @@
 
 package org.qfast.openerp.rpc.boundary;
 
-import com.google.gson.JsonArray;
 import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
 import java.io.Serializable;
@@ -48,6 +47,23 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     private static final long serialVersionUID = -2422695985617500754L;
     protected final OeExecutor executor;
     protected final Class<M> model;
+    /**
+     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
+     * give it the OpenERP model name and list of search criteria
+     *
+     * @param <E>     Executor boundary service type
+     * @param e       instance of Executor boundary service
+     * @param sc      list of search criteria
+     * @param offset
+     * @param columns one or more model columns to read
+     * @param limit
+     * @param order
+     * @param context
+     * @return list of custom Entities for OpenERP models or Objects with list
+     * of search criteria, OpenERP context and one or more model columns
+     * @throws OeRpcException
+     */
+    public ArrayList<String> columns = new ArrayList<String>();
 
     /**
      * AbstractOeService default constructor
@@ -67,9 +83,9 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         E eInstance = e.getDeclaredConstructor(OeExecutor.class).newInstance(executor);
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(OeConst._COL_ID).eq(id);
-        JsonArray result = executor.searchReadArr(eInstance.getName(), cb.getCriteria());
-        if (result != null && !result.isJsonNull() && result.size() != 0) {
-            return OeBinder.bind(result.get(0).toString(), m, eInstance);
+        Map<String, Object>[] result = executor.searchReadMap(eInstance.getName(), cb.getCriteria());
+        if (result != null && result.length != 0) {
+            return OeBinder.bind(result[0].toString(), m, eInstance);
         }
         throw new OeRpcException(m.getSimpleName() + " Not found with id=" + id, null);
     }
@@ -397,32 +413,16 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         return find(sc, offset, limit, order, executor.getContext(), columns);
     }
 
-    /**
-     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
-     * give it the OpenERP model name and list of search criteria
-     *
-     * @param <E>     Executor boundary service type
-     * @param e       instance of Executor boundary service
-     * @param sc      list of search criteria
-     * @param offset
-     * @param columns one or more model columns to read
-     * @param limit
-     * @param order
-     * @param context
-     * @return list of custom Entities for OpenERP models or Objects with list
-     * of search criteria, OpenERP context and one or more model columns
-     * @throws OeRpcException
-     */
     public final <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
                                                             String order, Map<String, Object> context,
                                                             String... columns) throws OeRpcException {
-        JsonArray result = executor.searchRead(getName(), sc, offset, limit, order, context, columns);
-        List<M> oeModels = new ArrayList<M>(result.size());
+        Map<String, Object>[] result = executor.searchReadMap(getName(), sc, offset, limit, order, context, columns);
+        List<M> oeModels = new ArrayList<M>(result.length);
 //        Set<Map.Entry<String, JsonElement>> entries = OeUtil.parseAsJsonObject(result.get(0).toString()).entrySet();
 //        for (Map.Entry<String, JsonElement> entry : entries)
 //            System.out.println(entry.getKey() + " = "+ entry.getValue());
-        for (int i = 0; i < result.size(); i++) {
-            oeModels.add(OeBinder.bind(result.get(i).toString(), model, e));
+        for (int i = 0; i < result.length; i++) {
+            oeModels.add(OeBinder.bind(result[i].toString(), model, e));
         }
         return oeModels;
     }

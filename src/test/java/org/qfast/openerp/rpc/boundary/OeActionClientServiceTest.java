@@ -22,6 +22,7 @@ import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 import static org.qfast.openerp.rpc.OeConst.OeFun.SEARCH;
 import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_CLIENT;
 import static org.qfast.openerp.rpc.OeConst.OeModel.PARTNERS;
-import static org.qfast.openerp.rpc.util.OeUtil.convertJsonArray;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.convertJsonArray;
 
 /**
  * @author Ahmed El-mawaziny on 2/16/16.
@@ -104,6 +105,10 @@ public class OeActionClientServiceTest extends AbstractBaseTest {
                 min = Math.min(min, id);
             }
             OeActionClient first = service.findFirst();
+            ArrayList<String> columns = service.columns;
+            columns.removeAll(Arrays.asList(OeActionClient.COLUMNS));
+            System.out.println(columns);
+            assertTrue(columns.isEmpty());
             if (first != null) {
                 assertEquals(min, first.getId());
             }

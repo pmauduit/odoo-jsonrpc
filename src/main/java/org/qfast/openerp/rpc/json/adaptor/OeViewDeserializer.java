@@ -21,21 +21,28 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import org.qfast.openerp.rpc.entity.OeView;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.lang.reflect.Type;
 
 /**
  * @author Ahmed El-mawaziny
  */
-public class StringDeserializer implements JsonDeserializer<String> {
+public class OeViewDeserializer implements JsonDeserializer<OeView> {
 
     @Override
-    public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public OeView deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        System.out.println(json + " " + typeOfT);
-        if (json != null && !json.isJsonNull() && json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
-            return null;
+        if (json != null && !json.isJsonNull() && json.isJsonPrimitive()) {
+            JsonPrimitive asJsonPrimitive = json.getAsJsonPrimitive();
+            if (asJsonPrimitive.isBoolean()) {
+                return null;
+            } else if (asJsonPrimitive.isString()) {
+                json = OeJsonUtil.parseAsJsonElement(json.getAsString());
+            }
         }
-        return new Gson().fromJson(json, String.class);
+        return new Gson().fromJson(json, OeView.class);
     }
 }

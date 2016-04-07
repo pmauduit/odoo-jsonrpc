@@ -16,7 +16,6 @@
 
 package org.qfast.openerp.rpc.boundary;
 
-import com.google.gson.JsonArray;
 import org.qfast.openerp.rpc.OeConst.OeActionType;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
@@ -25,10 +24,11 @@ import org.qfast.openerp.rpc.entity.OeActionClient;
 import org.qfast.openerp.rpc.entity.OeActionWindow;
 import org.qfast.openerp.rpc.entity.OeView;
 import org.qfast.openerp.rpc.exception.OeRpcException;
+import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.util.OeBinder;
-import org.qfast.openerp.rpc.util.OeUtil;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,11 +112,11 @@ public class OeViewService extends AbstractOeService<OeView> {
      */
     public OeView getFieldsView(String modelName, Integer viewId, String viewMode, Map<String, Object> context)
             throws OeRpcException {
-        JsonArray args = new JsonArray();
+        List<Object> args = new ArrayList<Object>(3);
         args.add(viewId);
         args.add(((viewMode == null) ? FORM.getName() : viewMode));
-        args.add(OeUtil.parseAsJsonElement(context));
-        Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), args);
+        args.add(OeJsonUtil.parseAsJsonElement(context));
+        Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), args, false);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }
 

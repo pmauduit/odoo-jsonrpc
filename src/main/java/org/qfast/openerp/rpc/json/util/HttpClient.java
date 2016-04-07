@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.qfast.openerp.rpc.util;
+package org.qfast.openerp.rpc.json.util;
 
 import com.google.gson.JsonObject;
 import org.apache.http.HttpEntity;
@@ -60,7 +60,7 @@ public final class HttpClient {
                     InputStream in = entity.getContent();
                     String resultString = convertStreamToString(in);
 
-                    return OeUtil.parseAsJsonObject(resultString);
+                    return OeJsonUtil.parseAsJsonObject(resultString);
                 }
             } finally {
                 if (httpclient != null)

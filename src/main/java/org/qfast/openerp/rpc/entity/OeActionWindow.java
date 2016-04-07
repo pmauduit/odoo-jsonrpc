@@ -19,6 +19,7 @@ package org.qfast.openerp.rpc.entity;
 import org.qfast.openerp.rpc.OeConst.OeModel;
 import org.qfast.openerp.rpc.OeConst.OeViewMode;
 import org.qfast.openerp.rpc.boundary.OeActionWindowService;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.util.ArrayList;
@@ -35,12 +36,13 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
             _USAGE = "usage", _DOMAIN = "domain", _VIEW_ID = "view_id", _SEARCH_VIEW_ID = "search_view_id",
             _AUTO_REFRESH = "auto_refresh", _VIEW_MODE = "view_mode", _MULTI = "multi", _TARGET = "target",
             _AUTO_SEARCH = "auto_search", _FILTER = "filter", _SRC_MODEL = "src_model", _LIMIT = "limit",
-            _VIEW_TYPE = "view_type", _RES_ID = "res_id";
+            _VIEW_TYPE = "view_type", _RES_ID = "res_id", _GROUPS_ID = "groups_id", _VIEW_IDS = "view_ids",
+            _VIEWS = "views", _SEARCH_VIEW = "search_view";
 
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
             _DISPLAY_NAME, _LAST_UPDATE, _TYPE, _HELP, _RES_MODEL, _CONTEXT, _USAGE, _DOMAIN, _VIEW_ID, _SEARCH_VIEW_ID,
             _AUTO_REFRESH, _VIEW_MODE, _MULTI, _TARGET, _AUTO_SEARCH, _FILTER, _SRC_MODEL,
-            _LIMIT, _VIEW_TYPE, _RES_ID};
+            _LIMIT, _VIEW_TYPE, _RES_ID, _GROUPS_ID, _VIEW_IDS, _VIEWS, _SEARCH_VIEW};
 
     private static final long serialVersionUID = -6747437395841876695L;
 
@@ -62,6 +64,11 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     private Integer limit;
     private String viewType;
     private Long resId;
+    private Object[] groupsId;
+    private Object[][] views;
+    private OeView searchView;
+    private Object[] viewIds;
+
 
     public OeActionWindow() {
     }
@@ -112,7 +119,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     }
 
     public Map<String, Object> getActionContext() {
-        return OeUtil.convertStringToMap(context);
+        return OeJsonUtil.convertStringToMap(context);
     }
 
     public String getUsage() {
@@ -247,6 +254,38 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
         this.resId = resId;
     }
 
+    public Object[] getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(Object[] groupsId) {
+        this.groupsId = groupsId;
+    }
+
+    public Object[][] getViews() {
+        return views;
+    }
+
+    public void setViews(Object[][] views) {
+        this.views = views;
+    }
+
+    public OeView getSearchView() {
+        return searchView;
+    }
+
+    public void setSearchView(OeView searchView) {
+        this.searchView = searchView;
+    }
+
+    public Object[] getViewIds() {
+        return viewIds;
+    }
+
+    public void setViewIds(Object[] viewIds) {
+        this.viewIds = viewIds;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -268,15 +307,15 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
                 ", createDate=" + createDate +
                 ", lastUpdate=" + lastUpdate +
                 ", writeDate=" + writeDate +
-                ", autoRefresh=" + autoRefresh +
                 ", type='" + type + '\'' +
                 ", help='" + help + '\'' +
                 ", resModel='" + resModel + '\'' +
                 ", context='" + context + '\'' +
                 ", usage='" + usage + '\'' +
                 ", domain=" + Arrays.toString(domain) +
-                ", viewId=" + viewId +
+                ", viewId=" + Arrays.toString(viewId) +
                 ", searchViewId=" + Arrays.toString(searchViewId) +
+                ", autoRefresh=" + autoRefresh +
                 ", viewMode='" + viewMode + '\'' +
                 ", multi=" + multi +
                 ", target='" + target + '\'' +
@@ -286,6 +325,10 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
                 ", limit=" + limit +
                 ", viewType='" + viewType + '\'' +
                 ", resId=" + resId +
+                ", groupsId=" + Arrays.toString(groupsId) +
+                ", views=" + Arrays.toString(views) +
+                ", searchView=" + searchView +
+                ", viewIds=" + Arrays.toString(viewIds) +
                 '}';
     }
 }

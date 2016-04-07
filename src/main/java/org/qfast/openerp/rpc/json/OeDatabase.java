@@ -20,7 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.http.client.utils.URIBuilder;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.util.OeUtil;
+import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.io.Serializable;
 
@@ -28,8 +28,8 @@ import static org.qfast.openerp.rpc.OeConst.JsonDatabase.CREATE;
 import static org.qfast.openerp.rpc.OeConst.JsonDatabase.DROP;
 import static org.qfast.openerp.rpc.OeConst.JsonDatabase.DUPLICATE;
 import static org.qfast.openerp.rpc.OeConst.JsonDatabase.GET_LIST;
-import static org.qfast.openerp.rpc.util.OeUtil.getCallWith;
-import static org.qfast.openerp.rpc.util.OeUtil.postRequest;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.getCallWith;
+import static org.qfast.openerp.rpc.json.util.OeJsonUtil.postRequest;
 
 /**
  * @author Ahmed El-mawaziny
@@ -112,8 +112,8 @@ public class OeDatabase implements Serializable {
     public final String[] doList() throws OeRpcException {
         String reqUrl = url.setPath(GET_LIST.getPath()).toString();
         JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
-        OeRpcException.checkJsonResponse(response);
-        return OeUtil.convertJsonArray(response.getAsJsonArray("result"), String[].class);
+        OeJsonUtil.checkJsonResponse(response);
+        return OeJsonUtil.convertJsonArray(response.getAsJsonArray("result"), String[].class);
     }
 
     public String getProtocol() {
@@ -166,7 +166,7 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeRpcException.checkJsonResponse(response);
+        OeJsonUtil.checkJsonResponse(response);
         return response.get("result").getAsBoolean();
     }
 
@@ -188,7 +188,7 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeRpcException.checkJsonResponse(response);
+        OeJsonUtil.checkJsonResponse(response);
         return response.get("result").getAsBoolean();
     }
 
@@ -215,7 +215,7 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeRpcException.checkJsonResponse(response);
+        OeJsonUtil.checkJsonResponse(response);
         return response.get("result").getAsBoolean();
     }
 }
