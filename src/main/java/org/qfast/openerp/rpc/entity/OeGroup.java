@@ -52,7 +52,7 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
     private Integer[] ruleGroups;
     private String comment;
     private String fullName;
-    private Integer categoryId;
+    private Object[] categoryId;
     private Set<OeMenu> menus;
 
     public OeGroup() {
@@ -182,11 +182,11 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
         this.impliedIds = impliedIds;
     }
 
-    public Integer getCategoryId() {
+    public Object[] getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Object[] categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -220,9 +220,11 @@ public class OeGroup extends AbstractOeEntity<OeGroupService> {
                 ", share=" + share +
                 ", portal=" + portal +
                 ", transImpliedIds=" + Arrays.toString(transImpliedIds) +
+                ", impliedIds=" + Arrays.toString(impliedIds) +
                 ", ruleGroups=" + Arrays.toString(ruleGroups) +
                 ", comment='" + comment + '\'' +
                 ", fullName='" + fullName + '\'' +
+                ", categoryId=" + Arrays.toString(categoryId) +
                 ", menus=" + menus +
                 '}';
     }
