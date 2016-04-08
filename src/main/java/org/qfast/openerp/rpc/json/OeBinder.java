@@ -57,6 +57,7 @@ public class OeBinder {
                 .registerTypeAdapter(OeView.class, new OeViewDeserializer())
                 .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
                 .create();
+        result = result.replace("u'", "'");
         T instance = gson.fromJson(result, tClaz);
         instance.setOe(oe);
         return instance;

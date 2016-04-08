@@ -47,22 +47,6 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     private static final long serialVersionUID = -2422695985617500754L;
     protected final OeExecutor executor;
     protected final Class<M> model;
-    /**
-     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
-     * give it the OpenERP model name and list of search criteria
-     *
-     * @param <E>     Executor boundary service type
-     * @param e       instance of Executor boundary service
-     * @param sc      list of search criteria
-     * @param offset
-     * @param columns one or more model columns to read
-     * @param limit
-     * @param order
-     * @param context
-     * @return list of custom Entities for OpenERP models or Objects with list
-     * of search criteria, OpenERP context and one or more model columns
-     * @throws OeRpcException
-     */
     public ArrayList<String> columns = new ArrayList<String>();
 
     /**
@@ -413,16 +397,37 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         return find(sc, offset, limit, order, executor.getContext(), columns);
     }
 
+    /**
+     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
+     * give it the OpenERP model name and list of search criteria
+     *
+     * @param <E>     Executor boundary service type
+     * @param e       instance of Executor boundary service
+     * @param sc      list of search criteria
+     * @param offset
+     * @param columns one or more model columns to read
+     * @param limit
+     * @param order
+     * @param context
+     * @return list of custom Entities for OpenERP models or Objects with list
+     * of search criteria, OpenERP context and one or more model columns
+     * @throws OeRpcException
+     */
     public final <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
                                                             String order, Map<String, Object> context,
                                                             String... columns) throws OeRpcException {
-        Map<String, Object>[] result = executor.searchReadMap(getName(), sc, offset, limit, order, context, columns);
-        List<M> oeModels = new ArrayList<M>(result.length);
-//        Set<Map.Entry<String, JsonElement>> entries = OeUtil.parseAsJsonObject(result.get(0).toString()).entrySet();
-//        for (Map.Entry<String, JsonElement> entry : entries)
-//            System.out.println(entry.getKey() + " = "+ entry.getValue());
-        for (int i = 0; i < result.length; i++) {
-            oeModels.add(OeBinder.bind(result[i].toString(), model, e));
+        Map<String, Object>[] results = executor.searchReadMap(getName(), sc, offset, limit, order, context, columns);
+        List<M> oeModels = new ArrayList<M>(results.length);
+//        if (results.length != 0) {
+//            this.columns.clear();
+//            Set<Map.Entry<String, Object>> entries = results[0].entrySet();
+//            for (Map.Entry<String, Object> entry : entries) {
+//                this.columns.add(entry.getKey());
+//                System.out.println(entry.getKey() + " = " + entry.getValue());
+//            }
+//        }
+        for (Map<String, Object> result : results) {
+            oeModels.add(OeBinder.bind(result.toString(), model, e));
         }
         return oeModels;
     }

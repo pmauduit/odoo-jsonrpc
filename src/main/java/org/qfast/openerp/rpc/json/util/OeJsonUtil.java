@@ -119,7 +119,6 @@ public final class OeJsonUtil {
             }
         } else if (response.has("error")) {
             if (response.get("error").isJsonObject()) {
-                System.out.println(response.getAsJsonObject("error"));
                 throw new OeRpcException(convertJsonToMap(response.getAsJsonObject("error")));
             } else {
                 throw new OeRpcException(response.get("error").getAsString());

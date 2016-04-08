@@ -29,13 +29,13 @@ import java.util.Arrays;
  */
 public class OeAttachment extends AbstractOeEntity<OeAttachmentService> {
 
-    public static final String _FILE_NAME = "datas_fname", _DATA = "datas", _MODEL = "res_model",
+    public static final String _DATA = "datas", _MODEL = "res_model",
             _FILE_SIZE = "file_size", _FILE_TYPE = "file_type", _RES_NAME = "res_name", _DB_DATAS = "db_datas",
             _COMPANY_ID = "company_id", _TYPE = "type", _STORE_FNAME = "store_fname", _DESCRIPTION = "description",
             _FILE_TYPE_ICON = "file_type_icon", _URL = "url", _RES_ID = "res_id", _DATAS_FNAME = "datas_fname";
 
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
-            _DISPLAY_NAME, _LAST_UPDATE, _FILE_NAME, _DATA, _MODEL, _FILE_SIZE, _FILE_TYPE, _RES_NAME, _DB_DATAS,
+            _DISPLAY_NAME, _LAST_UPDATE, _DATA, _MODEL, _FILE_SIZE, _FILE_TYPE, _RES_NAME, _DB_DATAS,
             _COMPANY_ID, _TYPE, _STORE_FNAME, _DESCRIPTION, _FILE_TYPE_ICON, _URL, _RES_ID, _DATAS_FNAME};
 
     private static final long serialVersionUID = -3111917687766566032L;
@@ -88,7 +88,7 @@ public class OeAttachment extends AbstractOeEntity<OeAttachmentService> {
                 .setPath("/web/binary/saveas")
                 .setParameter("model", oe.getName())
                 .setParameter("field", _DATA)
-                .setParameter("filename_field", _FILE_NAME)
+                .setParameter("filename_field", _DATAS_FNAME)
                 .setParameter(_ID, String.valueOf(id))
                 .setParameter("session_id", executor.getSessionId())
                 .toString();

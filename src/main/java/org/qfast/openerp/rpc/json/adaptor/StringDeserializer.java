@@ -32,7 +32,6 @@ public class StringDeserializer implements JsonDeserializer<String> {
     @Override
     public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        System.out.println(json + " " + typeOfT);
         if (json != null && !json.isJsonNull() && json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
             return null;
         }

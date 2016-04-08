@@ -22,7 +22,6 @@ import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -104,14 +103,20 @@ public class OeLanguageServiceTest extends AbstractBaseTest {
                 min = Math.min(min, id);
             }
             OeLanguage first = service.findFirst();
-            ArrayList<String> columns = service.columns;
-            columns.removeAll(Arrays.asList(OeLanguage.COLUMNS));
-            System.out.println(columns);
             if (first != null) {
                 assertEquals(min, first.getId());
             }
         }
     }
+
+//    @org.junit.Test
+//    public void testColumns() throws Exception {
+//        service.findFirst();
+//        ArrayList<String> columns = service.columns;
+//        assertEquals(columns.size(), OeLanguage.COLUMNS.length);
+//        columns.removeAll(Arrays.asList(OeLanguage.COLUMNS));
+//        assertTrue(columns.isEmpty());
+//    }
 
     @org.junit.Test
     public void testFindLast() throws Exception {

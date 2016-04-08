@@ -38,7 +38,7 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
     public static final String[] COLUMNS = new String[]{_ID, _NAME, _CREATE_DATE, _CREATE_UID, _WRITE_DATE, _WRITE_UID,
             _DISPLAY_NAME, _LAST_UPDATE, _ACTION, _SEQUENCE, _PARENT_ID, _CHILD_ID, _WEB_ICON_DATA, _WEB_ICON_HOVER,
             _ICON_PICT, _WEB_ICON_HOVER_DATA, _COMPLETE_NAME, _ICON, _MAIL_GROUP_ID, _NEED_ACTION_ENABLED,
-            _PARENT_RIGHT, _WEB_ICON, _PARENT_LEFT};
+            _PARENT_RIGHT, _WEB_ICON, _PARENT_LEFT, _GROUPS_ID};
 
     private static final long serialVersionUID = -3622021175633536095L;
 
@@ -55,6 +55,7 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
     private String iconPict;
     private String completeName;
     private Object[] mailGroupId;
+    private Integer[] groupsId;
     @SerializedName(_NEED_ACTION_ENABLED)
     private boolean needActionEnabled;
     private Integer parentRight;
@@ -219,6 +220,14 @@ public class OeMenu extends AbstractOeEntity<OeMenuService> implements Comparabl
 
     public void setParentLeft(Integer parentLeft) {
         this.parentLeft = parentLeft;
+    }
+
+    public Integer[] getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(Integer[] groupsId) {
+        this.groupsId = groupsId;
     }
 
     @Override
