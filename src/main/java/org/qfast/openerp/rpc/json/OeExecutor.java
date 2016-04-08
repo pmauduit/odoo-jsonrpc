@@ -155,6 +155,7 @@ public class OeExecutor implements Serializable {
         params.add("context", jsonContext);
         JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeJsonUtil.checkJsonResponse(response);
+        instance = null;
     }
 
     private JsonObject getJsonContextFromLogin(JsonObject result) {
