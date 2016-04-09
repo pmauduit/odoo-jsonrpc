@@ -19,7 +19,6 @@ package org.qfast.openerp.rpc.boundary;
 import org.qfast.openerp.rpc.entity.OePartner;
 import org.qfast.openerp.rpc.exception.OeRpcException;
 import org.qfast.openerp.rpc.json.OeExecutor;
-import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -50,12 +49,6 @@ public class OePartnerService extends AbstractOeService<OePartner> {
     @Override
     public String getName() {
         return name;
-    }
-
-    public OePartner findByPartnerCode(String partnerCode) throws OeRpcException {
-        OeCriteriaBuilder cb = new OeCriteriaBuilder();
-        cb.column(OePartner._PARTNER_CODE).eq(partnerCode);
-        return findFirst(cb);
     }
 
     @Override
