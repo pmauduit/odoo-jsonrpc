@@ -105,10 +105,11 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
+                            <Implementation-Vendor-URL>${project.organization.url}</Implementation-Vendor-URL>
                             <Built-by>${user.name}</Built-by>
                             <Country>${user.country}</Country>
                             <License>${license.name}</License>
-                            <License-url>${license.url}</License-url>
+                            <License-URL>${license.url}</License-URL>
                         </manifestEntries>
                     </archive>
                 </configuration>
