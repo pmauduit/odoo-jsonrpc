@@ -85,17 +85,17 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @throws OeRpcException
      */
     public OeView getOeView(String actionType, Long actionId) throws OeRpcException {
-        OeModel modelName;
+        String modelName;
         OeViewMode viewMode = FORM;
         if (actionType.equals(ACTION_WINDOW.getName())) {
             OeActionWindowService service = new OeActionWindowService(executor);
             OeActionWindow action = service.findById(actionId);
-            modelName = action.getResOeModel();
+            modelName = action.getResModel();
             viewMode = action.getOeViewModes().get(0);
         } else if (actionType.equals(ACTION_CLIENT.getName())) {
             OeActionClientService service = new OeActionClientService(executor);
             OeActionClient action = service.findById(actionId);
-            modelName = action.getOeModel();
+            modelName = action.getResModel();
         } else {
             throw new UnsupportedOperationException(actionType + " is not supported yet");
         }
@@ -173,6 +173,10 @@ public class OeViewService extends AbstractOeService<OeView> {
      */
     public OeView getFieldsView(OeModel oeModel, OeViewMode viewMode) throws OeRpcException {
         return getFieldsView(oeModel, viewMode, executor.getContext());
+    }
+
+    public OeView getFieldsView(String resModel, OeViewMode viewMode) throws OeRpcException {
+        return getFieldsView(resModel, viewMode.getName(), executor.getContext());
     }
 
     /**

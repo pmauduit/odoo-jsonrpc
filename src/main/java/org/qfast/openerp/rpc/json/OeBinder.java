@@ -17,23 +17,12 @@
 package org.qfast.openerp.rpc.json;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.qfast.openerp.rpc.boundary.AbstractOeService;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.entity.OeView;
-import org.qfast.openerp.rpc.json.adaptor.BooleanDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.DateDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.FloatDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.IntegerDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.LongDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.MapDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.ObjectArrDeserializer;
 import org.qfast.openerp.rpc.json.adaptor.OeViewDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.StringDeserializer;
-
-import java.util.Date;
-import java.util.Map;
+import org.qfast.openerp.rpc.json.util.OeGson;
 
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
@@ -45,15 +34,7 @@ public class OeBinder {
     @SuppressWarnings("unchecked")
     public static <T extends AbstractOeEntity, E extends AbstractOeService> T bind(String result, Class<T> tClaz, E oe)
             throws JsonSyntaxException {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
-                .registerTypeAdapter(Integer.class, new IntegerDeserializer())
-                .registerTypeAdapter(Long.class, new LongDeserializer())
-                .registerTypeAdapter(String.class, new StringDeserializer())
-                .registerTypeAdapter(Date.class, new DateDeserializer())
-                .registerTypeAdapter(Float.class, new FloatDeserializer())
-                .registerTypeAdapter(Boolean.class, new BooleanDeserializer())
-                .registerTypeAdapter(Map.class, new MapDeserializer())
+        Gson gson = OeGson.getGsonBuilder()
                 .registerTypeAdapter(OeView.class, new OeViewDeserializer())
                 .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
                 .create();

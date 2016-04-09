@@ -75,7 +75,8 @@ public class OeConst {
         REQUEST_SERVICE_SERVICES("request.service.services"),
         FINANCIAL_STATEMENT("financial.statement"),
         ACTION_WINDOW("ir.actions.act_window"),
-        LANGUAGE("res.lang");
+        LANGUAGE("res.lang"),
+        MESSAGES("mail.message");
 
         private final String name;
 

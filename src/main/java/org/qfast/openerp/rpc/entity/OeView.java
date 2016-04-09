@@ -44,7 +44,7 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
     private String arch;
     private String fieldParent;
     private Object[] inheritId;
-    private Integer modelDataId;
+    private Object[] modelDataId;
     private Integer priority;
     private String application;
     private String mode;
@@ -115,11 +115,11 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
         this.inheritId = inheritId;
     }
 
-    public Integer getModelDataId() {
+    public Object[] getModelDataId() {
         return modelDataId;
     }
 
-    public void setModelDataId(Integer modelDataId) {
+    public void setModelDataId(Object[] modelDataId) {
         this.modelDataId = modelDataId;
     }
 
@@ -219,7 +219,7 @@ public class OeView extends AbstractOeEntity<OeViewService> implements Comparabl
                 ", arch='" + arch + '\'' +
                 ", fieldParent='" + fieldParent + '\'' +
                 ", inheritId=" + Arrays.toString(inheritId) +
-                ", modelDataId=" + modelDataId +
+                ", modelDataId=" + Arrays.toString(modelDataId) +
                 ", priority=" + priority +
                 ", mode='" + mode + '\'' +
                 ", model='" + model + '\'' +

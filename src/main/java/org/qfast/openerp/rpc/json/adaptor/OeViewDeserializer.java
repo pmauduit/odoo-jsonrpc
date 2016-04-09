@@ -23,6 +23,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import org.qfast.openerp.rpc.entity.OeView;
+import org.qfast.openerp.rpc.json.util.OeGson;
 import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.lang.reflect.Type;
@@ -43,6 +44,7 @@ public class OeViewDeserializer implements JsonDeserializer<OeView> {
                 json = OeJsonUtil.parseAsJsonElement(json.getAsString());
             }
         }
-        return new Gson().fromJson(json, OeView.class);
+        Gson gson = OeGson.getGsonBuilder().create();
+        return gson.fromJson(json, OeView.class);
     }
 }
