@@ -109,15 +109,6 @@ public class OePartnerServiceTest extends AbstractBaseTest {
         }
     }
 
-//    @org.junit.Test
-//    public void testColumns() throws Exception {
-//        service.findFirst();
-//        ArrayList<String> columns = service.columns;
-//        assertEquals(columns.size(), OePartner.COLUMNS.length);
-//        columns.removeAll(Arrays.asList(OePartner.COLUMNS));
-//        assertTrue(columns.isEmpty());
-//    }
-
     @org.junit.Test
     public void testFindLast() throws Exception {
         Long[] ids = getIds();
@@ -197,5 +188,4 @@ public class OePartnerServiceTest extends AbstractBaseTest {
         args.add(new JsonArray());
         return convertJsonArray((JsonArray) executor.execute(PARTNERS.getName(), SEARCH.getName(), args), Long[].class);
     }
-
 }

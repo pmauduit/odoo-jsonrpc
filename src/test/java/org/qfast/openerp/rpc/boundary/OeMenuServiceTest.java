@@ -110,15 +110,6 @@ public class OeMenuServiceTest extends AbstractBaseTest {
         }
     }
 
-//    @org.junit.Test
-//    public void testColumns() throws Exception {
-//        service.findFirst();
-//        ArrayList<String> columns = service.columns;
-//        assertEquals(columns.size(), OeMenu.COLUMNS.length);
-//        columns.removeAll(Arrays.asList(OeMenu.COLUMNS));
-//        assertTrue(columns.isEmpty());
-//    }
-
     @org.junit.Test
     public void testFindLast() throws Exception {
         Long[] ids = getIds();

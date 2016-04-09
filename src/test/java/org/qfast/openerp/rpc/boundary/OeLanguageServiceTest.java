@@ -109,15 +109,6 @@ public class OeLanguageServiceTest extends AbstractBaseTest {
         }
     }
 
-//    @org.junit.Test
-//    public void testColumns() throws Exception {
-//        service.findFirst();
-//        ArrayList<String> columns = service.columns;
-//        assertEquals(columns.size(), OeLanguage.COLUMNS.length);
-//        columns.removeAll(Arrays.asList(OeLanguage.COLUMNS));
-//        assertTrue(columns.isEmpty());
-//    }
-
     @org.junit.Test
     public void testFindLast() throws Exception {
         Long[] ids = getIds();
