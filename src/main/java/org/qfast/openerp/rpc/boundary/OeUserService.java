@@ -73,7 +73,7 @@ public class OeUserService extends AbstractOeService<OeUser> {
         return new OeMenuService(executor).findByUserIdAllInOne(userId);
     }
 
-    public OeLanguage findLangaugeByCode(String code) throws OeRpcException {
+    public OeLanguage findLanguageByCode(String code) throws OeRpcException {
         return new OeLanguageService(executor).findByCode(code);
     }
 }

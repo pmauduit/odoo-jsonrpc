@@ -121,7 +121,7 @@ public class OeUser extends AbstractOeEntity<OeUserService> {
     public OeLanguage getLanguage() throws OeRpcException {
         getLocale();
         if ((language == null && locale != null) || (language != null && !OeUtil.equals(language.getLocale(), locale))) {
-            language = oe.findLangaugeByCode(locale.toString());
+            language = oe.findLanguageByCode(locale.toString());
         }
         return language;
     }
