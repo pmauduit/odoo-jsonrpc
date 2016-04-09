@@ -47,7 +47,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     private static final long serialVersionUID = -2422695985617500754L;
     protected final OeExecutor executor;
     protected final Class<M> model;
-    public ArrayList<String> columns = new ArrayList<String>();
+//    public ArrayList<String> columns = new ArrayList<String>();
 
     /**
      * AbstractOeService default constructor
@@ -423,7 +423,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
 //            Set<Map.Entry<String, Object>> entries = results[0].entrySet();
 //            for (Map.Entry<String, Object> entry : entries) {
 //                this.columns.add(entry.getKey());
-//                System.out.println(entry.getKey() + " = " + entry.getValue());
+////                System.out.println(entry.getKey() + " = " + entry.getValue());
 //            }
 //        }
         for (Map<String, Object> result : results) {
