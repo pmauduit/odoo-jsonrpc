@@ -34,8 +34,8 @@ import static org.qfast.openerp.rpc.OeConst.SortType.DESC;
 import static org.qfast.openerp.rpc.OeConst._COL_ID;
 
 /**
- * AbstractOeService abstract class for boundary services of OpenERP. easy use
- * findById(s) findAll ...etc
+ * AbstractOeService abstract class for boundary services of Odoo. easy use
+ * findById(s), findAll, count, create, delete, update, ...etc
  *
  * @param <M> Entity type extends from {@link AbstractOeEntity}
  * @author Ahmed El-mawaziny
@@ -51,7 +51,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     /**
      * AbstractOeService default constructor
      *
-     * @param executor OpenERP Executor {@link OeExecutor}
+     * @param executor Odoo Executor {@link OeExecutor}
      * @param model    model class
      */
     @SuppressWarnings("unchecked")
@@ -60,6 +60,16 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         this.model = (Class<M>) model;
     }
 
+    /**
+     * @param executor
+     * @param m
+     * @param e
+     * @param id
+     * @param <OeM>
+     * @param <E>
+     * @return
+     * @throws Exception
+     */
     public static <OeM extends AbstractOeEntity, E extends AbstractOeService> OeM findById(OeExecutor executor,
                                                                                            Class<OeM> m, Class<E> e,
                                                                                            Long id) throws Exception {
@@ -74,7 +84,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * Get OpenERP Executor
+     * Get Odoo Executor
      *
      * @return OeExecutor
      */
@@ -83,18 +93,18 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * abstract method to get OpenERP model name
+     * abstract method to get Odoo model name
      *
-     * @return OpenERP model name
+     * @return Odoo model name
      */
     public abstract String getName();
 
     /**
-     * find OpenERP Model or Object by id and return custom Entity
+     * find Odoo Model or Object by id and return custom Entity
      *
-     * @param id Id of OpenERP Model or Object
-     * @return custom Entity for OpenERP model or object
-     * @throws OeRpcException if any exception happened on the OpenERP server
+     * @param id Id of Odoo Model or Object
+     * @return custom Entity for Odoo model or object
+     * @throws OeRpcException if any exception happened on the Odoo server or if no result found
      */
     public M findById(Long id, String... columns) throws OeRpcException {
         List<M> list = find(new Long[]{id}, columns);
@@ -106,41 +116,67 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * find OpenERP Models or Objects by id and return custom Entities
+     * find Odoo Models or Objects by ids and return custom Entities
      *
-     * @param ids OpenERP Models or Objects id
-     * @return custom Entities for OpenERP models or objects
-     * @throws OeRpcException
+     * @param ids Odoo Models or Objects id
+     * @return custom Entities for Odoo models or objects
+     * @throws OeRpcException if any exception happened during finding
      */
-    public final List<M> findByIds(Long... ids) throws OeRpcException {
+    public List<M> findByIds(Long... ids) throws OeRpcException {
         return find(ids);
     }
 
-    public final List<M> findByIds(Long[] ids, String... columns) throws OeRpcException {
+    /**
+     * Find by ids and with only array of columns not all columns (recommended for reducing bandwidth)
+     *
+     * @param ids     Odoo Models id
+     * @param columns Odoo Model columns
+     * @return custom entity with only specified columns
+     * @throws OeRpcException if any exception happened during this finding
+     */
+    public List<M> findByIds(Long[] ids, String... columns) throws OeRpcException {
         return find(ids, columns);
     }
 
     /**
-     * find all OpenERP Models or Objects
+     * find all Odoo Models or Objects with or without array of columns (recommended to reduce bandwidth)
      *
-     * @return list of custom Entities for OpenERP models or Objects
-     * @throws OeRpcException
+     * @return list of custom Entities for Odoo models or Objects
+     * @throws OeRpcException if any exception happened during this finding
      */
-    public final List<M> findAll(String... columns) throws OeRpcException {
+    public List<M> findAll(String... columns) throws OeRpcException {
         return find(executor.getContext(), columns);
     }
 
-    public final M findFirst(String... columns) throws OeRpcException {
+    /**
+     * finding first record with/without array of columns (recommended to reduce bandwidth)
+     * <p>
+     * this method using order by id ascending to get lower id
+     *
+     * @param columns array of columns
+     * @return custom entity with lower id with only specified columns
+     * @throws OeRpcException if any exception happened during this finding
+     * @see #findFirst(OeCriteriaBuilder, String...)
+     * @see OeCriteriaBuilder
+     */
+    public M findFirst(String... columns) throws OeRpcException {
         return findFirst(new OeCriteriaBuilder(), columns);
     }
 
     /**
-     * @param cb
-     * @param columns
-     * @return
-     * @throws OeRpcException
+     * find first record by criteria builder for searching {@link OeCriteriaBuilder} (odoo domain)
+     * with/without array of columns (recommended to reduce bandwidth)
+     * <p>
+     * this method using order by id ascending to get lower id
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
+     * @param columns array of columns
+     * @return custom entity with lower id with only specified columns
+     * @throws OeRpcException if any exception happened during this finding
+     * @see OeCriteriaBuilder
+     * @see #find(OeCriteriaBuilder, Integer, Integer, String, String...)
      */
-    public final M findFirst(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
+    public M findFirst(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
         List<M> find = find(cb, 0, 1, _COL_ID + ASC.toString(), columns);
         if (find != null && !find.isEmpty()) {
             return find.get(0);
@@ -149,20 +185,32 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @return
-     * @throws OeRpcException
+     * find last record with specific columns (optional - recommended to reduce bandwidth)
+     * <p>
+     * this method order by id descending
+     *
+     * @param columns array of columns
+     * @return last record in odoo model
+     * @throws OeRpcException if any something went wrong
+     * @see #findLast(OeCriteriaBuilder, String...)
+     * @see OeCriteriaBuilder
      */
-    public final M findLast(String... columns) throws OeRpcException {
+    public M findLast(String... columns) throws OeRpcException {
         return findLast(new OeCriteriaBuilder(), columns);
     }
 
     /**
-     * @param cb
-     * @param columns
-     * @return
-     * @throws OeRpcException
+     * find last record by criteria builder (odoo domain) {@link OeCriteriaBuilder}
+     * with specific columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
+     * @param columns array of columns (optional)
+     * @return last record in Odoo model
+     * @throws OeRpcException if any something went wrong
+     * @see OeCriteriaBuilder
+     * @see #find(OeCriteriaBuilder, Integer, Integer, String, String...)
      */
-    public final M findLast(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
+    public M findLast(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
         List<M> find = find(cb, 0, 1, _COL_ID + DESC.toString(), columns);
         if (find != null && !find.isEmpty()) {
             return find.get(0);
@@ -170,17 +218,31 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
         return null;
     }
 
-    public final M findAny(String... columns) throws OeRpcException {
+    /**
+     * find any record with specific columns (optional - recommended to reduce bandwidth)
+     *
+     * @param columns array of columns (optional)
+     * @return any record in Odoo model
+     * @throws OeRpcException if any something went wrong
+     * @see OeCriteriaBuilder
+     * @see #findAny(OeCriteriaBuilder, String...)
+     */
+    public M findAny(String... columns) throws OeRpcException {
         return findAny(new OeCriteriaBuilder(), columns);
     }
 
     /**
-     * @param cb
-     * @param columns
-     * @return
-     * @throws OeRpcException
+     * find last record by criteria builder (odoo domain) {@link OeCriteriaBuilder}
+     * with specific columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder}
+     * @param columns array of columns (optional)
+     * @return any record match this search criteria with optional columns
+     * @throws OeRpcException if any something went wrong
+     * @see #find(OeCriteriaBuilder, Integer, String...)
+     * @see OeCriteriaBuilder
      */
-    public final M findAny(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
+    public M findAny(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
         List<M> find = find(cb, 1, columns);
         if (find != null && !find.isEmpty()) {
             return find.get(0);
@@ -189,72 +251,72 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * find all OpenERP Models or Objects with OpenERP context
+     * find all Odoo Models or Objects with Odoo context
      *
-     * @param context OpenERP context
-     * @return list of custom Entities for OpenERP models or Objects with
-     * specific OpenERP context
+     * @param context Odoo context
+     * @return list of custom Entities for Odoo models or Objects with
+     * specific Odoo context
      * @throws OeRpcException
      */
-    public final List<M> find(Map<String, Object> context, String... columns) throws OeRpcException {
+    public List<M> find(Map<String, Object> context, String... columns) throws OeRpcException {
         return find(Collections.emptyList(), null, null, null, context, columns);
     }
 
     /**
-     * find all OpenERP Models or Objects with search criteria and reading some
+     * find all Odoo Models or Objects with search criteria and reading some
      * specific columns
      *
      * @param cb      search criteria created with {@link OeCriteriaBuilder}
      * @param columns one or more model columns to read
-     * @return list of custom Entities for OpenERP models or Objects with some
+     * @return list of custom Entities for Odoo models or Objects with some
      * specific columns
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
+    public List<M> find(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
         return find(cb.getCriteria(), columns);
     }
 
     /**
-     * find all OpenERP Models or Objects with search criteria, OpenERP context
+     * find all Odoo Models or Objects with search criteria, Odoo context
      * and reading some specific columns
      *
      * @param cb      search criteria created with {@link OeCriteriaBuilder}
-     * @param context OpenERP context
+     * @param context Odoo context
      * @param columns one or more model columns to read
-     * @return list of custom Entities for OpenERP models or Objects with some
-     * specific columns and OpenERP context
+     * @return list of custom Entities for Odoo models or Objects with some
+     * specific columns and Odoo context
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, Map<String, Object> context, String... columns)
+    public List<M> find(OeCriteriaBuilder cb, Map<String, Object> context, String... columns)
             throws OeRpcException {
         return find(cb.getCriteria(), null, null, null, context, columns);
     }
 
     /**
-     * find all OpenERP Models or Objects with list of search criteria and
+     * find all Odoo Models or Objects with list of search criteria and
      * reading some specific columns
      *
      * @param sc      list of search criteria
      * @param columns one or more model columns
-     * @return list of custom Entities for OpenERP models or Objects with some
+     * @return list of custom Entities for Odoo models or Objects with some
      * custom list of search criteria and one or more model columns
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, String... columns) throws OeRpcException {
+    public List<M> find(List<Object> sc, String... columns) throws OeRpcException {
         return find(sc, (String) null, columns);
     }
 
     /**
-     * find all OpenERP Models or Objects with its id and reading some specific
+     * find all Odoo Models or Objects with its id and reading some specific
      * columns
      *
-     * @param ids     OpenERP models or objects id
+     * @param ids     Odoo models or objects id
      * @param columns one or more model columns
-     * @return list of custom Entities for OpenERP models or Objects with its id
+     * @return list of custom Entities for Odoo models or Objects with its id
      * and one or more model columns
      * @throws OeRpcException
      */
-    public final List<M> find(Object[] ids, String... columns) throws OeRpcException {
+    public List<M> find(Object[] ids, String... columns) throws OeRpcException {
         return find(ids, executor.getContext(), columns);
     }
 
@@ -264,23 +326,23 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * {@link #find(AbstractOeService, List, Integer, Integer, String, Map, String...)}
      *
      * @param sc      list of search criteria
-     * @param offset
-     * @param limit
-     * @param order
-     * @param context OpenERP context
+     * @param offset  offset number
+     * @param limit   limit number
+     * @param order   order by with asc/desc
+     * @param context Odoo context
      * @param columns one or more model columns to read
-     * @return list of custom Entities for OpenERP models or Objects with list
-     * of search criteria, OpenERP context and one or more model columns
+     * @return list of custom Entities for Odoo models or Objects with list
+     * of search criteria, Odoo context and one or more model columns
      * @throws OeRpcException
      */
     public abstract List<M> find(List<Object> sc, Integer offset, Integer limit, String order,
                                  Map<String, Object> context, String... columns) throws OeRpcException;
 
     /**
-     * @param ids     OpenERP models or objects id
-     * @param context OpenERP context
+     * @param ids     Odoo models or objects id
+     * @param context Odoo context
      * @param columns one or more model columns to read
-     * @return list of custom Entities for OpenERP models or Objects with its id, OpenERP context and
+     * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
      * @throws OeRpcException
      */
@@ -291,50 +353,69 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param cb
-     * @param limit
-     * @param columns
-     * @return
+     * find limited records by search criteria (Odoo domain) and with
+     * columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder}
+     * @param limit   limit number
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
+     * one or more model columns
      * @throws OeRpcException
+     * @see #find(List, Integer, String...)
+     * @see OeCriteriaBuilder
      */
-    public final List<M> find(OeCriteriaBuilder cb, Integer limit, String... columns) throws OeRpcException {
+    public List<M> find(OeCriteriaBuilder cb, Integer limit, String... columns) throws OeRpcException {
         return find(cb.getCriteria(), limit, columns);
     }
 
     /**
-     * @param sc
-     * @param limit
-     * @param columns
-     * @return
+     * find limited records by search criteria (Odoo domain) and with
+     * columns (optional - recommended to reduce bandwidth)
+     *
+     * @param sc      search criteria
+     * @param limit   limit number
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
+     * one or more model columns
      * @throws OeRpcException
+     * @see #find(List, Integer, Integer, String, String...)
      */
-    public final List<M> find(List<Object> sc, Integer limit, String... columns) throws OeRpcException {
+    public List<M> find(List<Object> sc, Integer limit, String... columns) throws OeRpcException {
         return find(sc, null, limit, null, columns);
     }
 
     /**
-     * @param cb
-     * @param order
-     * @param columns
-     * @return
+     * find ordered records by search criteria (Odoo domain) and with
+     * columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder}
+     * @param order   order column with asc/desc
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
+     * one or more model columns
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, String order, String... columns) throws OeRpcException {
+    public List<M> find(OeCriteriaBuilder cb, String order, String... columns) throws OeRpcException {
         return find(cb.getCriteria(), order, columns);
     }
 
     /**
-     * @param sc
-     * @param order
-     * @param columns
-     * @return
+     * find ordered records by search criteria (Odoo domain) and with
+     * columns (optional - recommended to reduce bandwidth)
+     *
+     * @param sc      search criteria
+     * @param order   order column with asc/desc
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
+     * one or more model columns
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, String order, String... columns) throws OeRpcException {
+    public List<M> find(List<Object> sc, String order, String... columns) throws OeRpcException {
         return find(sc, null, null, order, columns);
     }
 
-    public final List<M> findRang(Integer offset, Integer limit, String... columns) throws OeRpcException {
+    public List<M> findRang(Integer offset, Integer limit, String... columns) throws OeRpcException {
         return find(new OeCriteriaBuilder(), offset, limit, columns);
     }
 
@@ -346,7 +427,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String... columns)
+    public List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String... columns)
             throws OeRpcException {
         return find(cb.getCriteria(), offset, limit, columns);
     }
@@ -359,11 +440,11 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns) throws OeRpcException {
+    public List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns) throws OeRpcException {
         return find(sc, offset, limit, null, columns);
     }
 
-    public final List<M> findRang(Integer offset, Integer limit, String order, String... columns)
+    public List<M> findRang(Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
         return find(new OeCriteriaBuilder(), offset, limit, order, columns);
     }
@@ -377,7 +458,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String order, String... columns)
+    public List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
         return find(cb.getCriteria(), offset, limit, order, columns);
     }
@@ -391,14 +472,14 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @return
      * @throws OeRpcException
      */
-    public final List<M> find(List<Object> sc, Integer offset, Integer limit, String order, String... columns)
+    public List<M> find(List<Object> sc, Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
         return find(sc, offset, limit, order, executor.getContext(), columns);
     }
 
     /**
-     * find OpenERP models by calling {@link OeExecutor} searchReadMap method
-     * give it the OpenERP model name and list of search criteria
+     * find Odoo models by calling {@link OeExecutor} searchReadMap method
+     * give it the Odoo model name and list of search criteria
      *
      * @param <E>     Executor boundary service type
      * @param e       instance of Executor boundary service
@@ -408,13 +489,13 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param limit
      * @param order
      * @param context
-     * @return list of custom Entities for OpenERP models or Objects with list
-     * of search criteria, OpenERP context and one or more model columns
+     * @return list of custom Entities for Odoo models or Objects with list
+     * of search criteria, Odoo context and one or more model columns
      * @throws OeRpcException
      */
-    public final <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
-                                                            String order, Map<String, Object> context,
-                                                            String... columns) throws OeRpcException {
+    public <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
+                                                      String order, Map<String, Object> context,
+                                                      String... columns) throws OeRpcException {
         Map<String, Object>[] results = executor.searchReadMap(getName(), sc, offset, limit, order, context, columns);
         List<M> oeModels = new ArrayList<M>(results.length);
         for (Map<String, Object> result : results) {
