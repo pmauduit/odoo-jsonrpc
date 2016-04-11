@@ -19,8 +19,8 @@ package org.qfast.openerp.rpc.boundary;
 import org.qfast.openerp.rpc.OeConst;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.json.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 
 import java.io.Serializable;
@@ -61,14 +61,20 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param executor
-     * @param m
-     * @param e
-     * @param id
-     * @param <OeM>
-     * @param <E>
-     * @return
+     * static helper method use same search logic by id
+     *
+     * @param executor Odoo (OpenERP) executor client
+     * @param m        Odoo model
+     * @param e        executor service
+     * @param id       Odoo model id
+     * @param <OeM>    extends from {@link AbstractOeEntity}
+     * @param <E>      extends from {@link AbstractOeService}
+     * @return Odoo model found by id
      * @throws Exception
+     * @see OeExecutor
+     * @see AbstractOeService
+     * @see AbstractOeEntity
+     * @see OeCriteriaBuilder
      */
     public static <OeM extends AbstractOeEntity, E extends AbstractOeService> OeM findById(OeExecutor executor,
                                                                                            Class<OeM> m, Class<E> e,
@@ -420,12 +426,18 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param cb
-     * @param offset
-     * @param limit
-     * @param columns
-     * @return
+     * find by search criteria (Odoo domain) and using offset and limit,
+     * with one or more columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
+     * @param offset  offset number of records
+     * @param limit   limit number of records
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with one or more model columns
+     * limited with limit and offset
      * @throws OeRpcException
+     * @see OeCriteriaBuilder
+     * @see #find(List, Integer, Integer, String...)
      */
     public List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String... columns)
             throws OeRpcException {
@@ -433,30 +445,54 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param sc
-     * @param offset
-     * @param limit
-     * @param columns
-     * @return
+     * find by search criteria (Odoo domain) and using offset and limit,
+     * with one or more columns (optional - recommended to reduce bandwidth)
+     *
+     * @param sc      search criteria (Odoo domain)
+     * @param offset  offset number of records
+     * @param limit   limit number of records
+     * @param columns one or more model columns to read
+     * @return list of custom Entities for Odoo models or Objects with one or more model columns
+     * limited with limit and offset
      * @throws OeRpcException
+     * @see #find(List, Integer, Integer, String, String...)
      */
     public List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns) throws OeRpcException {
         return find(sc, offset, limit, null, columns);
     }
 
+    /**
+     * find some record between limit and offset ordered and
+     * with one or more columns (optional - recommended to reduce bandwidth)
+     *
+     * @param offset  offset number of records
+     * @param limit   limit number of records
+     * @param order   column name with asc/desc to order by
+     * @param columns one or more model columns to read
+     * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
+     * limited with limit and offset
+     * @throws OeRpcException
+     * @see #find(OeCriteriaBuilder, Integer, Integer, String, String...)
+     */
     public List<M> findRang(Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
         return find(new OeCriteriaBuilder(), offset, limit, order, columns);
     }
 
     /**
-     * @param cb
-     * @param offset
-     * @param limit
-     * @param order
-     * @param columns
-     * @return
+     * find ordered models by search criteria (Odoo domain) and using offset and limit,
+     * with one or more columns (optional - recommended to reduce bandwidth)
+     *
+     * @param cb      search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
+     * @param offset  offset number of records
+     * @param limit   limit number of records
+     * @param order   column name with asc/desc to order by
+     * @param columns one or more model columns to read
+     * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
+     * limited with limit and offset
      * @throws OeRpcException
+     * @see OeCriteriaBuilder
+     * @see #find(List, Integer, Integer, String, String...)
      */
     public List<M> find(OeCriteriaBuilder cb, Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
@@ -464,13 +500,18 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param sc
-     * @param offset
-     * @param limit
-     * @param order
-     * @param columns
-     * @return
+     * find ordered models by search criteria (Odoo domain) and using offset and limit,
+     * with one or more columns (optional - recommended to reduce bandwidth)
+     *
+     * @param sc      search criteria (Odoo domain)
+     * @param offset  offset number of records
+     * @param limit   limit number of records
+     * @param order   column name with asc/desc to order by
+     * @param columns one or more model columns to read
+     * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
+     * limited with limit and offset
      * @throws OeRpcException
+     * @see #find(List, Integer, Integer, String, Map, String...)
      */
     public List<M> find(List<Object> sc, Integer offset, Integer limit, String order, String... columns)
             throws OeRpcException {
@@ -484,14 +525,15 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param <E>     Executor boundary service type
      * @param e       instance of Executor boundary service
      * @param sc      list of search criteria
-     * @param offset
+     * @param offset  offset number of records
+     * @param limit   limit number of records
      * @param columns one or more model columns to read
-     * @param limit
-     * @param order
-     * @param context
+     * @param order   column name with asc/desc to order by
+     * @param context Odoo context
      * @return list of custom Entities for Odoo models or Objects with list
      * of search criteria, Odoo context and one or more model columns
      * @throws OeRpcException
+     * @see OeBinder#bind(String, Class, AbstractOeService)
      */
     public <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
                                                       String order, Map<String, Object> context,
@@ -505,39 +547,50 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param method
-     * @return
+     * Execute odoo method name
+     *
+     * @param method method name
+     * @return result as object
      * @throws OeRpcException
+     * @see #execute(String, Object[], Map)
      */
     public Object execute(String method) throws OeRpcException {
         return execute(method, new Object[]{}, Collections.<String, Object>emptyMap());
     }
 
     /**
-     * @param method
-     * @param kwargs
-     * @return
+     * Execute odoo method name with kwargs
+     *
+     * @param method odoo method name
+     * @param kwargs odoo kwargs
+     * @return result as object
      * @throws OeRpcException
+     * @see #execute(String, Object[], Map)
      */
     public Object execute(String method, Map<String, Object> kwargs) throws OeRpcException {
         return execute(method, new Object[]{}, kwargs);
     }
 
     /**
-     * @param method
-     * @param args
-     * @return
+     * Execute odoo method name with args
+     *
+     * @param method odoo method name
+     * @param args   odoo method args
+     * @return result as object
      * @throws OeRpcException
+     * @see #execute(String, Object[], Map)
      */
     public Object execute(String method, Object[] args) throws OeRpcException {
         return execute(method, args, Collections.<String, Object>emptyMap());
     }
 
     /**
-     * @param method
-     * @param args
-     * @param kwargs
-     * @return
+     * Execute odoo method name with args and kwargs
+     *
+     * @param method odoo method name
+     * @param args   odoo method args
+     * @param kwargs odoo kwargs
+     * @return result as object
      * @throws OeRpcException
      */
     public Object execute(String method, Object[] args, Map<String, Object> kwargs) throws OeRpcException {
@@ -549,65 +602,86 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     }
 
     /**
-     * @param cb
-     * @return
+     * Count Odoo model with search criteria (domain name)
+     *
+     * @param cb search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
+     * @return count
      * @throws OeRpcException
+     * @see #count(List)
      */
     public Long count(OeCriteriaBuilder cb) throws OeRpcException {
         return count(cb.getCriteria());
     }
 
     /**
-     * @param sc
-     * @return
+     * Count Odoo model with search criteria (domain name)
+     *
+     * @param sc search criteria (Odoo domain)
+     * @return count
      * @throws OeRpcException
+     * @see OeExecutor#count(String, List)
      */
     public Long count(List<Object> sc) throws OeRpcException {
         return executor.count(getName(), sc);
     }
 
     /**
-     * @param values
-     * @return
+     * Create Odoo model record
+     *
+     * @param values record values
+     * @return generated odoo id
      * @throws OeRpcException
+     * @see OeExecutor#create(String, Map)
      */
     public Long create(Map<String, Object> values) throws OeRpcException {
         return executor.create(getName(), values);
     }
 
     /**
-     * @param id
-     * @param values
-     * @return
+     * Update Odoo model record
+     *
+     * @param id     record id
+     * @param values new values to update
+     * @return true if record updated
      * @throws OeRpcException
+     * @see OeExecutor#write(String, Object, Map)
      */
     public Boolean write(Object id, Map<String, Object> values) throws OeRpcException {
         return executor.write(getName(), id, values);
     }
 
     /**
-     * @param id
-     * @param values
-     * @return
+     * Update Odoo model record
+     *
+     * @param id     record id
+     * @param values new values to update
+     * @return true if record updated
      * @throws OeRpcException
+     * @see #write(Object, Map)
      */
     public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
         return write(id, values);
     }
 
     /**
-     * @param ids
-     * @return
+     * Delete record using unlike in odoo model
+     *
+     * @param ids ids to be removed
+     * @return true if the record(s) removed
      * @throws OeRpcException
+     * @see OeExecutor#unlike(String, Long...)
      */
     public Boolean unlike(Long... ids) throws OeRpcException {
         return executor.unlike(getName(), ids);
     }
 
     /**
-     * @param ids
-     * @return
+     * Delete record using unlike in odoo model
+     *
+     * @param ids ids to be removed
+     * @return true if the record(s) removed
      * @throws OeRpcException
+     * @see #unlike(Long...)
      */
     public Boolean delete(Long... ids) throws OeRpcException {
         return unlike(ids);
