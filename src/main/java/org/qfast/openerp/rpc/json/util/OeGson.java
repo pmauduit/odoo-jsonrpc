@@ -17,14 +17,14 @@
 package org.qfast.openerp.rpc.json.util;
 
 import com.google.gson.GsonBuilder;
-import org.qfast.openerp.rpc.json.adaptor.BooleanDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.DateDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.FloatDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.IntegerDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.LongDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.MapDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.ObjectArrDeserializer;
-import org.qfast.openerp.rpc.json.adaptor.StringDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.BooleanDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.DateDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.FloatDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.IntegerDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.LongDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.MapDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.ObjectArrDeserializer;
+import org.qfast.openerp.rpc.json.util.adaptor.StringDeserializer;
 
 import java.util.Date;
 import java.util.Map;

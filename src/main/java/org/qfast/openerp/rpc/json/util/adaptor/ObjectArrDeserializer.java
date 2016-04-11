@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.json.adaptor;
+package org.qfast.openerp.rpc.json.util.adaptor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

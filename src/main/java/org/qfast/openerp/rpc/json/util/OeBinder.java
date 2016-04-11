@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.json;
+package org.qfast.openerp.rpc.json.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.qfast.openerp.rpc.boundary.AbstractOeService;
 import org.qfast.openerp.rpc.entity.AbstractOeEntity;
 import org.qfast.openerp.rpc.entity.OeView;
-import org.qfast.openerp.rpc.json.adaptor.OeViewDeserializer;
-import org.qfast.openerp.rpc.json.util.OeGson;
+import org.qfast.openerp.rpc.json.util.adaptor.OeViewDeserializer;
 
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 

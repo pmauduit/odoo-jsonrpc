@@ -14,34 +14,27 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.json.adaptor;
+package org.qfast.openerp.rpc.json.util.adaptor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import org.qfast.openerp.rpc.util.OeUtil;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 /**
  * @author Ahmed El-mawaziny
  */
-public class MapDeserializer implements JsonDeserializer<Map> {
+public class StringDeserializer implements JsonDeserializer<String> {
 
     @Override
-    public Map deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        if (json != null && !json.isJsonNull() && json.isJsonPrimitive()) {
-            if (json.getAsJsonPrimitive().isBoolean()) {
-                return null;
-            } else if (json.getAsJsonPrimitive().isString()) {
-                String asString = OeUtil.clearMap(json.getAsString());
-                return new Gson().fromJson(asString, Map.class);
-            }
+        if (json != null && !json.isJsonNull() && json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
+            return null;
         }
-        return new Gson().fromJson(json, Map.class);
+        return new Gson().fromJson(json, String.class);
     }
 }

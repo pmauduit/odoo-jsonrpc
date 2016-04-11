@@ -24,8 +24,8 @@ import org.qfast.openerp.rpc.entity.OeActionClient;
 import org.qfast.openerp.rpc.entity.OeActionWindow;
 import org.qfast.openerp.rpc.entity.OeView;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.json.util.OeBinder;
 import org.qfast.openerp.rpc.json.util.OeJsonUtil;
 
 import java.util.ArrayList;

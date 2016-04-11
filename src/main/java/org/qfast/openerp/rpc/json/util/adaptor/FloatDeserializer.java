@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.json.adaptor;
+package org.qfast.openerp.rpc.json.util.adaptor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -23,34 +23,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author Ahmed El-mawaziny
  */
-public class DateDeserializer implements JsonDeserializer<Date> {
+public class FloatDeserializer implements JsonDeserializer<Float> {
 
     @Override
-    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public Float deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         if (json != null && !json.isJsonNull()) {
             if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
                 return null;
             }
-
-            try {
-                String dateStr = json.getAsString();
-                if (dateStr.length() == 10) {
-                    return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-                } else if (dateStr.length() == 19) {
-                    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
-                }
-            } catch (ParseException ex) {
-                throw new RuntimeException(ex);
-            }
         }
-        return new Gson().fromJson(json, Date.class);
+        return new Gson().fromJson(json, Float.class);
     }
 }

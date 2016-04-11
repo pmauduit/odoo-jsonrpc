@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.qfast.openerp.rpc.json.adaptor;
+package org.qfast.openerp.rpc.json.util.adaptor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -27,14 +27,14 @@ import java.lang.reflect.Type;
 /**
  * @author Ahmed El-mawaziny
  */
-public class BooleanDeserializer implements JsonDeserializer<Boolean> {
+public class LongDeserializer implements JsonDeserializer<Long> {
 
     @Override
-    public Boolean deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        if (json != null && !json.isJsonNull() && json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
-            return json.getAsInt() == 1;
+        if (json != null && json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
+            return null;
         }
-        return new Gson().fromJson(json, Boolean.class);
+        return new Gson().fromJson(json, Long.class);
     }
 }

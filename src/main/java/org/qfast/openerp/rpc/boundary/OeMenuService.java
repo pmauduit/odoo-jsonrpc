@@ -20,8 +20,8 @@ import org.qfast.openerp.rpc.OeConst.JsonMenu;
 import org.qfast.openerp.rpc.entity.OeGroup;
 import org.qfast.openerp.rpc.entity.OeMenu;
 import org.qfast.openerp.rpc.exception.OeRpcException;
-import org.qfast.openerp.rpc.json.OeBinder;
 import org.qfast.openerp.rpc.json.OeExecutor;
+import org.qfast.openerp.rpc.json.util.OeBinder;
 import org.qfast.openerp.rpc.util.OeCriteriaBuilder;
 import org.qfast.openerp.rpc.util.OeUtil;
 
