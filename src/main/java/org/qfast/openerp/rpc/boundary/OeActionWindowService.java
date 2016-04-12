@@ -26,7 +26,11 @@ import java.util.Map;
 import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_WINDOW;
 
 /**
+ * Service to manage {@link OeActionWindow}
+ *
  * @author Ahmed El-mawaziny
+ * @see OeActionWindow
+ * @since 1.0
  */
 public class OeActionWindowService extends AbstractOeService<OeActionWindow> {
 

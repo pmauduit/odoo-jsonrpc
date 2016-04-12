@@ -42,6 +42,8 @@ import static org.qfast.openerp.rpc.entity.OeMenu._PARENT_ID;
 import static org.qfast.openerp.rpc.entity.OeMenu._PARENT_ID_ID;
 
 /**
+ * Service to manage {@link OeMenu}
+ *
  * @author Ahmed El-mawaziny
  */
 public class OeMenuService extends AbstractOeService<OeMenu> {

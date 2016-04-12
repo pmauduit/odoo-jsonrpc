@@ -32,7 +32,11 @@ import static org.qfast.openerp.rpc.OeConst._COL_ID;
 import static org.qfast.openerp.rpc.entity.OeGroup._USERS_ID_ID;
 
 /**
+ * Service to manage {@link OeGroup}
+ *
  * @author Ahmed El-mawaziny
+ * @see OeGroup
+ * @since 1.0
  */
 public class OeGroupService extends AbstractOeService<OeGroup> {
 
@@ -58,10 +62,28 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
+    /**
+     * Find menus by group id
+     *
+     * @param groupId group id
+     * @return set of menus for the given group id
+     * @throws OeRpcException
+     * @see OeMenu
+     * @see OeMenuService#findByGroupId(Long...)
+     */
     public Set<OeMenu> findMenusByGroupId(Long groupId) throws OeRpcException {
         return new OeMenuService(executor).findByGroupId(groupId);
     }
 
+    /**
+     * Find groups by user id
+     *
+     * @param userId user id
+     * @return set of groups
+     * @throws OeRpcException
+     * @see OeCriteriaBuilder
+     * @see #find(OeCriteriaBuilder, String...)
+     */
     public Set<OeGroup> findByUserId(Long userId) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
         cb.column(_USERS_ID_ID).eq(userId);

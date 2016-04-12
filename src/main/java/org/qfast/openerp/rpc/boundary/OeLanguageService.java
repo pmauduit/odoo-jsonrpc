@@ -29,7 +29,11 @@ import static org.qfast.openerp.rpc.OeConst.OeModel.LANGUAGE;
 import static org.qfast.openerp.rpc.entity.OeLanguage._CODE;
 
 /**
+ * Service to manage {@link OeLanguage}
+ *
  * @author Ahmed El-mawaziny
+ * @see OeLanguage
+ * @since 1.0
  */
 public class OeLanguageService extends AbstractOeService<OeLanguage> {
 
@@ -56,9 +60,13 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
     }
 
     /**
-     * @param code
-     * @return
+     * find Odoo language by its code
+     *
+     * @param code language code
+     * @return language Odoo model
      * @throws OeRpcException
+     * @see #findAny(OeCriteriaBuilder, String...)
+     * @see OeCriteriaBuilder
      */
     public OeLanguage findByCode(String code, String... columns) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
@@ -66,17 +74,69 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
         return findAny(cb, columns);
     }
 
+    /**
+     * Overriding update method because there is a bug in Language write method trying to loop on int value
+     * which is not iterable
+     * <p>
+     * fixing bug by wrapping the id in an array
+     *
+     * @param id     record id
+     * @param values new values to update
+     * @return true means record is successfully updated
+     * @throws OeRpcException
+     * @see #write(Object, Map)
+     */
     @Override
     public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
-        return super.update(new Object[]{id}, values);
+        return write(new Object[]{id}, values);
     }
 
+    /**
+     * Overriding write method because there is a bug in Language write method trying to loop on int value
+     * which is not iterable
+     * <p>
+     * fixing bug by wrapping the id in an array
+     *
+     * @param id     record id
+     * @param values new values to update
+     * @return true means record is successfully updated
+     * @throws OeRpcException
+     * @see super#write(Object, Map)
+     */
+    @Override
+    public Boolean write(Object id, Map<String, Object> values) throws OeRpcException {
+        return super.write(new Object[]{id}, values);
+    }
+
+    /**
+     * Overriding unlike method because in Odoo if you want to delete/unlike language you have to deactivate it first
+     *
+     * @param ids ids to be removed
+     * @return true if the record is successfully deleted or unlike
+     * @throws OeRpcException
+     * @see #delete(Long...)
+     */
     @Override
     public Boolean unlike(Long... ids) throws OeRpcException {
+        return delete(ids);
+    }
+
+    /**
+     * Overriding delete method because in Odoo if you want to delete/unlike language you have to deactivate it first
+     *
+     * @param ids ids to be removed
+     * @return true if the record is successfully deleted or unlike
+     * @throws OeRpcException
+     * @see #write(Object, Map)
+     * @see super#unlike(Long...)
+     */
+
+    @Override
+    public Boolean delete(Long... ids) throws OeRpcException {
         Map<String, Object> values = new HashMap<String, Object>(1);
         values.put(OeLanguage._ACTIVE, false);
         for (Long id : ids) {
-            update(id, values);
+            write(id, values);
         }
         return super.unlike(ids);
     }

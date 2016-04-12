@@ -26,7 +26,11 @@ import java.util.Map;
 import static org.qfast.openerp.rpc.OeConst.OeModel.ACTION_CLIENT;
 
 /**
+ * Service to manage {@link OeActionClient}
+ *
  * @author Ahmed El-mawaziny
+ * @see OeActionClient
+ * @since 1.0
  */
 public class OeActionClientService extends AbstractOeService<OeActionClient> {
 

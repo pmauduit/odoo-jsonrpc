@@ -26,10 +26,10 @@ import java.util.Map;
 import static org.qfast.openerp.rpc.OeConst.OeModel.ATTACHMENT;
 
 /**
- * OePartnerService for find OpenERP partner (res.partner) by findById, finAll
- * or custom search criteria
+ * Service to manage OpenERP {@link OeAttachment}
  *
  * @author Ahmed El-mawaziny
+ * @see OeAttachment
  * @since 1.0
  */
 public class OeAttachmentService extends AbstractOeService<OeAttachment> {
