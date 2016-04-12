@@ -79,8 +79,10 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * load OpenERP Menus by calling loadMenus function in ir.ui.menu in OpenERP
      * v8. {@link #loadMenus() }
      *
-     * @return
+     * @return user menus
      * @throws OeRpcException
+     * @see OeBinder#bind(String, Class, AbstractOeService)
+     * @see #loadMenus()
      */
     public OeMenu loadOeMenus() throws OeRpcException {
         Map<String, Object> result = loadMenus();
