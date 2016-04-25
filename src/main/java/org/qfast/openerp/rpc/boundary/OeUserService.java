@@ -62,17 +62,34 @@ public class OeUserService extends AbstractOeService<OeUser> {
      * find menus by user id
      *
      * @param userId user id
-     * @return Collection Set of OeMenu
+     * @return OeMenu root and all menus are sub menus in it
      * @throws OeRpcException
+     * @see OeMenuService#findByUserId(Long)
      */
     public OeMenu findMenusByUserId(Long userId) throws OeRpcException {
         return new OeMenuService(executor).findByUserId(userId);
     }
 
+    /**
+     * find all menus in one list by user id
+     *
+     * @param userId user id
+     * @return List of {@link OeMenu}
+     * @throws OeRpcException
+     * @see OeMenuService#findByUserIdAllInOne(Long)
+     */
     public List<OeMenu> findMenusByUserIdAllInOne(Long userId) throws OeRpcException {
         return new OeMenuService(executor).findByUserIdAllInOne(userId);
     }
 
+    /**
+     * find {@link OeLanguage} by language code
+     *
+     * @param code language code
+     * @return OeLanguage by code
+     * @throws OeRpcException
+     * @see OeLanguageService#findByCode(String, String...)
+     */
     public OeLanguage findLanguageByCode(String code) throws OeRpcException {
         return new OeLanguageService(executor).findByCode(code);
     }

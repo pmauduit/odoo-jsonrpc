@@ -52,11 +52,25 @@ public class OeModuleService extends AbstractOeService<OeModule> {
         return name;
     }
 
+    /**
+     * Used to install Odoo modules
+     *
+     * @param ids id(s) of Odoo modules to install
+     * @return true if module successfully installed
+     * @throws OeRpcException
+     */
     public boolean install(Object... ids) throws OeRpcException {
         executor.execute(name, Fun.INSTALL.name, OeJsonUtil.parseAsJsonArray(ids));
         return true;
     }
 
+    /**
+     * used to uninstall Odoo modules
+     *
+     * @param ids id(s) of Odoo modules to uninstall
+     * @return true if module successfully uninstalled
+     * @throws OeRpcException
+     */
     public boolean uninstall(Object... ids) throws OeRpcException {
         executor.execute(name, Fun.UNINSTALL.name, ids, true);
         return true;
@@ -68,6 +82,9 @@ public class OeModuleService extends AbstractOeService<OeModule> {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
+    /**
+     * enum contains some functions for Odoo module
+     */
     public enum Fun {
 
         INSTALL("button_immediate_install"),

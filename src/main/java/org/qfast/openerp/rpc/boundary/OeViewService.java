@@ -60,29 +60,42 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     * @param oeAction
-     * @return
+     * getting {@link OeView} by {@link OeAction}
+     *
+     * @param oeAction {@link OeAction} "ir.actions.client" or "ir.actions.act_window"
+     * @return OeView
      * @throws OeRpcException
+     * @see #getOeView(OeActionType, Long)
      */
     public OeView getOeView(OeAction oeAction) throws OeRpcException {
         return getOeView(oeAction.getType(), oeAction.getId());
     }
 
     /**
-     * @param actionType
-     * @param actionId
-     * @return
+     * getting {@link OeView} by {@link OeActionType} and action id
+     *
+     * @param actionType action type "ir.actions.client" or "ir.actions.act_window"
+     * @param actionId   action id
+     * @return OeView
      * @throws OeRpcException
+     * @see #getOeView(String, Long)
      */
     public OeView getOeView(OeActionType actionType, Long actionId) throws OeRpcException {
         return getOeView(actionType.getName(), actionId);
     }
 
     /**
-     * @param actionType
-     * @param actionId
-     * @return
+     * getting action by action type "ir.actions.client" or "ir.actions.act_window" and action id
+     * <p>
+     * check if action type is "ir.actions.act_window" use {@link OeActionWindowService}
+     * if action type is "ir.actions.client" use {@link OeActionClientService}
+     * otherwise throw {@link UnsupportedOperationException}
+     *
+     * @param actionType action type "ir.actions.client" or "ir.actions.act_window"
+     * @param actionId   action id
+     * @return OeView
      * @throws OeRpcException
+     * @throws UnsupportedOperationException
      */
     public OeView getOeView(String actionType, Long actionId) throws OeRpcException {
         String modelName;
@@ -103,14 +116,16 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     * @param modelName
-     * @param viewId
-     * @param viewMode
-     * @param context
-     * @return
+     * Calling fields_view_get function in Odoo
+     *
+     * @param modelName Odoo model name
+     * @param viewId    view id
+     * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
+     * @param context   Odoo context
+     * @return OeView
      * @throws OeRpcException
      */
-    public OeView getFieldsView(String modelName, Integer viewId, String viewMode, Map<String, Object> context)
+    public OeView getFieldsView(String modelName, Long viewId, String viewMode, Map<String, Object> context)
             throws OeRpcException {
         List<Object> args = new ArrayList<Object>(3);
         args.add(viewId);
@@ -121,72 +136,102 @@ public class OeViewService extends AbstractOeService<OeView> {
     }
 
     /**
-     * @param modelName
-     * @param viewMode
-     * @param context
-     * @return
+     * Wrapper for {@link #getFieldsView(String, Long, String, Map)}
+     *
+     * @param modelName Odoo model name
+     * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
+     * @param context   Odoo context
+     * @return OeView
      * @throws OeRpcException
+     * @see #getFieldsView(String, Long, String, Map)
      */
     public OeView getFieldsView(String modelName, String viewMode, Map<String, Object> context) throws OeRpcException {
         return getFieldsView(modelName, null, viewMode, context);
     }
 
     /**
-     * @param modelName
-     * @param viewMode
-     * @return
+     * Wrapper for {@link #getFieldsView(String, String, Map)}
+     *
+     * @param modelName Odoo model name
+     * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
+     * @return OeView
      * @throws OeRpcException
+     * @see #getFieldsView(String, String, Map)
      */
     public OeView getFieldsView(String modelName, String viewMode) throws OeRpcException {
         return getFieldsView(modelName, viewMode, executor.getContext());
     }
 
     /**
-     * @param oeModel
-     * @param viewId
-     * @param viewMode
-     * @param context
-     * @return
+     * Wrapper for {@link #getFieldsView(String, Long, String, Map)}
+     *
+     * @param oeModel  Odoo model name form {@link OeModel}
+     * @param viewId   view id
+     * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
+     * @param context  Odoo context
+     * @return OeView
      * @throws OeRpcException
+     * @see OeModel
+     * @see OeViewMode
      */
-    public OeView getFieldsView(OeModel oeModel, Integer viewId, OeViewMode viewMode, Map<String, Object> context)
+    public OeView getFieldsView(OeModel oeModel, Long viewId, OeViewMode viewMode, Map<String, Object> context)
             throws OeRpcException {
         return getFieldsView(oeModel.getName(), viewId, viewMode.getName(), context);
     }
 
     /**
-     * @param oeModel
-     * @param viewMode
-     * @param context
-     * @return
+     * Wrapper for {@link #getFieldsView(String, String, Map)}
+     *
+     * @param oeModel  Odoo model name form {@link OeModel}
+     * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
+     * @param context  Odoo context
+     * @return OeView
      * @throws OeRpcException
+     * @see OeModel
+     * @see OeViewMode
      */
     public OeView getFieldsView(OeModel oeModel, OeViewMode viewMode, Map<String, Object> context) throws OeRpcException {
         return getFieldsView(oeModel.getName(), viewMode.getName(), context);
     }
 
     /**
-     * @param oeModel
-     * @param viewMode
-     * @return
+     * Wrapper for {@link #getFieldsView(OeModel, OeViewMode, Map)}
+     *
+     * @param oeModel  Odoo model name form {@link OeModel}
+     * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
+     * @return OeView
      * @throws OeRpcException
+     * @see OeModel
+     * @see OeViewMode
      */
     public OeView getFieldsView(OeModel oeModel, OeViewMode viewMode) throws OeRpcException {
         return getFieldsView(oeModel, viewMode, executor.getContext());
     }
 
-    public OeView getFieldsView(String resModel, OeViewMode viewMode) throws OeRpcException {
-        return getFieldsView(resModel, viewMode.getName(), executor.getContext());
+    /**
+     * Wrapper for {@link #getFieldsView(OeModel, OeViewMode, Map)}
+     *
+     * @param modelName Odoo model name or res model
+     * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
+     * @return OeView
+     * @throws OeRpcException
+     * @see OeViewMode
+     */
+    public OeView getFieldsView(String modelName, OeViewMode viewMode) throws OeRpcException {
+        return getFieldsView(modelName, viewMode.getName(), executor.getContext());
     }
 
     /**
-     * @param oeModel
-     * @param viewId
-     * @param viewMode
-     * @return
+     * Wrapper for {@link #getFieldsView(OeModel, Long, OeViewMode, Map)}
+     *
+     * @param oeModel  Odoo model name form {@link OeModel}
+     * @param viewId   view id
+     * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
+     * @return OeView
      * @throws OeRpcException
+     * @see #getFieldsView(OeModel, Long, OeViewMode, Map)
      */
-    public OeView getFieldsView(OeModel oeModel, Integer viewId, OeViewMode viewMode) throws OeRpcException {
+    public OeView getFieldsView(OeModel oeModel, Long viewId, OeViewMode viewMode) throws OeRpcException {
         return getFieldsView(oeModel, viewId, viewMode, executor.getContext());
     }
 

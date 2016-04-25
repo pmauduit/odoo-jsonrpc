@@ -304,6 +304,9 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
         return (new HashSet<OeMenu>(super.find(cb)));
     }
 
+    /**
+     * enum contains some functions for loading menus
+     */
     public enum Fun {
 
         LOAD_MENUS("load_menus"),
