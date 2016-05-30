@@ -88,7 +88,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      */
     @Override
     public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
-        return super.write(new Object[]{id}, values);
+        return write(id, values);
     }
 
     /**
