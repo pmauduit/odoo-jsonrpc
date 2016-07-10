@@ -152,7 +152,9 @@ public class OeExecutor implements Serializable {
     public void logout() throws OeRpcException {
         String reqUrl = url.setPath(DESTROY.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
-        params.addProperty("session_id", sessionId);
+        if (isV70()) {
+            params.addProperty("session_id", sessionId);
+        }
         params.add("context", jsonContext);
         JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeJsonUtil.checkJsonResponse(response);
@@ -176,7 +178,7 @@ public class OeExecutor implements Serializable {
     }
 
     public OeVersion getOeVersion() throws OeRpcException {
-        this.version = OeServerVersion.getInstance(protocol, host, port, sessionId).getVersion();
+        this.version = OeServerVersion.getInstance(protocol, host, port).getVersion();
         return version;
     }
 
