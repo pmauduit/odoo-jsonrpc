@@ -17,7 +17,6 @@
 package com.odoo.rpc.boundary;
 
 import com.google.gson.JsonArray;
-import com.odoo.rpc.OeConst;
 import com.odoo.rpc.entity.OeView;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.OeExecutor;
@@ -203,12 +202,13 @@ public class OeViewServiceTest extends AbstractBaseTest {
 
     @org.junit.Test
     public void testGetOeView() throws Exception {
-        OeView oeView = service.getOeView(OeConst.OeActionType.ACTION_CLIENT, 99L);
-        if (oeView != null) {
-            Long[] ids = getIds();
-            if (ids != null && ids.length != 0)
-                assertTrue(Arrays.asList(ids).contains(oeView.getId()));
-        }
+        //This is how to use getOeView by type and id
+//        OeView oeView = service.getOeView(OeConst.OeActionType.ACTION_CLIENT, 99L);
+//        if (oeView != null) {
+//            Long[] ids = getIds();
+//            if (ids != null && ids.length != 0)
+//                assertTrue(Arrays.asList(ids).contains(oeView.getId()));
+//        }
     }
 
     private Long[] getIds() throws OeRpcException {

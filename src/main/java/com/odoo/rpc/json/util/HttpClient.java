@@ -48,10 +48,10 @@ public final class HttpClient {
             CloseableHttpClient httpclient = HttpClientBuilder.create().build();
             try {
                 HttpPost httpPostRequest = new HttpPost(URL);
-                StringEntity se = new StringEntity(jsonObjSend.toString());
-                httpPostRequest.setEntity(se);
                 httpPostRequest.setHeader("Accept", "application/json");
                 httpPostRequest.setHeader("Content-type", "application/json");
+                StringEntity se = new StringEntity(jsonObjSend.toString());
+                httpPostRequest.setEntity(se);
                 HttpResponse response = httpclient.execute(httpPostRequest);
 
                 HttpEntity entity = response.getEntity();

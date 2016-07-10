@@ -40,34 +40,35 @@ public class OeServerVersion implements Serializable {
     private final String protocol;
     private final String host;
     private final int port;
-    private final JsonObject emptyObject = new JsonObject();
+    private final JsonObject params = new JsonObject();
     private final OeVersion version;
 
-    private OeServerVersion(String protocol, String host, int port) throws OeRpcException {
+    private OeServerVersion(String protocol, String host, int port, String sessionId) throws OeRpcException {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
         this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
-        version = getServerVersion();
+        version = getServerVersion(sessionId);
     }
 
     private OeServerVersion(OeDatabase oeDatabase) throws OeRpcException {
-        this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
+        this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort(), null);
     }
 
-    public static OeServerVersion getInstance(String protocol, String host, int port) throws OeRpcException {
+    public static OeServerVersion getInstance(String protocol, String host, int port, String sessionId) throws OeRpcException {
         if (instance == null) {
             synchronized (OeServerVersion.class) {
                 if (instance == null) {
-                    instance = new OeServerVersion(protocol, host, port);
+                    instance = new OeServerVersion(protocol, host, port, sessionId);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeServerVersion getNewInstance(String protocol, String host, int port) throws OeRpcException {
-        instance = new OeServerVersion(protocol, host, port);
+    public synchronized static OeServerVersion getNewInstance(String protocol, String host, int port, String sessionId)
+            throws OeRpcException {
+        instance = new OeServerVersion(protocol, host, port, sessionId);
         return instance;
     }
 
@@ -103,9 +104,10 @@ public class OeServerVersion implements Serializable {
         return port;
     }
 
-    private OeVersion getServerVersion() throws OeRpcException {
-        String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
-        JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
+    private OeVersion getServerVersion(String sessionId) throws OeRpcException {
+        String reqUrl = url.setPath(VERSION_INFO.getPath()).setParameter("session_id", sessionId).toString();
+        params.addProperty("session_id", sessionId);
+        JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeJsonUtil.checkJsonResponse(response);
 
         JsonObject result = response.getAsJsonObject("result");

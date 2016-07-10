@@ -74,7 +74,7 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
     private String city;
     @SerializedName(_CALENDAR_LAST_NOTIFICATION_ACK)
     private Date calendarLastNotificationAck;
-    private Integer stateId;
+    private Object[] stateId;
     private BigDecimal creditLimit;
     private Date signupValid;
     private Date signupExpiration;
@@ -109,7 +109,7 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
     private String tzOffset;
     private String signupUrl;
     private String website;
-    private Integer countryId;
+    private Object[] countryId;
     private Boolean useParentAddress;
     private String ref;
     private String tz;
@@ -252,11 +252,11 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
         this.calendarLastNotificationAck = calendarLastNotificationAck;
     }
 
-    public Integer getStateId() {
+    public Object[] getStateId() {
         return stateId;
     }
 
-    public void setStateId(Integer stateId) {
+    public void setStateId(Object[] stateId) {
         this.stateId = stateId;
     }
 
@@ -524,11 +524,11 @@ public class OePartner extends AbstractOeEntity<OePartnerService> {
         this.website = website;
     }
 
-    public Integer getCountryId() {
+    public Object[] getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(Integer countryId) {
+    public void setCountryId(Object[] countryId) {
         this.countryId = countryId;
     }
 

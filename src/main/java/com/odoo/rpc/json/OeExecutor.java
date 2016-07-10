@@ -152,6 +152,7 @@ public class OeExecutor implements Serializable {
     public void logout() throws OeRpcException {
         String reqUrl = url.setPath(DESTROY.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
+        params.addProperty("session_id", sessionId);
         params.add("context", jsonContext);
         JsonObject response = postRequest(reqUrl, getCallWith(params));
         OeJsonUtil.checkJsonResponse(response);
@@ -175,7 +176,7 @@ public class OeExecutor implements Serializable {
     }
 
     public OeVersion getOeVersion() throws OeRpcException {
-        this.version = OeServerVersion.getInstance(protocol, host, port).getVersion();
+        this.version = OeServerVersion.getInstance(protocol, host, port, sessionId).getVersion();
         return version;
     }
 
@@ -349,6 +350,7 @@ public class OeExecutor implements Serializable {
     public Long create(String model, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(OeJsonUtil.parseAsJsonElement(values));
+        args.add(jsonContext);
         Object result = execute(model, CREATE.getName(), args);
         if (!OeUtil.isNULL(result)) {
             return Long.parseLong(result.toString());
@@ -367,6 +369,7 @@ public class OeExecutor implements Serializable {
     public Boolean unlike(String model, Long... ids) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(OeJsonUtil.parseAsJsonArray(ids));
+        args.add(jsonContext);
         Object result = execute(model, UNLINK.getName(), args);
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
