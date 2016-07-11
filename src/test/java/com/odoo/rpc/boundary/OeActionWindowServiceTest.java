@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author Ahmed El-mawaziny on 3/2/16.
+ * @author Ahmed El-mawaziny
  */
 public class OeActionWindowServiceTest extends AbstractBaseTest {
 

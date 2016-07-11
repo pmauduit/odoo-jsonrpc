@@ -19,7 +19,7 @@ package com.odoo.rpc.boundary;
 import com.odoo.rpc.json.OeExecutor;
 
 /**
- * @author Ahmed El-mawaziny on 4/5/16.
+ * @author Ahmed El-mawaziny
  */
 public abstract class AbstractBaseTest {
 
