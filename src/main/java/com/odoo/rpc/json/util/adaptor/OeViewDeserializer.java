@@ -23,13 +23,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.odoo.rpc.entity.OeView;
-import com.odoo.rpc.json.util.OeGson;
+import com.odoo.rpc.json.util.GsonFactory;
 import com.odoo.rpc.json.util.OeJsonUtil;
 
 import java.lang.reflect.Type;
 
 /**
+ * Gson deserializer implementation for {@link OeView}
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
+ * @see OeView
  */
 public class OeViewDeserializer implements JsonDeserializer<OeView> {
 
@@ -44,7 +48,7 @@ public class OeViewDeserializer implements JsonDeserializer<OeView> {
                 json = OeJsonUtil.parseAsJsonElement(json.getAsString());
             }
         }
-        Gson gson = OeGson.getGsonBuilder().create();
+        Gson gson = GsonFactory.createGsonBuilder().create();
         return gson.fromJson(json, OeView.class);
     }
 }

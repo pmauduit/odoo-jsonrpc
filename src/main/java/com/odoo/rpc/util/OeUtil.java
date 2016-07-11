@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 /**
  * @author Ahmed El-mawaziny
  */
-public final class OeUtil {
+public class OeUtil {
 
     public static boolean isNULL(Object text) {
         if (text != null) {

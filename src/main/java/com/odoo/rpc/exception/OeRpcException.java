@@ -22,7 +22,10 @@ import com.odoo.rpc.json.util.OeJsonUtil;
 import java.util.Map;
 
 /**
+ * Exception class to handel Odoo error
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeRpcException extends Exception {
 
@@ -52,6 +55,12 @@ public class OeRpcException extends Exception {
         this(getCodeNumber(err), getMessageErr(err), getTypeError(err));
     }
 
+    /**
+     * static method to get error code number
+     *
+     * @param err map with error
+     * @return code number
+     */
     private static int getCodeNumber(Map<String, Object> err) {
         if (err.containsKey("code")) {
             Object code = err.get("code");
@@ -62,6 +71,12 @@ public class OeRpcException extends Exception {
         return 0;
     }
 
+    /**
+     * static method to get error massage
+     *
+     * @param err map with error
+     * @return error message
+     */
     private static String getMessageErr(Map<String, Object> err) {
         if (err.containsKey("message")) {
             return String.valueOf(err.get("message"));
@@ -69,6 +84,12 @@ public class OeRpcException extends Exception {
         return null;
     }
 
+    /**
+     * convert Odoo error response to java {@link Throwable()}
+     *
+     * @param err map with error
+     * @return throwable with error data
+     */
     private static Throwable getTypeError(Map<String, Object> err) {
         if (err.containsKey("data")) {
             Object data = err.get("data");
@@ -86,6 +107,12 @@ public class OeRpcException extends Exception {
         return null;
     }
 
+    /**
+     * static method to check json response if it has error key or not, if yes convert this error to java exception
+     *
+     * @param response Json Object with Odoo response
+     * @throws OeRpcException if the response has error thrown
+     */
     public static void checkJsonResponse(JsonObject response) throws OeRpcException {
         if (response.has("result")) {
             if (response.get("result").isJsonObject()) {

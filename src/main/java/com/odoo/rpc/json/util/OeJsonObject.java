@@ -22,7 +22,10 @@ import com.google.gson.JsonObject;
 import com.odoo.rpc.exception.OeRpcException;
 
 /**
- * @author Ahmed El-mawaziny on 7/11/16.
+ * OeJsonObject is a wrapper class for {@link JsonObject} to check if Odoo response object contains error or not
+ *
+ * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeJsonObject {
 

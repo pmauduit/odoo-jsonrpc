@@ -33,9 +33,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * @author Ahmed El-mawaziny on 4/7/16.
+ * @author Ahmed El-mawaziny
  */
-public final class OeJsonUtil {
+public class OeJsonUtil {
 
     private static final Logger LOG = Logger.getLogger(OeJsonUtil.class.getName());
 
@@ -76,7 +76,7 @@ public final class OeJsonUtil {
 
     public static JsonObject postRequest(String url, JsonObject json) throws OeRpcException {
         LOG.info("Hit: " + url);
-        return HttpClient.postHttp(url, json);
+        return HttpClient.post(url, json);
     }
 
     public static JsonArray parseAsJsonArray(Object obj) {

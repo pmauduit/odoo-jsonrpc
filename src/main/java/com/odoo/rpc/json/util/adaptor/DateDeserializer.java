@@ -28,7 +28,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Gson deserializer implementation for Date
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class DateDeserializer implements JsonDeserializer<Date> {
 

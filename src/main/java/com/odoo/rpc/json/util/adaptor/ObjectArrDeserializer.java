@@ -27,7 +27,10 @@ import com.odoo.rpc.util.OeUtil;
 import java.lang.reflect.Type;
 
 /**
+ * Gson deserializer implementation for Array of Objects
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class ObjectArrDeserializer implements JsonDeserializer<Object[]> {
 

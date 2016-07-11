@@ -25,7 +25,10 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 /**
+ * Gson deserializer implementation for Boolean
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class BooleanDeserializer implements JsonDeserializer<Boolean> {
 

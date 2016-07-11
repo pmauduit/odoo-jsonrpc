@@ -17,25 +17,33 @@
 package com.odoo.rpc.json.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.odoo.rpc.boundary.AbstractOeService;
 import com.odoo.rpc.entity.AbstractOeEntity;
 import com.odoo.rpc.entity.OeView;
 import com.odoo.rpc.json.util.adaptor.OeViewDeserializer;
 
-import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
-
 /**
+ * OeBinder used for bind Odoo json response data in entities
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeBinder {
 
+    /**
+     * static method to bind json string in entity class
+     *
+     * @param result json data
+     * @param tClaz  entity class extends from {@link AbstractOeEntity}
+     * @param oe     service class extends from {@link AbstractOeService}
+     * @param <T>    generic class extends {@link AbstractOeEntity}
+     * @param <E>    generic class extends {@link AbstractOeService}
+     * @return instance of entity class
+     */
     @SuppressWarnings("unchecked")
-    public static <T extends AbstractOeEntity, E extends AbstractOeService> T bind(String result, Class<T> tClaz, E oe)
-            throws JsonSyntaxException {
-        Gson gson = OeGson.getGsonBuilder()
+    public static <T extends AbstractOeEntity, E extends AbstractOeService> T bind(String result, Class<T> tClaz, E oe) {
+        Gson gson = GsonFactory.createGsonBuilder()
                 .registerTypeAdapter(OeView.class, new OeViewDeserializer())
-                .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
                 .create();
         result = result.replace("u'", "'");
         T instance = gson.fromJson(result, tClaz);

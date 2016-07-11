@@ -36,22 +36,37 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonObject;
+
 /**
+ * Utility class for Http connection
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
-public final class HttpClient {
+public class HttpClient {
 
     private static final Logger LOG = Logger.getLogger(HttpClient.class.getName());
 
-    public static JsonObject postHttp(String URL, JsonObject jsonObjSend) {
+    /**
+     * static method for http post
+     *
+     * @param URL  url to post
+     * @param data json data to post
+     * @return response as json object
+     */
+    public static JsonObject post(String URL, JsonObject data) {
         try {
             CloseableHttpClient httpclient = HttpClientBuilder.create().build();
             try {
                 HttpPost httpPostRequest = new HttpPost(URL);
+
                 httpPostRequest.setHeader("Accept", "application/json");
                 httpPostRequest.setHeader("Content-type", "application/json");
-                StringEntity se = new StringEntity(jsonObjSend.toString());
+
+                StringEntity se = new StringEntity(data.toString());
                 httpPostRequest.setEntity(se);
+
                 HttpResponse response = httpclient.execute(httpPostRequest);
 
                 HttpEntity entity = response.getEntity();
@@ -60,7 +75,7 @@ public final class HttpClient {
                     InputStream in = entity.getContent();
                     String resultString = convertStreamToString(in);
 
-                    return OeJsonUtil.parseAsJsonObject(resultString);
+                    return parseAsJsonObject(resultString);
                 }
             } finally {
                 if (httpclient != null)
@@ -74,6 +89,13 @@ public final class HttpClient {
         return null;
     }
 
+    /**
+     * static method to convert the response stream to string
+     *
+     * @param in input stream
+     * @return string converted from input stream
+     * @throws IOException if anything happened during input/output for conversion
+     */
     private static String convertStreamToString(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
@@ -87,8 +109,7 @@ public final class HttpClient {
                 LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
             } finally {
                 in.close();
-                if (reader != null)
-                    reader.close();
+                reader.close();
             }
         }
         return sb.toString();

@@ -32,11 +32,20 @@ import java.util.Map;
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
 /**
- * @author Ahmed El-mawaziny on 4/9/16.
+ * Gson factory
+ *
+ * @author Ahmed El-mawaziny
+ * @since 1.0
  */
-public final class OeGson {
+public class GsonFactory {
 
-    public static GsonBuilder getGsonBuilder() {
+    /**
+     * static method for creating {@link GsonBuilder} with some configurations
+     *
+     * @return instance of gson builder
+     * @see GsonBuilder
+     */
+    public static GsonBuilder createGsonBuilder() {
         return new GsonBuilder()
                 .registerTypeAdapter(Object[].class, new ObjectArrDeserializer())
                 .registerTypeAdapter(Integer.class, new IntegerDeserializer())

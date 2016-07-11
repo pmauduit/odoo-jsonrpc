@@ -246,6 +246,9 @@ public class OeViewService extends AbstractOeService<OeView> {
         return super.find(this, sc, offset, limit, order, context, columns);
     }
 
+    /**
+     * enum with methods name in view model
+     */
     public enum Fun {
 
         FIELDS_VIEW_GET("fields_view_get"),

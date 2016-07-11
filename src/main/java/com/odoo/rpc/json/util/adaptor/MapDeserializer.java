@@ -27,7 +27,10 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
+ * Gson deserializer implementation for Map
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class MapDeserializer implements JsonDeserializer<Map> {
 
