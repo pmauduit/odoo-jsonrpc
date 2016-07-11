@@ -20,7 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.odoo.rpc.entity.OeVersion;
 import com.odoo.rpc.exception.OeRpcException;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJsonObject;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.io.Serializable;
@@ -107,9 +107,8 @@ public class OeServerVersion implements Serializable {
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
         JsonObject response = postRequest(reqUrl, getCallWith(params));
-        OeJsonUtil.checkJsonResponse(response);
 
-        JsonObject result = response.getAsJsonObject("result");
+        JsonObject result = new OeJsonObject(response).getAsJsonObject("result");
         String serverSerie = result.get("server_serie").getAsString();
         String serverVersion = result.get("server_version").getAsString();
         JsonArray serverVersionInfo = result.getAsJsonArray("server_version_info");

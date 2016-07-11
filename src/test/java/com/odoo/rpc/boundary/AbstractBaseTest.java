@@ -32,7 +32,7 @@ public abstract class AbstractBaseTest {
     protected static OeExecutor executor;
 
     @org.junit.AfterClass
-    public static void afterClass() throws Exception {
+    public static void afterClass() {
         executor.logout();
     }
 }

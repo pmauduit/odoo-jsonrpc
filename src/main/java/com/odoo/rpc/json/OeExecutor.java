@@ -21,13 +21,15 @@ import com.google.gson.JsonObject;
 import com.odoo.rpc.OeConst.OeModel;
 import com.odoo.rpc.entity.OeVersion;
 import com.odoo.rpc.exception.OeRpcException;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJsonObject;
 import com.odoo.rpc.util.OeUtil;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.odoo.rpc.OeConst.JsonDataSet.CALL_KW;
 import static com.odoo.rpc.OeConst.JsonDataSet.SEARCH_READ;
@@ -37,7 +39,13 @@ import static com.odoo.rpc.OeConst.OeFun.CREATE;
 import static com.odoo.rpc.OeConst.OeFun.SEARCH_COUNT;
 import static com.odoo.rpc.OeConst.OeFun.UNLINK;
 import static com.odoo.rpc.OeConst.OeFun.WRITE;
+import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonArrayToMapArray;
+import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonToMap;
 import static com.odoo.rpc.json.util.OeJsonUtil.getCallWith;
+import static com.odoo.rpc.json.util.OeJsonUtil.margeJsonObject;
+import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonArray;
+import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonElement;
+import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonObject;
 import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
 
 /**
@@ -45,6 +53,7 @@ import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
  */
 public class OeExecutor implements Serializable {
 
+    public static final Logger LOG = Logger.getLogger(OeExecutor.class.getName());
     private static final long serialVersionUID = 7528230097059877102L;
     private static volatile OeExecutor instance;
     private final String protocol;
@@ -71,7 +80,7 @@ public class OeExecutor implements Serializable {
         this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
         JsonObject loginResult = doLogin();
         this.jsonContext = getJsonContextFromLogin(loginResult);
-        this.context = OeJsonUtil.convertJsonToMap(jsonContext);
+        this.context = convertJsonToMap(jsonContext);
         this.sessionId = loginResult.get("session_id").getAsString();
         this.userId = loginResult.get("uid").getAsLong();
     }
@@ -145,19 +154,22 @@ public class OeExecutor implements Serializable {
         params.addProperty("login", username);
         params.addProperty("password", password);
         JsonObject response = postRequest(reqUrl, getCallWith(params));
-        OeJsonUtil.checkJsonResponse(response);
-        return response.getAsJsonObject("result");
+        return new OeJsonObject(response).getAsJsonObject("result");
     }
 
-    public void logout() throws OeRpcException {
+    public void logout() {
         String reqUrl = url.setPath(DESTROY.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
-        if (isV70()) {
-            params.addProperty("session_id", sessionId);
+        try {
+            if (isV70()) {
+                params.addProperty("session_id", sessionId);
+            }
+            params.add("context", jsonContext);
+            JsonObject response = postRequest(reqUrl, getCallWith(params));
+            OeRpcException.checkJsonResponse(response);
+        } catch (OeRpcException e) {
+            LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
         }
-        params.add("context", jsonContext);
-        JsonObject response = postRequest(reqUrl, getCallWith(params));
-        OeJsonUtil.checkJsonResponse(response);
         instance = null;
     }
 
@@ -191,7 +203,7 @@ public class OeExecutor implements Serializable {
     }
 
     public void setContext(Map<String, Object> context) {
-        this.jsonContext = OeJsonUtil.parseAsJsonObject(context);
+        this.jsonContext = parseAsJsonObject(context);
         this.context = context;
     }
 
@@ -200,7 +212,7 @@ public class OeExecutor implements Serializable {
     }
 
     public void setJsonContext(JsonObject jsonContext) {
-        this.context = OeJsonUtil.convertJsonToMap(jsonContext);
+        this.context = convertJsonToMap(jsonContext);
         this.jsonContext = jsonContext;
     }
 
@@ -210,18 +222,18 @@ public class OeExecutor implements Serializable {
     }
 
     public void updateContext(String key, Object value) {
-        jsonContext.add(key, OeJsonUtil.parseAsJsonElement(value));
+        jsonContext.add(key, parseAsJsonElement(value));
         context.put(key, value);
     }
 
     public void updateJsonContext(Map<String, Object> params) {
         for (String key : params.keySet()) {
-            jsonContext.add(key, OeJsonUtil.parseAsJsonElement(params.get(key)));
+            jsonContext.add(key, parseAsJsonElement(params.get(key)));
         }
     }
 
     public void updateJsonContext(JsonObject params) {
-        OeJsonUtil.margeJsonObject(params, jsonContext);
+        margeJsonObject(params, jsonContext);
     }
 
     public String getProtocol() {
@@ -275,17 +287,17 @@ public class OeExecutor implements Serializable {
 
     public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
                                 Map<String, Object> context, String... columns) throws OeRpcException {
-        return OeJsonUtil.parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
+        return parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
     }
 
     public JsonArray searchRead(String model, List<Object> domain, String... columns) throws OeRpcException {
-        return OeJsonUtil.parseAsJsonArray(searchReadStr(model, domain, null, null, null, context, columns));
+        return parseAsJsonArray(searchReadStr(model, domain, null, null, null, context, columns));
     }
 
     public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,
                                                String order, Map<String, Object> context, String... columns)
             throws OeRpcException {
-        return OeJsonUtil.convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
+        return convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
     }
 
     public String searchReadStr(String model, List<Object> domain, Integer offset, Integer limit, String order,
@@ -296,19 +308,19 @@ public class OeExecutor implements Serializable {
         params.addProperty("model", model);
 
         if (columns != null && columns.length != 0) {
-            params.add("fields", OeJsonUtil.parseAsJsonArray(columns));
+            params.add("fields", parseAsJsonArray(columns));
         } else {
             params.add("fields", new JsonArray());
         }
 
         if (domain != null) {
-            params.add("domain", OeJsonUtil.parseAsJsonArray(domain));
+            params.add("domain", parseAsJsonArray(domain));
         } else {
             params.add("domain", new JsonArray());
         }
 
         if (context != null) {
-            params.add("context", OeJsonUtil.parseAsJsonObject(context));
+            params.add("context", parseAsJsonObject(context));
         } else {
             params.add("context", new JsonObject());
         }
@@ -327,8 +339,7 @@ public class OeExecutor implements Serializable {
         }
 
         JsonObject response = postRequest(reqUrl, getCallWith(params));
-        OeJsonUtil.checkJsonResponse(response);
-        return response.getAsJsonObject("result").getAsJsonArray("records").toString();
+        return new OeJsonObject(response).getAsJsonObject("result").getAsJsonArray("records").toString();
     }
 
     public Long count(OeModel model, List<Object> domain) throws OeRpcException {
@@ -337,7 +348,7 @@ public class OeExecutor implements Serializable {
 
     public Long count(String model, List<Object> domain) throws OeRpcException {
         JsonArray args = new JsonArray();
-        args.add(OeJsonUtil.parseAsJsonElement(domain));
+        args.add(parseAsJsonElement(domain));
         Object result = execute(model, SEARCH_COUNT.getName(), args);
         if (!OeUtil.isNULL(result)) {
             return Long.parseLong(result.toString());
@@ -351,7 +362,7 @@ public class OeExecutor implements Serializable {
 
     public Long create(String model, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
-        args.add(OeJsonUtil.parseAsJsonElement(values));
+        args.add(parseAsJsonElement(values));
         args.add(jsonContext);
         Object result = execute(model, CREATE.getName(), args);
         if (!OeUtil.isNULL(result)) {
@@ -362,15 +373,15 @@ public class OeExecutor implements Serializable {
 
     public Boolean write(String model, Object id, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
-        args.add(OeJsonUtil.parseAsJsonElement(id));
-        args.add(OeJsonUtil.parseAsJsonElement(values));
+        args.add(parseAsJsonElement(id));
+        args.add(parseAsJsonElement(values));
         Object result = execute(model, WRITE.getName(), args);
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
     public Boolean unlike(String model, Long... ids) throws OeRpcException {
         JsonArray args = new JsonArray();
-        args.add(OeJsonUtil.parseAsJsonArray(ids));
+        args.add(parseAsJsonArray(ids));
         args.add(jsonContext);
         Object result = execute(model, UNLINK.getName(), args);
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
@@ -379,15 +390,15 @@ public class OeExecutor implements Serializable {
     public Map<String, Object> execute(String model, String method) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(jsonContext);
-        return OeJsonUtil.convertJsonToMap((JsonObject) execute(model, method, args));
+        return convertJsonToMap((JsonObject) execute(model, method, args));
     }
 
     public Object execute(String model, String method, Object args, boolean wrapArgs) throws OeRpcException {
         JsonArray argsArr = new JsonArray();
         if (wrapArgs) {
-            argsArr.add(OeJsonUtil.parseAsJsonArray(args));
+            argsArr.add(parseAsJsonArray(args));
         } else {
-            argsArr = OeJsonUtil.parseAsJsonArray(args);
+            argsArr = parseAsJsonArray(args);
         }
         return execute(model, method, argsArr);
     }
@@ -397,8 +408,8 @@ public class OeExecutor implements Serializable {
     }
 
     public Object execute(String model, String method, Object[] args, Map<String, Object> kwargs) throws OeRpcException {
-        JsonArray argsJson = OeJsonUtil.parseAsJsonArray(args);
-        JsonObject kwargsJson = OeJsonUtil.parseAsJsonObject(kwargs);
+        JsonArray argsJson = parseAsJsonArray(args);
+        JsonObject kwargsJson = parseAsJsonObject(kwargs);
         return execute(model, method, argsJson, kwargsJson);
     }
 
@@ -413,13 +424,12 @@ public class OeExecutor implements Serializable {
             params.addProperty("session_id", sessionId);
         }
         JsonObject response = postRequest(reqUrl, getCallWith(params));
-        OeJsonUtil.checkJsonResponse(response);
 
-        return response.get("result");
+        return new OeJsonObject(response).get("result");
     }
 
     public Map<String, Object> execute(String fun, Map<String, Object> params) throws OeRpcException {
-        return OeJsonUtil.convertJsonToMap((JsonObject) execute(fun, OeJsonUtil.parseAsJsonObject(params)));
+        return convertJsonToMap((JsonObject) execute(fun, parseAsJsonObject(params)));
     }
 
     public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {

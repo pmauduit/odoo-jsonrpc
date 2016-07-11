@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.odoo.rpc.entity.OeLocale;
 import com.odoo.rpc.exception.OeRpcException;
+import com.odoo.rpc.json.util.OeJsonObject;
 import com.odoo.rpc.json.util.OeJsonUtil;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -105,8 +106,7 @@ public class OeServerLocale implements Serializable {
         try {
             String reqUrl = url.setPath(GET_LANG_LIST.toString()).toString();
             JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
-            OeJsonUtil.checkJsonResponse(response);
-            JsonArray result = response.getAsJsonArray("result");
+            JsonArray result = new OeJsonObject(response).getAsJsonArray("result");
             Object[] langs = new Object[result.size()];
             for (int i = 0; i < result.size(); i++) {
                 langs[i] = OeJsonUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);

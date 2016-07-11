@@ -19,6 +19,7 @@ package com.odoo.rpc.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.odoo.rpc.exception.OeRpcException;
+import com.odoo.rpc.json.util.OeJsonObject;
 import com.odoo.rpc.json.util.OeJsonUtil;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -112,8 +113,7 @@ public class OeDatabase implements Serializable {
     public final String[] doList() throws OeRpcException {
         String reqUrl = url.setPath(GET_LIST.getPath()).toString();
         JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
-        OeJsonUtil.checkJsonResponse(response);
-        return OeJsonUtil.convertJsonArray(response.getAsJsonArray("result"), String[].class);
+        return OeJsonUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
     }
 
     public String getProtocol() {
@@ -166,8 +166,7 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeJsonUtil.checkJsonResponse(response);
-        return response.get("result").getAsBoolean();
+        return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
     public boolean doDrop(String databaseName) throws OeRpcException {
@@ -188,8 +187,7 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeJsonUtil.checkJsonResponse(response);
-        return response.get("result").getAsBoolean();
+        return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
     public boolean doDuplicate(String databaseName, String newDatabaseName) throws OeRpcException {
@@ -215,7 +213,6 @@ public class OeDatabase implements Serializable {
         fields.add("fields", fieldsArr);
 
         JsonObject response = postRequest(reqUrl, getCallWith(fields));
-        OeJsonUtil.checkJsonResponse(response);
-        return response.get("result").getAsBoolean();
+        return new OeJsonObject(response).get("result").getAsBoolean();
     }
 }
