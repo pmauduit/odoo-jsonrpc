@@ -23,7 +23,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.odoo.rpc.exception.OeRpcException;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -33,16 +32,32 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
+ * OeJsonUtil is a utility class for converting json text to some java data types
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeJsonUtil {
 
     private static final Logger LOG = Logger.getLogger(OeJsonUtil.class.getName());
 
+    /**
+     * static method to convert json string to map
+     *
+     * @param jsonStr Json object string
+     * @return Map key string and value object
+     * @see #convertJsonToMap(JsonObject)
+     */
     public static Map<String, Object> convertStringToMap(String jsonStr) {
         return convertJsonToMap(new JsonObject().getAsJsonObject(jsonStr));
     }
 
+    /**
+     * static method to convert json object to map
+     *
+     * @param jsonObject json object
+     * @return Map key string and value object
+     */
     public static Map<String, Object> convertJsonToMap(JsonObject jsonObject) {
         Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
         Map<String, Object> convertedMap = new HashMap<String, Object>(entries.size());
@@ -52,10 +67,25 @@ public class OeJsonUtil {
         return convertedMap;
     }
 
+    /**
+     * static method to convert json array to typed java array
+     *
+     * @param jsonArray json array
+     * @param tArr      class of typed array
+     * @param <T>       generic type
+     * @return typed array
+     */
     public static <T> T[] convertJsonArray(JsonArray jsonArray, Class<T[]> tArr) {
         return new Gson().fromJson(jsonArray, tArr);
     }
 
+    /**
+     * static method to convert json array contains json object to map key string and value object array
+     *
+     * @param jsonArray json array
+     * @return array of map string key and value object
+     * @see #convertJsonToMap(JsonObject)
+     */
     public static Map<String, Object>[] convertJsonArrayToMapArray(JsonArray jsonArray) {
         int length = jsonArray.size();
         @SuppressWarnings("unchecked")
@@ -66,27 +96,32 @@ public class OeJsonUtil {
         return mapArr;
     }
 
-    public static JsonObject getCallWith(JsonObject params) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("jsonrpc", "2.0");
-        jsonObject.addProperty("method", "call");
-        jsonObject.add("params", params);
-        return jsonObject;
-    }
-
-    public static JsonObject postRequest(String url, JsonObject json) throws OeRpcException {
-        LOG.info("Hit: " + url);
-        return HttpClient.post(url, json);
-    }
-
+    /**
+     * static method to parse object to json array
+     *
+     * @param obj object to parse
+     * @return json array
+     */
     public static JsonArray parseAsJsonArray(Object obj) {
         return parseAsJsonElement(obj).getAsJsonArray();
     }
 
+    /**
+     * static method to parse object to json object
+     *
+     * @param obj object to parse
+     * @return json object
+     */
     public static JsonObject parseAsJsonObject(Object obj) {
         return parseAsJsonElement(obj).getAsJsonObject();
     }
 
+    /**
+     * static method to parse object to json element
+     *
+     * @param obj object to parse
+     * @return json element
+     */
     public static JsonElement parseAsJsonElement(Object obj) {
         try {
             if (!(obj instanceof String)) {
@@ -101,6 +136,13 @@ public class OeJsonUtil {
         }
     }
 
+    /**
+     * static method to merge two json objects in one object
+     *
+     * @param with merged object
+     * @param into merged into it object
+     * @return the second param merged with the first param
+     */
     public static JsonObject margeJsonObject(JsonObject with, JsonObject into) {
         Set<Map.Entry<String, JsonElement>> entries = with.entrySet();
         for (Map.Entry<String, JsonElement> entry : entries) {

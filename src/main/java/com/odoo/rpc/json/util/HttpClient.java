@@ -49,17 +49,32 @@ public class HttpClient {
     private static final Logger LOG = Logger.getLogger(HttpClient.class.getName());
 
     /**
+     * static method to wrap the request data with some properties
+     *
+     * @param data request json object
+     * @return json object wrap the request data
+     */
+    public static JsonObject postWithParams(String url, JsonObject data) {
+        JsonObject wrapper = new JsonObject();
+        wrapper.addProperty("jsonrpc", "2.0");
+        wrapper.addProperty("method", "call");
+        wrapper.add("params", data);
+        return post(url, wrapper);
+    }
+
+    /**
      * static method for http post
      *
-     * @param URL  url to post
+     * @param url  url to post
      * @param data json data to post
      * @return response as json object
      */
-    public static JsonObject post(String URL, JsonObject data) {
+    public static JsonObject post(String url, JsonObject data) {
+        LOG.info("Hit: " + url);
         try {
             CloseableHttpClient httpclient = HttpClientBuilder.create().build();
             try {
-                HttpPost httpPostRequest = new HttpPost(URL);
+                HttpPost httpPostRequest = new HttpPost(url);
 
                 httpPostRequest.setHeader("Accept", "application/json");
                 httpPostRequest.setHeader("Content-type", "application/json");

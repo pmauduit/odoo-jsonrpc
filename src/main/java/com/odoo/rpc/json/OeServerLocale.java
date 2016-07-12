@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.odoo.rpc.OeConst.JsonSession.GET_LANG_LIST;
-import static com.odoo.rpc.json.util.OeJsonUtil.getCallWith;
-import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
+import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 
 /**
  * @author Ahmed El-mawaziny
@@ -105,7 +104,7 @@ public class OeServerLocale implements Serializable {
     private Object[] doListLang() throws OeRpcException {
         try {
             String reqUrl = url.setPath(GET_LANG_LIST.toString()).toString();
-            JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
+            JsonObject response = postWithParams(reqUrl, emptyObject);
             JsonArray result = new OeJsonObject(response).getAsJsonArray("result");
             Object[] langs = new Object[result.size()];
             for (int i = 0; i < result.size(); i++) {

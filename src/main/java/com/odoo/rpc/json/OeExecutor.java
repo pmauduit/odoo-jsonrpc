@@ -39,14 +39,13 @@ import static com.odoo.rpc.OeConst.OeFun.CREATE;
 import static com.odoo.rpc.OeConst.OeFun.SEARCH_COUNT;
 import static com.odoo.rpc.OeConst.OeFun.UNLINK;
 import static com.odoo.rpc.OeConst.OeFun.WRITE;
+import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonArrayToMapArray;
 import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonToMap;
-import static com.odoo.rpc.json.util.OeJsonUtil.getCallWith;
 import static com.odoo.rpc.json.util.OeJsonUtil.margeJsonObject;
 import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonArray;
 import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonElement;
 import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonObject;
-import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
 
 /**
  * @author Ahmed El-mawaziny
@@ -153,7 +152,7 @@ public class OeExecutor implements Serializable {
         params.addProperty("db", database);
         params.addProperty("login", username);
         params.addProperty("password", password);
-        JsonObject response = postRequest(reqUrl, getCallWith(params));
+        JsonObject response = postWithParams(reqUrl, params);
         return new OeJsonObject(response).getAsJsonObject("result");
     }
 
@@ -165,7 +164,7 @@ public class OeExecutor implements Serializable {
                 params.addProperty("session_id", sessionId);
             }
             params.add("context", jsonContext);
-            JsonObject response = postRequest(reqUrl, getCallWith(params));
+            JsonObject response = postWithParams(reqUrl, params);
             OeRpcException.checkJsonResponse(response);
         } catch (OeRpcException e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -338,7 +337,7 @@ public class OeExecutor implements Serializable {
             params.addProperty("session_id", sessionId);
         }
 
-        JsonObject response = postRequest(reqUrl, getCallWith(params));
+        JsonObject response = postWithParams(reqUrl, params);
         return new OeJsonObject(response).getAsJsonObject("result").getAsJsonArray("records").toString();
     }
 
@@ -423,7 +422,7 @@ public class OeExecutor implements Serializable {
         if (isV70()) {
             params.addProperty("session_id", sessionId);
         }
-        JsonObject response = postRequest(reqUrl, getCallWith(params));
+        JsonObject response = postWithParams(reqUrl, params);
 
         return new OeJsonObject(response).get("result");
     }
@@ -434,6 +433,6 @@ public class OeExecutor implements Serializable {
 
     public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {
         String reqUrl = url.setPath(fun).setParameter("session_id", sessionId).toString();
-        return postRequest(reqUrl, getCallWith(jsonObj)).get("result");
+        return postWithParams(reqUrl, jsonObj).get("result");
     }
 }

@@ -29,8 +29,7 @@ import static com.odoo.rpc.OeConst.JsonDatabase.CREATE;
 import static com.odoo.rpc.OeConst.JsonDatabase.DROP;
 import static com.odoo.rpc.OeConst.JsonDatabase.DUPLICATE;
 import static com.odoo.rpc.OeConst.JsonDatabase.GET_LIST;
-import static com.odoo.rpc.json.util.OeJsonUtil.getCallWith;
-import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
+import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 
 /**
  * @author Ahmed El-mawaziny
@@ -112,7 +111,7 @@ public class OeDatabase implements Serializable {
 
     public final String[] doList() throws OeRpcException {
         String reqUrl = url.setPath(GET_LIST.getPath()).toString();
-        JsonObject response = postRequest(reqUrl, getCallWith(emptyObject));
+        JsonObject response = postWithParams(reqUrl, emptyObject);
         return OeJsonUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
     }
 
@@ -165,7 +164,7 @@ public class OeDatabase implements Serializable {
         JsonObject fields = new JsonObject();
         fields.add("fields", fieldsArr);
 
-        JsonObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postWithParams(reqUrl, fields);
         return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
@@ -186,7 +185,7 @@ public class OeDatabase implements Serializable {
         JsonObject fields = new JsonObject();
         fields.add("fields", fieldsArr);
 
-        JsonObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postWithParams(reqUrl, fields);
         return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
@@ -212,7 +211,7 @@ public class OeDatabase implements Serializable {
         JsonObject fields = new JsonObject();
         fields.add("fields", fieldsArr);
 
-        JsonObject response = postRequest(reqUrl, getCallWith(fields));
+        JsonObject response = postWithParams(reqUrl, fields);
         return new OeJsonObject(response).get("result").getAsBoolean();
     }
 }

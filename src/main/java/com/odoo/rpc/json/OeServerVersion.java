@@ -26,8 +26,7 @@ import org.apache.http.client.utils.URIBuilder;
 import java.io.Serializable;
 
 import static com.odoo.rpc.OeConst.JsonWebClient.VERSION_INFO;
-import static com.odoo.rpc.json.util.OeJsonUtil.getCallWith;
-import static com.odoo.rpc.json.util.OeJsonUtil.postRequest;
+import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 
 /**
  * @author Ahmed El-mawaziny
@@ -106,7 +105,7 @@ public class OeServerVersion implements Serializable {
 
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
-        JsonObject response = postRequest(reqUrl, getCallWith(params));
+        JsonObject response = postWithParams(reqUrl, params);
 
         JsonObject result = new OeJsonObject(response).getAsJsonObject("result");
         String serverSerie = result.get("server_serie").getAsString();
