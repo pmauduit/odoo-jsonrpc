@@ -38,38 +38,38 @@ public class OeServerLocale implements Serializable {
 
     private static final long serialVersionUID = -2489079149616037822L;
     private static volatile OeServerLocale instance;
-    private final String protocol;
+    private final String scheme;
     private final String host;
     private final int port;
     private final URIBuilder url;
     private final JsonObject emptyObject = new JsonObject();
     private final Object[] languages;
 
-    private OeServerLocale(String protocol, String host, int port) throws OeRpcException {
-        this.protocol = protocol;
+    private OeServerLocale(String scheme, String host, int port) throws OeRpcException {
+        this.scheme = scheme;
         this.host = host;
         this.port = port;
-        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
+        this.url = new URIBuilder().setScheme(scheme).setHost(host).setPort(port);
         languages = doListLang();
     }
 
     private OeServerLocale(OeDatabase oeDatabase) throws OeRpcException {
-        this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
+        this(oeDatabase.getScheme(), oeDatabase.getHost(), oeDatabase.getPort());
     }
 
-    public static OeServerLocale getInstance(String protocol, String host, int port) throws OeRpcException {
+    public static OeServerLocale getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
             synchronized (OeServerLocale.class) {
                 if (instance == null) {
-                    instance = new OeServerLocale(protocol, host, port);
+                    instance = new OeServerLocale(scheme, host, port);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeServerLocale getNewInstance(String protocol, String host, int port) throws OeRpcException {
-        instance = new OeServerLocale(protocol, host, port);
+    public synchronized static OeServerLocale getNewInstance(String scheme, String host, int port) throws OeRpcException {
+        instance = new OeServerLocale(scheme, host, port);
         return instance;
     }
 
@@ -89,8 +89,8 @@ public class OeServerLocale implements Serializable {
         return instance;
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getScheme() {
+        return scheme;
     }
 
     public String getHost() {

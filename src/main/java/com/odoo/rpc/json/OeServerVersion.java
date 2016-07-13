@@ -36,38 +36,38 @@ public class OeServerVersion implements Serializable {
     private static final long serialVersionUID = -5241159354557231546L;
     private static volatile OeServerVersion instance;
     private final URIBuilder url;
-    private final String protocol;
+    private final String scheme;
     private final String host;
     private final int port;
     private final JsonObject params = new JsonObject();
     private final OeVersion version;
 
-    private OeServerVersion(String protocol, String host, int port) throws OeRpcException {
-        this.protocol = protocol;
+    private OeServerVersion(String scheme, String host, int port) throws OeRpcException {
+        this.scheme = scheme;
         this.host = host;
         this.port = port;
-        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
+        this.url = new URIBuilder().setScheme(scheme).setHost(host).setPort(port);
         version = getServerVersion();
     }
 
     private OeServerVersion(OeDatabase oeDatabase) throws OeRpcException {
-        this(oeDatabase.getProtocol(), oeDatabase.getHost(), oeDatabase.getPort());
+        this(oeDatabase.getScheme(), oeDatabase.getHost(), oeDatabase.getPort());
     }
 
-    public static OeServerVersion getInstance(String protocol, String host, int port) throws OeRpcException {
+    public static OeServerVersion getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
             synchronized (OeServerVersion.class) {
                 if (instance == null) {
-                    instance = new OeServerVersion(protocol, host, port);
+                    instance = new OeServerVersion(scheme, host, port);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeServerVersion getNewInstance(String protocol, String host, int port)
+    public synchronized static OeServerVersion getNewInstance(String scheme, String host, int port)
             throws OeRpcException {
-        instance = new OeServerVersion(protocol, host, port);
+        instance = new OeServerVersion(scheme, host, port);
         return instance;
     }
 
@@ -91,8 +91,8 @@ public class OeServerVersion implements Serializable {
         return version;
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getScheme() {
+        return scheme;
     }
 
     public String getHost() {

@@ -82,7 +82,7 @@ public class OeAttachment extends AbstractOeEntity<OeAttachmentService> {
 
     public String getUrl() {
         OeExecutor executor = oe.getExecutor();
-        return new URIBuilder().setScheme(executor.getProtocol())
+        return new URIBuilder().setScheme(executor.getScheme())
                 .setHost(executor.getHost())
                 .setPort(executor.getPort())
                 .setPath("/web/binary/saveas")

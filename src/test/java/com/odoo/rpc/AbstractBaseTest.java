@@ -21,7 +21,7 @@ package com.odoo.rpc;
  */
 public abstract class AbstractBaseTest {
 
-    protected static final String PROTOCOL = "http";
+    protected static final String SCHEME = "http";
     protected static final String HOST = "localhost";
     protected static final int PORT = 8069;
     protected static final String USERNAME = "admin";

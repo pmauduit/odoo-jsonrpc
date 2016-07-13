@@ -33,7 +33,7 @@ public class OeDatabaseTest extends AbstractBaseTest {
 
     @org.junit.BeforeClass
     public static void beforeClass() throws Exception {
-        oeDatabase = OeDatabase.getInstance(PROTOCOL, HOST, PORT, "admin");
+        oeDatabase = OeDatabase.getInstance(SCHEME, HOST, PORT, "admin");
     }
 
     @Test

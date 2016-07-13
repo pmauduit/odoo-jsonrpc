@@ -44,7 +44,7 @@ public class OeActionWindowServiceTest extends AbstractBoundaryTest {
 
     @org.junit.BeforeClass
     public static void beforeClass() throws Exception {
-        executor = OeExecutor.getInstance(PROTOCOL, HOST, PORT, DATABASE, USERNAME, PASSWORD);
+        executor = OeExecutor.getInstance(SCHEME, HOST, PORT, DATABASE, USERNAME, PASSWORD);
         service = new OeActionWindowService(executor);
     }
 

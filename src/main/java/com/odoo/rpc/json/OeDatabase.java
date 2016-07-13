@@ -32,67 +32,125 @@ import static com.odoo.rpc.OeConst.JsonDatabase.GET_LIST;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 
 /**
+ * OeDatabase class is for manage odoo databases
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeDatabase implements Serializable {
 
     private static final long serialVersionUID = 7443043973211482534L;
     private static volatile OeDatabase instance;
-    private final String protocol;
+    private final String scheme;
     private final String host;
     private final int port;
     private final URIBuilder url;
     private final JsonObject emptyObject = new JsonObject();
     private final Object adminPwd;
 
-    private OeDatabase(String protocol, String host, int port, Object adminPwd) {
-        this.protocol = protocol;
+    /**
+     * Constructor to build uri
+     *
+     * @param scheme   http or https
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param adminPwd admin password
+     */
+    private OeDatabase(String scheme, String host, int port, Object adminPwd) {
+        this.scheme = scheme;
         this.host = host;
         this.port = port;
         this.adminPwd = adminPwd;
-        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
+        this.url = new URIBuilder().setScheme(scheme).setHost(host).setPort(port);
     }
 
-    private OeDatabase(String protocol, String host, int port) {
-        this(protocol, host, port, Boolean.FALSE);
+    /**
+     * Constructor to build uri with no admin password
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     */
+    private OeDatabase(String scheme, String host, int port) {
+        this(scheme, host, port, Boolean.FALSE);
     }
 
+    /**
+     * Constructor to build uri without admin password, http and 8069
+     *
+     * @param host host name or ip password
+     */
     private OeDatabase(String host) {
         this("http", host, 8069);
     }
 
-    public static OeDatabase getInstance(String protocol, String host, int port, Object adminPwd) {
+    /**
+     * Constructor to build uri
+     *
+     * @param scheme   http or https
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param adminPwd admin password
+     */
+    public static OeDatabase getInstance(String scheme, String host, int port, Object adminPwd) {
         if (instance == null) {
             synchronized (OeDatabase.class) {
                 if (instance == null) {
-                    instance = new OeDatabase(protocol, host, port, adminPwd);
+                    instance = new OeDatabase(scheme, host, port, adminPwd);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeDatabase getNewInstance(String protocol, String host, int port, Object adminPwd) {
-        instance = new OeDatabase(protocol, host, port, adminPwd);
+    /**
+     * Constructor to build uri
+     *
+     * @param scheme   http or https
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param adminPwd admin password
+     */
+    public synchronized static OeDatabase getNewInstance(String scheme, String host, int port, Object adminPwd) {
+        instance = new OeDatabase(scheme, host, port, adminPwd);
         return instance;
     }
 
-    public static OeDatabase getInstance(String protocol, String host, int port) {
+    /**
+     * Constructor to build uri with no admin password
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     */
+    public static OeDatabase getInstance(String scheme, String host, int port) {
         if (instance == null) {
             synchronized (OeDatabase.class) {
                 if (instance == null) {
-                    instance = new OeDatabase(protocol, host, port);
+                    instance = new OeDatabase(scheme, host, port);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeDatabase getNewInstance(String protocol, String host, int port) {
-        instance = new OeDatabase(protocol, host, port);
+    /**
+     * Constructor to build uri with no admin password
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     */
+    public synchronized static OeDatabase getNewInstance(String scheme, String host, int port) {
+        instance = new OeDatabase(scheme, host, port);
         return instance;
     }
 
+    /**
+     * Constructor to build uri without admin password, http and 8069
+     *
+     * @param host host name or ip password
+     */
     public static OeDatabase getInstance(String host) {
         if (instance == null) {
             synchronized (OeDatabase.class) {
@@ -104,19 +162,18 @@ public class OeDatabase implements Serializable {
         return instance;
     }
 
+    /**
+     * Constructor to build uri without admin password, http and 8069
+     *
+     * @param host host name or ip password
+     */
     public synchronized static OeDatabase getNewInstance(String host) {
         instance = new OeDatabase(host);
         return instance;
     }
 
-    public final String[] doList() throws OeRpcException {
-        String reqUrl = url.setPath(GET_LIST.getPath()).toString();
-        JsonObject response = postWithParams(reqUrl, emptyObject);
-        return OeJsonUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
-    }
-
-    public String getProtocol() {
-        return protocol;
+    public String getScheme() {
+        return scheme;
     }
 
     public String getHost() {
@@ -131,6 +188,28 @@ public class OeDatabase implements Serializable {
         return adminPwd;
     }
 
+    /**
+     * list all databases
+     *
+     * @return array of string with databases name
+     * @throws OeRpcException
+     */
+    public final String[] doList() throws OeRpcException {
+        String reqUrl = url.setPath(GET_LIST.getPath()).toString();
+        JsonObject response = postWithParams(reqUrl, emptyObject);
+        return OeJsonUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
+    }
+
+    /**
+     * create new database
+     *
+     * @param databaseName the name of database
+     * @param demo         insert demo data
+     * @param lang         database language
+     * @param password     database admin password
+     * @return true if created
+     * @throws OeRpcException
+     */
     public boolean doCreate(String databaseName, boolean demo, String lang, String password) throws OeRpcException {
         String reqUrl = url.setPath(CREATE.getPath()).toString();
 
@@ -168,6 +247,13 @@ public class OeDatabase implements Serializable {
         return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
+    /**
+     * drop database
+     *
+     * @param databaseName database name to drop it
+     * @return true if dropped
+     * @throws OeRpcException
+     */
     public boolean doDrop(String databaseName) throws OeRpcException {
         String reqUrl = url.setPath(DROP.getPath()).toString();
         JsonObject dropPwdObj = new JsonObject();
@@ -189,6 +275,14 @@ public class OeDatabase implements Serializable {
         return new OeJsonObject(response).get("result").getAsBoolean();
     }
 
+    /**
+     * duplicate database with new name
+     *
+     * @param databaseName    database name to duplicate
+     * @param newDatabaseName the duplicated database name
+     * @return true if duplicated
+     * @throws OeRpcException
+     */
     public boolean doDuplicate(String databaseName, String newDatabaseName) throws OeRpcException {
         String reqUrl = url.setPath(DUPLICATE.getPath()).toString();
 

@@ -55,7 +55,7 @@ public class OeExecutor implements Serializable {
     public static final Logger LOG = Logger.getLogger(OeExecutor.class.getName());
     private static final long serialVersionUID = 7528230097059877102L;
     private static volatile OeExecutor instance;
-    private final String protocol;
+    private final String scheme;
     private final String host;
     private final int port;
     private final String password;
@@ -68,15 +68,15 @@ public class OeExecutor implements Serializable {
     private JsonObject jsonContext;
     private Map<String, Object> context;
 
-    private OeExecutor(String protocol, String host, int port, String database, String username, String password)
+    private OeExecutor(String scheme, String host, int port, String database, String username, String password)
             throws OeRpcException {
         this.database = database;
         this.username = username;
         this.password = password;
-        this.protocol = protocol;
+        this.scheme = scheme;
         this.port = port;
         this.host = host;
-        this.url = new URIBuilder().setScheme(protocol).setHost(host).setPort(port);
+        this.url = new URIBuilder().setScheme(scheme).setHost(host).setPort(port);
         JsonObject loginResult = doLogin();
         this.jsonContext = getJsonContextFromLogin(loginResult);
         this.context = convertJsonToMap(jsonContext);
@@ -92,21 +92,21 @@ public class OeExecutor implements Serializable {
         this("http", host, 8069, database, username, password);
     }
 
-    public static OeExecutor getInstance(String protocol, String host, int port, String database, String username,
+    public static OeExecutor getInstance(String scheme, String host, int port, String database, String username,
                                          String password) throws OeRpcException {
         if (instance == null) {
             synchronized (OeExecutor.class) {
                 if (instance == null) {
-                    instance = new OeExecutor(protocol, host, port, database, username, password);
+                    instance = new OeExecutor(scheme, host, port, database, username, password);
                 }
             }
         }
         return instance;
     }
 
-    public synchronized static OeExecutor getNewInstance(String protocol, String host, int port, String database,
+    public synchronized static OeExecutor getNewInstance(String scheme, String host, int port, String database,
                                                          String username, String password) throws OeRpcException {
-        instance = new OeExecutor(protocol, host, port, database, username, password);
+        instance = new OeExecutor(scheme, host, port, database, username, password);
         return instance;
     }
 
@@ -189,7 +189,7 @@ public class OeExecutor implements Serializable {
     }
 
     public OeVersion getOeVersion() throws OeRpcException {
-        this.version = OeServerVersion.getInstance(protocol, host, port).getVersion();
+        this.version = OeServerVersion.getInstance(scheme, host, port).getVersion();
         return version;
     }
 
@@ -235,8 +235,8 @@ public class OeExecutor implements Serializable {
         margeJsonObject(params, jsonContext);
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getScheme() {
+        return scheme;
     }
 
     public String getHost() {
