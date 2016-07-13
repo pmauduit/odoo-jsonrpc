@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Ahmed El-mawaziny
  */
-public class OeActionWindowServiceTest extends AbstractBaseTest {
+public class OeActionWindowServiceTest extends AbstractBoundaryTest {
 
     private static OeActionWindowService service;
 

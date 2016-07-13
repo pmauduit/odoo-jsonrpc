@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.odoo.rpc.boundary;
-
-import com.odoo.rpc.json.OeExecutor;
+package com.odoo.rpc;
 
 /**
  * @author Ahmed El-mawaziny
@@ -29,10 +27,4 @@ public abstract class AbstractBaseTest {
     protected static final String USERNAME = "admin";
     protected static final String PASSWORD = "123";
     protected static final String DATABASE = "db8";
-    protected static OeExecutor executor;
-
-    @org.junit.AfterClass
-    public static void afterClass() {
-        executor.logout();
-    }
 }

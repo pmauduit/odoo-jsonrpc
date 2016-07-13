@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Ahmed El-mawaziny
  */
-public class OePartnerServiceTest extends AbstractBaseTest {
+public class OePartnerServiceTest extends AbstractBoundaryTest {
 
     private static OePartnerService service;
 

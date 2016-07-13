@@ -207,6 +207,7 @@ public class OeDatabase implements Serializable {
         JsonArray fieldsArr = new JsonArray();
         fieldsArr.add(superAdminPwdObj);
         fieldsArr.add(dbOriginalNameObj);
+        fieldsArr.add(dbNameObj);
 
         JsonObject fields = new JsonObject();
         fields.add("fields", fieldsArr);
