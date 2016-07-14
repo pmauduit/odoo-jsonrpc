@@ -32,7 +32,11 @@ import static com.odoo.rpc.OeConst.JsonSession.GET_LANG_LIST;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
 
 /**
+ * OeServerLocale class for listing Odoo locales as java locale
+ *
  * @author Ahmed El-mawaziny
+ * @see OeLocale
+ * @since 1.0
  */
 public class OeServerLocale implements Serializable {
 
@@ -42,9 +46,16 @@ public class OeServerLocale implements Serializable {
     private final String host;
     private final int port;
     private final URIBuilder url;
-    private final JsonObject emptyObject = new JsonObject();
     private final Object[] languages;
 
+    /**
+     * Constructor to build uri and list languages as array of object
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     * @throws OeRpcException
+     */
     private OeServerLocale(String scheme, String host, int port) throws OeRpcException {
         this.scheme = scheme;
         this.host = host;
@@ -53,10 +64,14 @@ public class OeServerLocale implements Serializable {
         languages = doListLang();
     }
 
-    private OeServerLocale(OeDatabase oeDatabase) throws OeRpcException {
-        this(oeDatabase.getScheme(), oeDatabase.getHost(), oeDatabase.getPort());
-    }
-
+    /**
+     * Constructor to build uri and list languages as array of object
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     * @throws OeRpcException
+     */
     public static OeServerLocale getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
             synchronized (OeServerLocale.class) {
@@ -68,24 +83,16 @@ public class OeServerLocale implements Serializable {
         return instance;
     }
 
+    /**
+     * Constructor to build uri and list languages as array of object
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     * @throws OeRpcException
+     */
     public synchronized static OeServerLocale getNewInstance(String scheme, String host, int port) throws OeRpcException {
         instance = new OeServerLocale(scheme, host, port);
-        return instance;
-    }
-
-    public static OeServerLocale getInstance(OeDatabase oeDatabase) throws OeRpcException {
-        if (instance == null) {
-            synchronized (OeServerLocale.class) {
-                if (instance == null) {
-                    instance = new OeServerLocale(oeDatabase);
-                }
-            }
-        }
-        return instance;
-    }
-
-    public synchronized static OeServerLocale getNewInstance(OeDatabase oeDatabase) throws OeRpcException {
-        instance = new OeServerLocale(oeDatabase);
         return instance;
     }
 
@@ -102,34 +109,32 @@ public class OeServerLocale implements Serializable {
     }
 
     private Object[] doListLang() throws OeRpcException {
-        try {
-            String reqUrl = url.setPath(GET_LANG_LIST.toString()).toString();
-            JsonObject response = postWithParams(reqUrl, emptyObject);
-            JsonArray result = new OeJsonObject(response).getAsJsonArray("result");
-            Object[] langs = new Object[result.size()];
-            for (int i = 0; i < result.size(); i++) {
-                langs[i] = OeJsonUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
-            }
-            return langs;
-        } catch (Exception e) {
-            throw new OeRpcException(e);
+        String reqUrl = url.setPath(GET_LANG_LIST.getPath()).toString();
+        JsonObject response = postWithParams(reqUrl);
+        JsonArray result = new OeJsonObject(response).getAsJsonArray("result");
+        Object[] langs = new Object[result.size()];
+        for (int i = 0; i < result.size(); i++) {
+            langs[i] = OeJsonUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
         }
+        return langs;
     }
 
     public Object[] getLanguages() {
         return languages;
     }
 
+    /**
+     * Convert languages to {@link OeLocale}
+     *
+     * @return list of {@link OeLocale}
+     * @throws OeRpcException
+     */
     public List<OeLocale> getOeLocales() throws OeRpcException {
-        try {
-            List<OeLocale> locales = new ArrayList<OeLocale>(languages.length);
-            for (Object langObj : languages) {
-                Object[] lang = (Object[]) langObj;
-                locales.add(new OeLocale(lang[0].toString(), lang[1].toString()));
-            }
-            return locales;
-        } catch (Exception e) {
-            throw new OeRpcException(e);
+        List<OeLocale> locales = new ArrayList<OeLocale>(languages.length);
+        for (Object langObj : languages) {
+            Object[] lang = (Object[]) langObj;
+            locales.add(new OeLocale(lang[0].toString(), lang[1].toString()));
         }
+        return locales;
     }
 }

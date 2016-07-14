@@ -51,6 +51,16 @@ public class HttpClient {
     /**
      * static method to wrap the request data with some properties
      *
+     * @return json object wrap the request data
+     * @see #postWithParams(String, JsonObject)
+     */
+    public static JsonObject postWithParams(String url) {
+        return postWithParams(url, new JsonObject());
+    }
+
+    /**
+     * static method to wrap the request data with some properties
+     *
      * @param data request json object
      * @return json object wrap the request data
      */

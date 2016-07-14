@@ -39,7 +39,6 @@ public class OeServerVersion implements Serializable {
     private final String scheme;
     private final String host;
     private final int port;
-    private final JsonObject params = new JsonObject();
     private final OeVersion version;
 
     private OeServerVersion(String scheme, String host, int port) throws OeRpcException {
@@ -48,10 +47,6 @@ public class OeServerVersion implements Serializable {
         this.port = port;
         this.url = new URIBuilder().setScheme(scheme).setHost(host).setPort(port);
         version = getServerVersion();
-    }
-
-    private OeServerVersion(OeDatabase oeDatabase) throws OeRpcException {
-        this(oeDatabase.getScheme(), oeDatabase.getHost(), oeDatabase.getPort());
     }
 
     public static OeServerVersion getInstance(String scheme, String host, int port) throws OeRpcException {
@@ -68,22 +63,6 @@ public class OeServerVersion implements Serializable {
     public synchronized static OeServerVersion getNewInstance(String scheme, String host, int port)
             throws OeRpcException {
         instance = new OeServerVersion(scheme, host, port);
-        return instance;
-    }
-
-    public static OeServerVersion getInstance(OeDatabase oeDatabase) throws OeRpcException {
-        if (instance == null) {
-            synchronized (OeServerVersion.class) {
-                if (instance == null) {
-                    instance = new OeServerVersion(oeDatabase);
-                }
-            }
-        }
-        return instance;
-    }
-
-    public synchronized static OeServerVersion getNewInstance(OeDatabase oeDatabase) throws OeRpcException {
-        instance = new OeServerVersion(oeDatabase);
         return instance;
     }
 
@@ -105,7 +84,7 @@ public class OeServerVersion implements Serializable {
 
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
-        JsonObject response = postWithParams(reqUrl, params);
+        JsonObject response = postWithParams(reqUrl);
 
         JsonObject result = new OeJsonObject(response).getAsJsonObject("result");
         String serverSerie = result.get("server_serie").getAsString();
