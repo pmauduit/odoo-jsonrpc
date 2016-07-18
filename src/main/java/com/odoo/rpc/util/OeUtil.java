@@ -23,10 +23,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * OeUtil is general utilities for this lib you can use it as well
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeUtil {
 
+    /**
+     * Check if null, empty or equals to null with ignore case
+     *
+     * @param text Object text to validate
+     * @return true if null, empty or equals to null with ignore case
+     */
     public static boolean isNULL(Object text) {
         if (text != null) {
             String strTest = text.toString().trim();
@@ -37,6 +46,12 @@ public class OeUtil {
         return true;
     }
 
+    /**
+     * Convert string locale to java locale
+     *
+     * @param locale String locale like en_US
+     * @return java locale
+     */
     public static Locale getLocale(String locale) {
         if (!isNULL(locale)) {
             String[] split;
@@ -53,6 +68,12 @@ public class OeUtil {
         return null;
     }
 
+    /**
+     * convert python tuple to array of array of Objects
+     *
+     * @param tupleString string tuple
+     * @return array of array of Objects
+     */
     public static Object[][] convertTupleStringToArray(String tupleString) {
         Pattern p = Pattern.compile("\\((.*?)\\)");
         Matcher matcher = p.matcher(tupleString);
@@ -71,24 +92,43 @@ public class OeUtil {
         return list1.toArray(new Object[][]{});
     }
 
+    /**
+     * simulate Objects.equals in JDK 7
+     *
+     * @param a object one to compare
+     * @param b object two to compare
+     * @return true if == or equals
+     */
     public static boolean equals(Object a, Object b) {
         return (a == b) || (a != null && a.equals(b));
     }
 
+    /**
+     * simulate Objects.hashCode in JDK 7
+     *
+     * @param o object to get hash code
+     * @return object hash code if not null or 0 if its null
+     */
     public static int hashCode(Object o) {
         return o != null ? o.hashCode() : 0;
     }
 
+    /**
+     * clear string representation for map - remove u' and spaces
+     *
+     * @param map map string representation
+     * @return clean map string representation
+     */
     public static String clearMap(String map) {
         map = map.trim().substring(1, map.length() - 1);
         String[] strings = map.split(",");
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        String coma = "";
+        String comma = "";
         for (String s : strings) {
             if (!isNULL(s)) {
-                sb.append(coma).append(s.trim().replace("u'", "'"));
-                coma = ",";
+                sb.append(comma).append(s.trim().replace("u'", "'"));
+                comma = ",";
             }
         }
         sb.append("}");

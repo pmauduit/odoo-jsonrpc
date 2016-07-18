@@ -16,9 +16,9 @@
 
 package com.odoo.rpc.entity;
 
-import com.odoo.rpc.OeConst.OeModel;
 import com.odoo.rpc.boundary.OeActionClientService;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
+import com.odoo.rpc.util.OeConst.OeModel;
 import com.odoo.rpc.util.OeUtil;
 
 import java.util.Arrays;
@@ -81,12 +81,12 @@ public class OeActionClient extends AbstractOeEntity<OeActionClientService> {
         return context;
     }
 
-    public void setContext(String context) {
-        this.context = OeJsonUtil.convertStringToMap(context);
-    }
-
     public void setContext(Map<String, Object> context) {
         this.context = context;
+    }
+
+    public void setContext(String context) {
+        this.context = OeJUtil.convertStringToMap(context);
     }
 
     public String getType() {

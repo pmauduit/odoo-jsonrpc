@@ -20,14 +20,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.odoo.rpc.OeConst.OeOperator.AND;
-import static com.odoo.rpc.OeConst.OeOperator.EQUALS;
-import static com.odoo.rpc.OeConst.OeOperator.ILIKE;
-import static com.odoo.rpc.OeConst.OeOperator.IN;
-import static com.odoo.rpc.OeConst.OeOperator.OR;
+import static com.odoo.rpc.util.OeCriteriaBuilder.OeOperator.AND;
+import static com.odoo.rpc.util.OeCriteriaBuilder.OeOperator.EQUALS;
+import static com.odoo.rpc.util.OeCriteriaBuilder.OeOperator.ILIKE;
+import static com.odoo.rpc.util.OeCriteriaBuilder.OeOperator.IN;
+import static com.odoo.rpc.util.OeCriteriaBuilder.OeOperator.OR;
 
 /**
+ * OeCriteriaBuilder to create Odoo domain
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public final class OeCriteriaBuilder {
 
@@ -47,6 +50,44 @@ public final class OeCriteriaBuilder {
         return Arrays.deepToString(criteria.toArray());
     }
 
+    public enum OeOperator {
+
+        EQUALS("="),
+        ILIKE("ilike"),
+        IN("in"),
+        OR("|"),
+        AND("&");
+
+        private final String symbol;
+
+        OeOperator(String operator) {
+            this.symbol = operator;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        @Override
+        public String toString() {
+            return symbol;
+        }
+    }
+
+    public enum SortType {
+        ASC {
+            @Override
+            public String toString() {
+                return " ASC";
+            }
+        }, DESC {
+            @Override
+            public String toString() {
+                return " DESC";
+            }
+        }
+    }
+
     public final class Column {
 
         private final Object[] sc;
@@ -56,18 +97,36 @@ public final class OeCriteriaBuilder {
             sc[0] = name;
         }
 
+        /**
+         * sql equals '='
+         *
+         * @param value value to compare
+         * @return Logic
+         */
         public Logic eq(Object value) {
             sc[1] = EQUALS.getSymbol();
             setValue(value);
             return new Logic();
         }
 
+        /**
+         * sql 'in'
+         *
+         * @param value value to compare
+         * @return Logic
+         */
         public Logic in(Object value) {
             sc[1] = IN.getSymbol();
             setValue(value);
             return new Logic();
         }
 
+        /**
+         * sql ilike - like with ignore case
+         *
+         * @param value value to compare
+         * @return Logic
+         */
         public Logic ilike(Object value) {
             sc[1] = ILIKE.getSymbol();
             setValue(value);
@@ -82,11 +141,25 @@ public final class OeCriteriaBuilder {
 
     public final class Logic {
 
+        /**
+         * sql OR
+         *
+         * @param columnName column name
+         * @return Column
+         * @see Column
+         */
         public Column orColumn(String columnName) {
             criteria.add(i++, OR.getSymbol());
             return new Column(columnName);
         }
 
+        /**
+         * sql AND
+         *
+         * @param columnName string column name
+         * @return Column
+         * @see Column
+         */
         public Column andColumn(String columnName) {
             criteria.add(i++, AND.getSymbol());
             return new Column(columnName);

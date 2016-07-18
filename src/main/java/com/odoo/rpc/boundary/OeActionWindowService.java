@@ -23,7 +23,7 @@ import com.odoo.rpc.json.OeExecutor;
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.OeModel.ACTION_WINDOW;
+import static com.odoo.rpc.util.OeConst.OeModel.ACTION_WINDOW;
 
 /**
  * Service to manage {@link OeActionWindow}

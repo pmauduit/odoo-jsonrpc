@@ -16,11 +16,11 @@
 
 package com.odoo.rpc.boundary;
 
-import com.odoo.rpc.OeConst;
 import com.odoo.rpc.entity.AbstractOeEntity;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.OeExecutor;
-import com.odoo.rpc.json.util.OeBinder;
+import com.odoo.rpc.util.OeBinder;
+import com.odoo.rpc.util.OeConst;
 import com.odoo.rpc.util.OeCriteriaBuilder;
 
 import java.io.Serializable;
@@ -29,9 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.SortType.ASC;
-import static com.odoo.rpc.OeConst.SortType.DESC;
-import static com.odoo.rpc.OeConst._COL_ID;
+import static com.odoo.rpc.util.OeConst._COL_ID;
+import static com.odoo.rpc.util.OeCriteriaBuilder.SortType.ASC;
+import static com.odoo.rpc.util.OeCriteriaBuilder.SortType.DESC;
 
 /**
  * AbstractOeService abstract class for boundary services of Odoo. easy use

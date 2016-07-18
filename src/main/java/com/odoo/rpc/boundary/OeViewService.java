@@ -16,27 +16,27 @@
 
 package com.odoo.rpc.boundary;
 
-import com.odoo.rpc.OeConst.OeActionType;
-import com.odoo.rpc.OeConst.OeModel;
-import com.odoo.rpc.OeConst.OeViewMode;
 import com.odoo.rpc.entity.OeAction;
 import com.odoo.rpc.entity.OeActionClient;
 import com.odoo.rpc.entity.OeActionWindow;
 import com.odoo.rpc.entity.OeView;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.OeExecutor;
-import com.odoo.rpc.json.util.OeBinder;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
+import com.odoo.rpc.util.OeBinder;
+import com.odoo.rpc.util.OeConst.OeActionType;
+import com.odoo.rpc.util.OeConst.OeModel;
+import com.odoo.rpc.util.OeConst.OeViewMode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.OeModel.ACTION_CLIENT;
-import static com.odoo.rpc.OeConst.OeModel.ACTION_WINDOW;
-import static com.odoo.rpc.OeConst.OeModel.VIEWS;
-import static com.odoo.rpc.OeConst.OeViewMode.FORM;
 import static com.odoo.rpc.boundary.OeViewService.Fun.FIELDS_VIEW_GET;
+import static com.odoo.rpc.util.OeConst.OeModel.ACTION_CLIENT;
+import static com.odoo.rpc.util.OeConst.OeModel.ACTION_WINDOW;
+import static com.odoo.rpc.util.OeConst.OeModel.VIEWS;
+import static com.odoo.rpc.util.OeConst.OeViewMode.FORM;
 
 /**
  * OeViewService for find Odoo view (ir.ui.view) by findById, finAll
@@ -135,7 +135,7 @@ public class OeViewService extends AbstractOeService<OeView> {
         List<Object> args = new ArrayList<Object>(3);
         args.add(viewId);
         args.add(((viewMode == null) ? FORM.getName() : viewMode));
-        args.add(OeJsonUtil.parseAsJsonElement(context));
+        args.add(OeJUtil.parseAsJsonElement(context));
         Object result = executor.execute(modelName, FIELDS_VIEW_GET.getName(), args, false);
         return OeBinder.bind(result.toString(), OeView.class, this);
     }

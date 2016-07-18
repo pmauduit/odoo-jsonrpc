@@ -36,7 +36,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonObject;
+import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonObject;
 
 /**
  * Utility class for Http connection

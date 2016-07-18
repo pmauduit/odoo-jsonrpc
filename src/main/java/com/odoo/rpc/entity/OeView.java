@@ -17,9 +17,9 @@
 package com.odoo.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import com.odoo.rpc.OeConst.OeModel;
-import com.odoo.rpc.OeConst.OeViewMode;
 import com.odoo.rpc.boundary.OeViewService;
+import com.odoo.rpc.util.OeConst.OeModel;
+import com.odoo.rpc.util.OeConst.OeViewMode;
 import com.odoo.rpc.util.OeUtil;
 
 import java.util.Arrays;

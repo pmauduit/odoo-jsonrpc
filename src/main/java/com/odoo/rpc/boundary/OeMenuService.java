@@ -16,12 +16,12 @@
 
 package com.odoo.rpc.boundary;
 
-import com.odoo.rpc.OeConst.JsonMenu;
 import com.odoo.rpc.entity.OeGroup;
 import com.odoo.rpc.entity.OeMenu;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.OeExecutor;
-import com.odoo.rpc.json.util.OeBinder;
+import com.odoo.rpc.json.util.OeJEndPoint.Menu;
+import com.odoo.rpc.util.OeBinder;
 import com.odoo.rpc.util.OeCriteriaBuilder;
 import com.odoo.rpc.util.OeUtil;
 
@@ -34,12 +34,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.odoo.rpc.OeConst.OeModel.MENUS;
 import static com.odoo.rpc.boundary.OeMenuService.Fun.LOAD_MENUS;
 import static com.odoo.rpc.entity.OeMenu._GROUPS_ID;
 import static com.odoo.rpc.entity.OeMenu._GROUPS_ID_ID;
 import static com.odoo.rpc.entity.OeMenu._PARENT_ID;
 import static com.odoo.rpc.entity.OeMenu._PARENT_ID_ID;
+import static com.odoo.rpc.util.OeConst.OeModel.MENUS;
 
 /**
  * Service to manage {@link OeMenu}
@@ -87,7 +87,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
     /**
      * load logged in user menus
      * <p>
-     * Check if odoo version less than 8 then call {@link JsonMenu#LOAD}
+     * Check if odoo version less than 8 then call {@link Menu#LOAD}
      * else call {@link Fun#LOAD_MENUS}
      *
      * @return User menus in {@link Map}
@@ -100,7 +100,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("session_id", executor.getSessionId());
             params.put("context", executor.getJsonContext());
-            return executor.execute(JsonMenu.LOAD.getPath(), params);
+            return executor.execute(Menu.LOAD.getPath(), params);
         } else {
             return executor.execute(name, LOAD_MENUS.getName());
         }

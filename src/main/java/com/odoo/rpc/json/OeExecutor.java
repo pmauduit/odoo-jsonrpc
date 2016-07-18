@@ -18,10 +18,10 @@ package com.odoo.rpc.json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.odoo.rpc.OeConst.OeModel;
 import com.odoo.rpc.entity.OeVersion;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.util.OeJsonObject;
+import com.odoo.rpc.util.OeConst.OeModel;
 import com.odoo.rpc.util.OeUtil;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -31,21 +31,21 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.odoo.rpc.OeConst.JsonDataSet.CALL_KW;
-import static com.odoo.rpc.OeConst.JsonDataSet.SEARCH_READ;
-import static com.odoo.rpc.OeConst.JsonSession.AUTHENTICATE;
-import static com.odoo.rpc.OeConst.JsonSession.DESTROY;
-import static com.odoo.rpc.OeConst.OeFun.CREATE;
-import static com.odoo.rpc.OeConst.OeFun.SEARCH_COUNT;
-import static com.odoo.rpc.OeConst.OeFun.UNLINK;
-import static com.odoo.rpc.OeConst.OeFun.WRITE;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
-import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonArrayToMapArray;
-import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonToMap;
-import static com.odoo.rpc.json.util.OeJsonUtil.margeJsonObject;
-import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonArray;
-import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonElement;
-import static com.odoo.rpc.json.util.OeJsonUtil.parseAsJsonObject;
+import static com.odoo.rpc.json.util.OeJEndPoint.DataSet.CALL_KW;
+import static com.odoo.rpc.json.util.OeJEndPoint.DataSet.SEARCH_READ;
+import static com.odoo.rpc.json.util.OeJEndPoint.Session.AUTHENTICATE;
+import static com.odoo.rpc.json.util.OeJEndPoint.Session.DESTROY;
+import static com.odoo.rpc.json.util.OeJUtil.convertJsonArrayToMapArray;
+import static com.odoo.rpc.json.util.OeJUtil.convertJsonToMap;
+import static com.odoo.rpc.json.util.OeJUtil.margeJsonObject;
+import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonArray;
+import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonElement;
+import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonObject;
+import static com.odoo.rpc.util.OeConst.OeFun.CREATE;
+import static com.odoo.rpc.util.OeConst.OeFun.SEARCH_COUNT;
+import static com.odoo.rpc.util.OeConst.OeFun.UNLINK;
+import static com.odoo.rpc.util.OeConst.OeFun.WRITE;
 
 /**
  * @author Ahmed El-mawaziny

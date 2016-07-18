@@ -37,9 +37,9 @@ import java.util.logging.Logger;
  * @author Ahmed El-mawaziny
  * @since 1.0
  */
-public class OeJsonUtil {
+public class OeJUtil {
 
-    private static final Logger LOG = Logger.getLogger(OeJsonUtil.class.getName());
+    private static final Logger LOG = Logger.getLogger(OeJUtil.class.getName());
 
     /**
      * static method to convert json string to map

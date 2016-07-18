@@ -17,7 +17,7 @@
 package com.odoo.rpc.entity;
 
 import com.google.gson.annotations.SerializedName;
-import com.odoo.rpc.OeConst.OeFieldType;
+import com.odoo.rpc.util.OeConst.OeFieldType;
 import com.odoo.rpc.util.OeUtil;
 
 import java.io.Serializable;
@@ -32,6 +32,7 @@ public class OeField implements Serializable {
     public static final String _TYPE = "type", _VIEWS = "views", _LABEL = "string", _READONLY = "readonly", _HELP = "help",
             _STORE = "store", _RELATION = "relation", _SELECTION = "selection", _REQUIRED = "required", _DOMAIN = "domain",
             _COMPANY_DEPENDENT = "company_dependent", _SIZE = "size", _DIGITS = "digits";
+
     private static final long serialVersionUID = -8700005699990251758L;
     private String type;
     private Map<String, OeView> views;
@@ -149,12 +150,12 @@ public class OeField implements Serializable {
         return domain;
     }
 
-    public void setDomain(String domain) {
-        this.domain = OeUtil.convertTupleStringToArray(domain);
-    }
-
     public void setDomain(Object[] domain) {
         this.domain = domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = OeUtil.convertTupleStringToArray(domain);
     }
 
     public boolean isCompanyDependent() {

@@ -17,7 +17,7 @@
 package com.odoo.rpc.exception;
 
 import com.google.gson.JsonObject;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
 
 import java.util.Map;
 
@@ -94,7 +94,7 @@ public class OeRpcException extends Exception {
         if (err.containsKey("data")) {
             Object data = err.get("data");
             if (data != null) {
-                Map dataJson = OeJsonUtil.convertJsonToMap(OeJsonUtil.parseAsJsonObject(data));
+                Map dataJson = OeJUtil.convertJsonToMap(OeJUtil.parseAsJsonObject(data));
                 if (dataJson.containsKey("debug")) {
                     Object debug = dataJson.get("debug");
                     if (debug != null) {
@@ -123,7 +123,7 @@ public class OeRpcException extends Exception {
             }
         } else if (response.has("error")) {
             if (response.get("error").isJsonObject()) {
-                throw new OeRpcException(OeJsonUtil.convertJsonToMap(response.getAsJsonObject("error")));
+                throw new OeRpcException(OeJUtil.convertJsonToMap(response.getAsJsonObject("error")));
             } else {
                 throw new OeRpcException(response.get("error").getAsString());
             }

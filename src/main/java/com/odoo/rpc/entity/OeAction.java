@@ -16,7 +16,7 @@
 
 package com.odoo.rpc.entity;
 
-import com.odoo.rpc.OeConst.OeActionType;
+import com.odoo.rpc.util.OeConst.OeActionType;
 import com.odoo.rpc.util.OeUtil;
 
 import java.io.Serializable;
@@ -55,12 +55,12 @@ public class OeAction implements Serializable {
         return type;
     }
 
-    public void setType(OeActionType type) {
-        this.type = type;
-    }
-
     public void setType(String type) {
         this.type = OeActionType.value(type);
+    }
+
+    public void setType(OeActionType type) {
+        this.type = type;
     }
 
     @Override

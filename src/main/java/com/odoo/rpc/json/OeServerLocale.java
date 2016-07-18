@@ -20,16 +20,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.odoo.rpc.entity.OeLocale;
 import com.odoo.rpc.exception.OeRpcException;
+import com.odoo.rpc.json.util.OeJUtil;
 import com.odoo.rpc.json.util.OeJsonObject;
-import com.odoo.rpc.json.util.OeJsonUtil;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.odoo.rpc.OeConst.JsonSession.GET_LANG_LIST;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
+import static com.odoo.rpc.json.util.OeJEndPoint.Session.GET_LANG_LIST;
 
 /**
  * OeServerLocale class for listing Odoo locales as java locale
@@ -101,7 +101,7 @@ public class OeServerLocale implements Serializable {
         JsonArray result = new OeJsonObject(response).getAsJsonArray("result");
         Object[] langs = new Object[result.size()];
         for (int i = 0; i < result.size(); i++) {
-            langs[i] = OeJsonUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
+            langs[i] = OeJUtil.convertJsonArray(result.get(i).getAsJsonArray(), Object[].class);
         }
         return langs;
     }

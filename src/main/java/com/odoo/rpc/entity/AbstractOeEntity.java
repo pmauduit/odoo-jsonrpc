@@ -23,15 +23,15 @@ import com.odoo.rpc.boundary.OeUserService;
 import java.io.Serializable;
 import java.util.Date;
 
-import static com.odoo.rpc.OeConst._COL_CREATE_DATE;
-import static com.odoo.rpc.OeConst._COL_CREATE_UID;
-import static com.odoo.rpc.OeConst._COL_DISPLAY_NAME;
-import static com.odoo.rpc.OeConst._COL_ID;
-import static com.odoo.rpc.OeConst._COL_LAST_UPDATE;
-import static com.odoo.rpc.OeConst._COL_NAME;
-import static com.odoo.rpc.OeConst._COL_WRITE_DATE;
-import static com.odoo.rpc.OeConst._COL_WRITE_UID;
 import static com.odoo.rpc.boundary.AbstractOeService.findById;
+import static com.odoo.rpc.util.OeConst._COL_CREATE_DATE;
+import static com.odoo.rpc.util.OeConst._COL_CREATE_UID;
+import static com.odoo.rpc.util.OeConst._COL_DISPLAY_NAME;
+import static com.odoo.rpc.util.OeConst._COL_ID;
+import static com.odoo.rpc.util.OeConst._COL_LAST_UPDATE;
+import static com.odoo.rpc.util.OeConst._COL_NAME;
+import static com.odoo.rpc.util.OeConst._COL_WRITE_DATE;
+import static com.odoo.rpc.util.OeConst._COL_WRITE_UID;
 
 /**
  * @param <T>

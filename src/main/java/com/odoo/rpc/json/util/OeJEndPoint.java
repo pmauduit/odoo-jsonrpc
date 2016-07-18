@@ -14,322 +14,26 @@
  * limitations under the License.
  */
 
-package com.odoo.rpc;
-
-import static com.odoo.rpc.util.OeUtil.isNULL;
+package com.odoo.rpc.json.util;
 
 /**
  * @author Ahmed El-mawaziny
  */
-public class OeConst {
+public class OeJEndPoint {
 
-    public static final String _COL_ID = "id", _COL_NAME = "name", _COL_CREATE_DATE = "create_date",
-            _COL_WRITE_UID = "write_uid", _COL_CREATE_UID = "create_uid", _COL_DISPLAY_NAME = "display_name",
-            _COL_LAST_UPDATE = "__last_update", _COL_WRITE_DATE = "write_date",
-            _RS_WEB = "/web", _RS_WEB_CLIENT = "/webclient", _RS_DATA_SET = "/dataset", _RS_VIEW = "/view",
-            _RS_TREE_VIEW = "/treeview", _RS_ACTION = "/action", _RS_EXPORT = "/export", _RS_PROXY = "/proxy",
-            _RS_MENU = "/menu", _RS_DATABASE = "/database", _RS_SESSION = "/session";
+    public static final String _RS_WEB = "/web";
+    public static final String _RS_WEB_CLIENT = "/webclient";
+    public static final String _RS_DATA_SET = "/dataset";
+    public static final String _RS_VIEW = "/view";
+    public static final String _RS_TREE_VIEW = "/treeview";
+    public static final String _RS_ACTION = "/action";
+    public static final String _RS_EXPORT = "/export";
+    public static final String _RS_PROXY = "/proxy";
+    public static final String _RS_MENU = "/menu";
+    public static final String _RS_DATABASE = "/database";
+    public static final String _RS_SESSION = "/session";
 
-    public enum OeOperator {
-
-        EQUALS("="),
-        ILIKE("ilike"),
-        IN("in"),
-        OR("|"),
-        AND("&");
-
-        private final String symbol;
-
-        OeOperator(String operator) {
-            this.symbol = operator;
-        }
-
-        public String getSymbol() {
-            return symbol;
-        }
-
-        @Override
-        public String toString() {
-            return symbol;
-        }
-    }
-
-    public enum OeModel {
-
-        MODULES("ir.module.module"),
-        HR_TIME_SHEET_SHEET("hr_timesheet_sheet.sheet"),
-        HR_ATTENDANCE("hr.attendance"),
-        PARTNERS("res.partner"),
-        COMPANY("res.company"),
-        BPM_MESSAGING("bpm.messaging"),
-        BPM_ANNOUNCEMENT("bpm.announcement"),
-        SERVICE_GROUP("res.service.group"),
-        BPM_SERVICE("res.service"),
-        USERS("res.users"),
-        GROUPS("res.groups"),
-        MENUS("ir.ui.menu"),
-        VIEWS("ir.ui.view"),
-        ACTION_CLIENT("ir.actions.client"),
-        ATTACHMENT("ir.attachment"),
-        SERVICE_REQUEST("request.service"),
-        REQUEST_SERVICE_SERVICES("request.service.services"),
-        FINANCIAL_STATEMENT("financial.statement"),
-        ACTION_WINDOW("ir.actions.act_window"),
-        LANGUAGE("res.lang"),
-        MESSAGES("mail.message");
-
-        private final String name;
-
-        OeModel(String name) {
-            this.name = name;
-        }
-
-        public static OeModel value(String name) {
-            if (!isNULL(name)) {
-                for (OeModel oeModel : values()) {
-                    if (oeModel.name.equals(name)) {
-                        return oeModel;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum OeActionType {
-
-        ACTION_CLIENT("ir.actions.client"),
-        ACTION_WINDOW("ir.actions.act_window");
-        private final String name;
-
-        OeActionType(String name) {
-            this.name = name;
-        }
-
-        public static OeActionType value(String name) {
-            if (!isNULL(name)) {
-                for (OeActionType oeActionType : values()) {
-                    if (oeActionType.name.equals(name)) {
-                        return oeActionType;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum OeViewMode {
-
-        FORM("form"),
-        KANBAN("kanban"),
-        TREE("tree");
-
-        private final String name;
-
-        OeViewMode(String name) {
-            this.name = name;
-        }
-
-        public static OeViewMode value(String name) {
-            if (!isNULL(name)) {
-                return valueOf(name.toUpperCase());
-            }
-            return null;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum OeFieldType {
-
-        BOOLEAN("boolean"),
-        INTEGER("integer"),
-        FLOAT("float"),
-        CHAR("char"),
-        TEXT("text"),
-        BINARY("binary"),
-        DATETIME("datetime"),
-        DATE("date"),
-        SELECTION("selection"),
-        MANY2ONE("many2one"),
-        ONE2MANY("one2many"),
-        MANY2MANY("many2many"),
-        HTML("html");
-
-        private final String name;
-
-        OeFieldType(String name) {
-            this.name = name;
-        }
-
-        public static OeFieldType value(String name) {
-            if (!isNULL(name)) {
-                return valueOf(name.toUpperCase());
-            }
-            return null;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum OeFun {
-
-        LOGIN("login"),
-        CREATE("create"),
-        READ("read"),
-        WRITE("write"),
-        UNLINK("unlink"),
-        SEARCH("search"),
-        SEARCH_COUNT("search_count"),
-        LIST("list"),
-        COPY("copy"),
-        EXECUTE("execute");
-
-        private final String name;
-
-        OeFun(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum Direction {
-
-        RTL("rtl"),
-        LTR("ltr");
-
-        private final String dir;
-
-        Direction(String dir) {
-            this.dir = dir;
-        }
-
-        public static Direction value(String name) {
-            if (!isNULL(name)) {
-                return valueOf(name.toUpperCase());
-            }
-            return null;
-        }
-
-        public String getDir() {
-            return dir;
-        }
-
-        @Override
-        public String toString() {
-            return dir;
-        }
-    }
-
-    public enum OeAttr {
-
-        STRING("string"),
-        FOR("for"),
-        CLASS("class");
-
-        private final String name;
-
-        OeAttr(String name) {
-            this.name = name;
-        }
-
-        public static OeAttr value(String name) {
-            return valueOf(name.toUpperCase());
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum OeViewElement {
-
-        LABEL("label"),
-        P("p"),
-        SHEET("sheet"),
-        GROUP("group"),
-        NOTEBOOK("notebook");
-
-        private final String name;
-
-        OeViewElement(String name) {
-            this.name = name;
-        }
-
-        public static OeViewElement value(String name) {
-            return valueOf(name.toUpperCase());
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum SortType {
-        ASC {
-            @Override
-            public String toString() {
-                return " ASC";
-            }
-        }, DESC {
-            @Override
-            public String toString() {
-                return " DESC";
-            }
-        }
-    }
-
-    public enum JsonSession {
+    public enum Session {
 
         GET_LANG_LIST {
             @Override
@@ -384,7 +88,7 @@ public class OeConst {
             }
         };
 
-        public static JsonSession value(String name) {
+        public static Session value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -393,7 +97,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonDatabase {
+    public enum Database {
 
         GET_LIST {
             @Override
@@ -422,7 +126,7 @@ public class OeConst {
             }
         };
 
-        public static JsonDatabase value(String name) {
+        public static Database value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -431,7 +135,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonMenu {
+    public enum Menu {
 
         GET_USER_ROOTS {
             @Override
@@ -455,7 +159,7 @@ public class OeConst {
             }
         };
 
-        public static JsonMenu value(String name) {
+        public static Menu value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -464,7 +168,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonWebClient {
+    public enum WebClient {
 
         VERSION_INFO {
             @Override
@@ -499,7 +203,7 @@ public class OeConst {
             }
         };
 
-        public static JsonWebClient value(String name) {
+        public static WebClient value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -508,7 +212,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonDataSet {
+    public enum DataSet {
 
         SEARCH_READ {
             @Override
@@ -547,7 +251,7 @@ public class OeConst {
             }
         };
 
-        public static JsonDataSet value(String name) {
+        public static DataSet value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -556,7 +260,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonView {
+    public enum View {
 
         ADD_CUSTOM {
             @Override
@@ -570,7 +274,7 @@ public class OeConst {
             }
         };
 
-        public static JsonView value(String name) {
+        public static View value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -579,7 +283,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonTreeView {
+    public enum TreeView {
 
         ACTION {
             @Override
@@ -588,7 +292,7 @@ public class OeConst {
             }
         };
 
-        public static JsonTreeView value(String name) {
+        public static TreeView value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -597,7 +301,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonAction {
+    public enum Action {
 
         LOAD {
             @Override
@@ -611,7 +315,7 @@ public class OeConst {
             }
         };
 
-        public static JsonAction value(String name) {
+        public static Action value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -620,7 +324,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonExport {
+    public enum Export {
 
         FORMATS {
             @Override
@@ -639,7 +343,7 @@ public class OeConst {
             }
         };
 
-        public static JsonExport value(String name) {
+        public static Export value(String name) {
             return valueOf(name.toUpperCase());
         }
 
@@ -648,7 +352,7 @@ public class OeConst {
         }
     }
 
-    public enum JsonProxy {
+    public enum Proxy {
 
         LOAD {
             @Override
@@ -657,7 +361,7 @@ public class OeConst {
             }
         };
 
-        public static JsonProxy value(String name) {
+        public static Proxy value(String name) {
             return valueOf(name.toUpperCase());
         }
 

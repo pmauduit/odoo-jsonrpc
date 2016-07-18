@@ -16,10 +16,10 @@
 
 package com.odoo.rpc.entity;
 
-import com.odoo.rpc.OeConst.OeModel;
-import com.odoo.rpc.OeConst.OeViewMode;
 import com.odoo.rpc.boundary.OeActionWindowService;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
+import com.odoo.rpc.util.OeConst.OeModel;
+import com.odoo.rpc.util.OeConst.OeViewMode;
 import com.odoo.rpc.util.OeUtil;
 
 import java.util.ArrayList;
@@ -119,7 +119,7 @@ public class OeActionWindow extends AbstractOeEntity<OeActionWindowService> {
     }
 
     public Map<String, Object> getActionContext() {
-        return OeJsonUtil.convertStringToMap(context);
+        return OeJUtil.convertStringToMap(context);
     }
 
     public String getUsage() {

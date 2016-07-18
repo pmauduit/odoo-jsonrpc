@@ -19,17 +19,17 @@ package com.odoo.rpc.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.odoo.rpc.exception.OeRpcException;
+import com.odoo.rpc.json.util.OeJUtil;
 import com.odoo.rpc.json.util.OeJsonObject;
-import com.odoo.rpc.json.util.OeJsonUtil;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.io.Serializable;
 
-import static com.odoo.rpc.OeConst.JsonDatabase.CREATE;
-import static com.odoo.rpc.OeConst.JsonDatabase.DROP;
-import static com.odoo.rpc.OeConst.JsonDatabase.DUPLICATE;
-import static com.odoo.rpc.OeConst.JsonDatabase.GET_LIST;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
+import static com.odoo.rpc.json.util.OeJEndPoint.Database.CREATE;
+import static com.odoo.rpc.json.util.OeJEndPoint.Database.DROP;
+import static com.odoo.rpc.json.util.OeJEndPoint.Database.DUPLICATE;
+import static com.odoo.rpc.json.util.OeJEndPoint.Database.GET_LIST;
 
 /**
  * OeDatabase class is for manage odoo databases
@@ -162,7 +162,7 @@ public class OeDatabase implements Serializable {
     public final String[] doList() throws OeRpcException {
         String reqUrl = url.setPath(GET_LIST.getPath()).toString();
         JsonObject response = postWithParams(reqUrl, emptyObject);
-        return OeJsonUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
+        return OeJUtil.convertJsonArray(new OeJsonObject(response).getAsJsonArray("result"), String[].class);
     }
 
     /**

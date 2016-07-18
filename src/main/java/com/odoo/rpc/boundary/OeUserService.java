@@ -25,7 +25,7 @@ import com.odoo.rpc.json.OeExecutor;
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.OeModel.USERS;
+import static com.odoo.rpc.util.OeConst.OeModel.USERS;
 
 /**
  * OeUserService for find Odoo user (res.user) by findById, finAll or custom search criteria

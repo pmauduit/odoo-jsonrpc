@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.odoo.rpc.OeConst.OeModel.GROUPS;
-import static com.odoo.rpc.OeConst._COL_ID;
 import static com.odoo.rpc.entity.OeGroup._USERS_ID_ID;
+import static com.odoo.rpc.util.OeConst.OeModel.GROUPS;
+import static com.odoo.rpc.util.OeConst._COL_ID;
 
 /**
  * Service to manage {@link OeGroup}

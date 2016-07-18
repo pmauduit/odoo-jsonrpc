@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.odoo.rpc.OeConst.OeFun.SEARCH;
-import static com.odoo.rpc.OeConst.OeModel.GROUPS;
-import static com.odoo.rpc.json.util.OeJsonUtil.convertJsonArray;
+import static com.odoo.rpc.json.util.OeJUtil.convertJsonArray;
+import static com.odoo.rpc.util.OeConst.OeFun.SEARCH;
+import static com.odoo.rpc.util.OeConst.OeModel.GROUPS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

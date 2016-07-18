@@ -24,7 +24,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.odoo.rpc.entity.OeView;
 import com.odoo.rpc.json.util.GsonFactory;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
 
 import java.lang.reflect.Type;
 
@@ -45,7 +45,7 @@ public class OeViewDeserializer implements JsonDeserializer<OeView> {
             if (asJsonPrimitive.isBoolean()) {
                 return null;
             } else if (asJsonPrimitive.isString()) {
-                json = OeJsonUtil.parseAsJsonElement(json.getAsString());
+                json = OeJUtil.parseAsJsonElement(json.getAsString());
             }
         }
         Gson gson = GsonFactory.createGsonBuilder().create();

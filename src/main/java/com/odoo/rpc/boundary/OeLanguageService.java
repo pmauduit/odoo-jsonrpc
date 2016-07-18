@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.OeModel.LANGUAGE;
 import static com.odoo.rpc.entity.OeLanguage._CODE;
+import static com.odoo.rpc.util.OeConst.OeModel.LANGUAGE;
 
 /**
  * Service to manage {@link OeLanguage}

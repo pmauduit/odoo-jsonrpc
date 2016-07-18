@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.odoo.rpc.json.util;
+package com.odoo.rpc.util;
 
 import com.google.gson.Gson;
 import com.odoo.rpc.boundary.AbstractOeService;
 import com.odoo.rpc.entity.AbstractOeEntity;
 import com.odoo.rpc.entity.OeView;
+import com.odoo.rpc.json.util.GsonFactory;
 import com.odoo.rpc.json.util.adaptor.OeViewDeserializer;
 
 /**

@@ -25,11 +25,15 @@ import org.apache.http.client.utils.URIBuilder;
 
 import java.io.Serializable;
 
-import static com.odoo.rpc.OeConst.JsonWebClient.VERSION_INFO;
 import static com.odoo.rpc.json.util.HttpClient.postWithParams;
+import static com.odoo.rpc.json.util.OeJEndPoint.WebClient.VERSION_INFO;
 
 /**
+ * OeServerVersion to read and parse Odoo version
+ *
  * @author Ahmed El-mawaziny
+ * @see OeVersion
+ * @since 1.0
  */
 public class OeServerVersion implements Serializable {
 
@@ -49,6 +53,15 @@ public class OeServerVersion implements Serializable {
         version = getServerVersion();
     }
 
+    /**
+     * get singleton instance of {@link OeServerVersion}
+     *
+     * @param scheme http or https
+     * @param host   host name or ip address
+     * @param port   port number
+     * @return singleton instance of {@link OeServerVersion}
+     * @throws OeRpcException
+     */
     public static OeServerVersion getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
             synchronized (OeServerVersion.class) {
@@ -76,6 +89,12 @@ public class OeServerVersion implements Serializable {
         return port;
     }
 
+    /**
+     * connect and read Odoo version then process version json object
+     *
+     * @return OeVersion
+     * @throws OeRpcException
+     */
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();
         JsonObject response = postWithParams(reqUrl);

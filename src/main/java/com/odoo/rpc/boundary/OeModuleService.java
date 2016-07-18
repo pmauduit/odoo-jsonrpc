@@ -19,12 +19,12 @@ package com.odoo.rpc.boundary;
 import com.odoo.rpc.entity.OeModule;
 import com.odoo.rpc.exception.OeRpcException;
 import com.odoo.rpc.json.OeExecutor;
-import com.odoo.rpc.json.util.OeJsonUtil;
+import com.odoo.rpc.json.util.OeJUtil;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.odoo.rpc.OeConst.OeModel.MODULES;
+import static com.odoo.rpc.util.OeConst.OeModel.MODULES;
 
 /**
  * OeModuleService for find Odoo module (ir.module.module) by findById, finAll or
@@ -60,7 +60,7 @@ public class OeModuleService extends AbstractOeService<OeModule> {
      * @throws OeRpcException
      */
     public boolean install(Object... ids) throws OeRpcException {
-        executor.execute(name, Fun.INSTALL.name, OeJsonUtil.parseAsJsonArray(ids));
+        executor.execute(name, Fun.INSTALL.name, OeJUtil.parseAsJsonArray(ids));
         return true;
     }
 

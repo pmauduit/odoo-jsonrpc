@@ -16,8 +16,8 @@
 
 package com.odoo.rpc.entity;
 
-import com.odoo.rpc.OeConst.Direction;
 import com.odoo.rpc.boundary.OeLanguageService;
+import com.odoo.rpc.util.OeConst.Direction;
 import com.odoo.rpc.util.OeUtil;
 
 import java.util.Arrays;
