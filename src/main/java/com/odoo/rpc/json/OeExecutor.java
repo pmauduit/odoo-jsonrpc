@@ -104,12 +104,6 @@ public class OeExecutor implements Serializable {
         return instance;
     }
 
-    public synchronized static OeExecutor getNewInstance(String scheme, String host, int port, String database,
-                                                         String username, String password) throws OeRpcException {
-        instance = new OeExecutor(scheme, host, port, database, username, password);
-        return instance;
-    }
-
     public static OeExecutor getInstance(String host, int port, String database, String username, String password)
             throws OeRpcException {
         if (instance == null) {
@@ -122,12 +116,6 @@ public class OeExecutor implements Serializable {
         return instance;
     }
 
-    public synchronized static OeExecutor getNewInstance(String host, int port, String database, String username,
-                                                         String password) throws OeRpcException {
-        instance = new OeExecutor(host, port, database, username, password);
-        return instance;
-    }
-
     public static OeExecutor getInstance(String host, String database, String username, String password)
             throws OeRpcException {
         if (instance == null) {
@@ -137,12 +125,6 @@ public class OeExecutor implements Serializable {
                 }
             }
         }
-        return instance;
-    }
-
-    public synchronized static OeExecutor getNewInstance(String host, String database, String username, String password)
-            throws OeRpcException {
-        instance = new OeExecutor(host, database, username, password);
         return instance;
     }
 

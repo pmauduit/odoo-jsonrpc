@@ -83,19 +83,6 @@ public class OeServerLocale implements Serializable {
         return instance;
     }
 
-    /**
-     * Constructor to build uri and list languages as array of object
-     *
-     * @param scheme http or https
-     * @param host   host name or ip address
-     * @param port   port number
-     * @throws OeRpcException
-     */
-    public synchronized static OeServerLocale getNewInstance(String scheme, String host, int port) throws OeRpcException {
-        instance = new OeServerLocale(scheme, host, port);
-        return instance;
-    }
-
     public String getScheme() {
         return scheme;
     }

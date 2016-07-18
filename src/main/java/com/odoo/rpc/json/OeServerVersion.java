@@ -60,12 +60,6 @@ public class OeServerVersion implements Serializable {
         return instance;
     }
 
-    public synchronized static OeServerVersion getNewInstance(String scheme, String host, int port)
-            throws OeRpcException {
-        instance = new OeServerVersion(scheme, host, port);
-        return instance;
-    }
-
     public OeVersion getVersion() {
         return version;
     }

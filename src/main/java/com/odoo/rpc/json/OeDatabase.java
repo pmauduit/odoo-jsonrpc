@@ -104,19 +104,6 @@ public class OeDatabase implements Serializable {
     }
 
     /**
-     * Constructor to build uri
-     *
-     * @param scheme   http or https
-     * @param host     host name or ip address
-     * @param port     port number
-     * @param adminPwd admin password
-     */
-    public synchronized static OeDatabase getNewInstance(String scheme, String host, int port, Object adminPwd) {
-        instance = new OeDatabase(scheme, host, port, adminPwd);
-        return instance;
-    }
-
-    /**
      * Constructor to build uri with no admin password
      *
      * @param scheme http or https
@@ -135,18 +122,6 @@ public class OeDatabase implements Serializable {
     }
 
     /**
-     * Constructor to build uri with no admin password
-     *
-     * @param scheme http or https
-     * @param host   host name or ip address
-     * @param port   port number
-     */
-    public synchronized static OeDatabase getNewInstance(String scheme, String host, int port) {
-        instance = new OeDatabase(scheme, host, port);
-        return instance;
-    }
-
-    /**
      * Constructor to build uri without admin password, http and 8069
      *
      * @param host host name or ip password
@@ -159,16 +134,6 @@ public class OeDatabase implements Serializable {
                 }
             }
         }
-        return instance;
-    }
-
-    /**
-     * Constructor to build uri without admin password, http and 8069
-     *
-     * @param host host name or ip password
-     */
-    public synchronized static OeDatabase getNewInstance(String host) {
-        instance = new OeDatabase(host);
         return instance;
     }
 
