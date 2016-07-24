@@ -29,7 +29,6 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * OeJsonUtil is a utility class for converting json text to some java data types
@@ -38,8 +37,6 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class OeJUtil {
-
-    private static final Logger LOG = Logger.getLogger(OeJUtil.class.getName());
 
     /**
      * static method to convert json string to map

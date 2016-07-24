@@ -69,7 +69,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      *
      * @param oeAction {@link OeAction} "ir.actions.client" or "ir.actions.act_window"
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #getOeView(OeActionType, Long)
      */
     public OeView getOeView(OeAction oeAction) throws OeRpcException {
@@ -82,7 +82,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param actionType action type "ir.actions.client" or "ir.actions.act_window"
      * @param actionId   action id
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #getOeView(String, Long)
      */
     public OeView getOeView(OeActionType actionType, Long actionId) throws OeRpcException {
@@ -99,8 +99,8 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param actionType action type "ir.actions.client" or "ir.actions.act_window"
      * @param actionId   action id
      * @return OeView
-     * @throws OeRpcException
-     * @throws UnsupportedOperationException
+     * @throws OeRpcException                if Odoo response with error
+     * @throws UnsupportedOperationException if action type unknown
      */
     public OeView getOeView(String actionType, Long actionId) throws OeRpcException {
         String modelName;
@@ -128,7 +128,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
      * @param context   Odoo context
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public OeView getFieldsView(String modelName, Long viewId, String viewMode, Map<String, Object> context)
             throws OeRpcException {
@@ -147,7 +147,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
      * @param context   Odoo context
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #getFieldsView(String, Long, String, Map)
      */
     public OeView getFieldsView(String modelName, String viewMode, Map<String, Object> context) throws OeRpcException {
@@ -160,7 +160,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param modelName Odoo model name
      * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #getFieldsView(String, String, Map)
      */
     public OeView getFieldsView(String modelName, String viewMode) throws OeRpcException {
@@ -175,7 +175,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
      * @param context  Odoo context
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeModel
      * @see OeViewMode
      */
@@ -191,7 +191,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
      * @param context  Odoo context
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeModel
      * @see OeViewMode
      */
@@ -205,7 +205,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param oeModel  Odoo model name form {@link OeModel}
      * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeModel
      * @see OeViewMode
      */
@@ -219,7 +219,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param modelName Odoo model name or res model
      * @param viewMode  view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeViewMode
      */
     public OeView getFieldsView(String modelName, OeViewMode viewMode) throws OeRpcException {
@@ -233,7 +233,7 @@ public class OeViewService extends AbstractOeService<OeView> {
      * @param viewId   view id
      * @param viewMode view mode FORM, KANBAN, ..etc and if its null the default value form {@link OeViewMode}
      * @return OeView
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #getFieldsView(OeModel, Long, OeViewMode, Map)
      */
     public OeView getFieldsView(OeModel oeModel, Long viewId, OeViewMode viewMode) throws OeRpcException {

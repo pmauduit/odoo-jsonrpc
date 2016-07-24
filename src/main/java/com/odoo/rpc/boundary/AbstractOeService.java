@@ -70,7 +70,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param <OeM>    extends from {@link AbstractOeEntity}
      * @param <E>      extends from {@link AbstractOeService}
      * @return Odoo model found by id
-     * @throws Exception
+     * @throws Exception if any something went wrong
      * @see OeExecutor
      * @see AbstractOeService
      * @see AbstractOeEntity
@@ -262,7 +262,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param context Odoo context
      * @return list of custom Entities for Odoo models or Objects with
      * specific Odoo context
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(Map<String, Object> context, String... columns) throws OeRpcException {
         return find(Collections.emptyList(), null, null, null, context, columns);
@@ -276,7 +276,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with some
      * specific columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(OeCriteriaBuilder cb, String... columns) throws OeRpcException {
         return find(cb.getCriteria(), columns);
@@ -291,7 +291,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with some
      * specific columns and Odoo context
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(OeCriteriaBuilder cb, Map<String, Object> context, String... columns)
             throws OeRpcException {
@@ -306,7 +306,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns
      * @return list of custom Entities for Odoo models or Objects with some
      * custom list of search criteria and one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(List<Object> sc, String... columns) throws OeRpcException {
         return find(sc, (String) null, columns);
@@ -320,7 +320,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns
      * @return list of custom Entities for Odoo models or Objects with its id
      * and one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(Object[] ids, String... columns) throws OeRpcException {
         return find(ids, executor.getContext(), columns);
@@ -339,7 +339,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with list
      * of search criteria, Odoo context and one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public abstract List<M> find(List<Object> sc, Integer offset, Integer limit, String order,
                                  Map<String, Object> context, String... columns) throws OeRpcException;
@@ -350,7 +350,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(Object[] ids, Map<String, Object> context, String... columns) throws OeRpcException {
         OeCriteriaBuilder cb = new OeCriteriaBuilder();
@@ -367,7 +367,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #find(List, Integer, String...)
      * @see OeCriteriaBuilder
      */
@@ -384,7 +384,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #find(List, Integer, Integer, String, String...)
      */
     public List<M> find(List<Object> sc, Integer limit, String... columns) throws OeRpcException {
@@ -400,7 +400,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(OeCriteriaBuilder cb, String order, String... columns) throws OeRpcException {
         return find(cb.getCriteria(), order, columns);
@@ -415,7 +415,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with its id, Odoo context and
      * one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public List<M> find(List<Object> sc, String order, String... columns) throws OeRpcException {
         return find(sc, null, null, order, columns);
@@ -435,7 +435,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with one or more model columns
      * limited with limit and offset
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(List, Integer, Integer, String...)
      */
@@ -454,7 +454,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return list of custom Entities for Odoo models or Objects with one or more model columns
      * limited with limit and offset
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #find(List, Integer, Integer, String, String...)
      */
     public List<M> find(List<Object> sc, Integer offset, Integer limit, String... columns) throws OeRpcException {
@@ -471,7 +471,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
      * limited with limit and offset
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #find(OeCriteriaBuilder, Integer, Integer, String, String...)
      */
     public List<M> findRang(Integer offset, Integer limit, String order, String... columns)
@@ -490,7 +490,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
      * limited with limit and offset
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(List, Integer, Integer, String, String...)
      */
@@ -510,7 +510,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param columns one or more model columns to read
      * @return ordered list of custom Entities for Odoo models or Objects with one or more model columns
      * limited with limit and offset
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #find(List, Integer, Integer, String, Map, String...)
      */
     public List<M> find(List<Object> sc, Integer offset, Integer limit, String order, String... columns)
@@ -532,7 +532,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param context Odoo context
      * @return list of custom Entities for Odoo models or Objects with list
      * of search criteria, Odoo context and one or more model columns
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeBinder#bind(String, Class, AbstractOeService)
      */
     public <E extends AbstractOeService> List<M> find(E e, List<Object> sc, Integer offset, Integer limit,
@@ -551,7 +551,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param method method name
      * @return result as object
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #execute(String, Object[], Map)
      */
     public Object execute(String method) throws OeRpcException {
@@ -564,7 +564,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param method odoo method name
      * @param kwargs odoo kwargs
      * @return result as object
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #execute(String, Object[], Map)
      */
     public Object execute(String method, Map<String, Object> kwargs) throws OeRpcException {
@@ -577,7 +577,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param method odoo method name
      * @param args   odoo method args
      * @return result as object
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #execute(String, Object[], Map)
      */
     public Object execute(String method, Object[] args) throws OeRpcException {
@@ -591,7 +591,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param args   odoo method args
      * @param kwargs odoo kwargs
      * @return result as object
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public Object execute(String method, Object[] args, Map<String, Object> kwargs) throws OeRpcException {
         return executor.execute(getName(), method, args, kwargs);
@@ -606,7 +606,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param cb search criteria created with {@link OeCriteriaBuilder} (Odoo domain)
      * @return count
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #count(List)
      */
     public Long count(OeCriteriaBuilder cb) throws OeRpcException {
@@ -618,7 +618,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param sc search criteria (Odoo domain)
      * @return count
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeExecutor#count(String, List)
      */
     public Long count(List<Object> sc) throws OeRpcException {
@@ -630,7 +630,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param values record values
      * @return generated odoo id
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeExecutor#create(String, Map)
      */
     public Long create(Map<String, Object> values) throws OeRpcException {
@@ -643,7 +643,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param id     record id
      * @param values new values to update
      * @return true if record updated
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeExecutor#write(String, Object, Map)
      */
     public Boolean write(Object id, Map<String, Object> values) throws OeRpcException {
@@ -656,7 +656,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * @param id     record id
      * @param values new values to update
      * @return true if record updated
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #write(Object, Map)
      */
     public Boolean update(Object id, Map<String, Object> values) throws OeRpcException {
@@ -668,7 +668,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param ids ids to be removed
      * @return true if the record(s) removed
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeExecutor#unlike(String, Long...)
      */
     public Boolean unlike(Long... ids) throws OeRpcException {
@@ -680,7 +680,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param ids ids to be removed
      * @return true if the record(s) removed
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #unlike(Long...)
      */
     public Boolean delete(Long... ids) throws OeRpcException {

@@ -91,7 +91,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * else call {@link Fun#LOAD_MENUS}
      *
      * @return User menus in {@link Map}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeExecutor#execute(String, Map)
      * @see OeExecutor#execute(String, String)
      */
@@ -111,7 +111,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * v8. {@link #loadMenus() }
      *
      * @return user menus
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeBinder#bind(String, Class, AbstractOeService)
      * @see #loadMenus()
      */
@@ -139,7 +139,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      *
      * @param userId user id to get menus
      * @return list of {@link OeMenu}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeMenu
      * @see #addChildren(List, OeMenu[])
      * @see #loadOeMenus()
@@ -192,7 +192,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      *
      * @param userId user id to get menus
      * @return OeMenu root with id -1 and name root and its children linked
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeGroupService
      * @see OeGroup
      * @see #setMenuChildren(OeMenu, Long[])
@@ -223,7 +223,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      *
      * @param parentMenu root menu
      * @param oeGroupsId array of groups id
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #findByGroupIdParentId(Long, Long...)
      * @see OeMenu
      */
@@ -242,7 +242,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      *
      * @param columns array of columns
      * @return set of {@link OeMenu}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      */
     public Set<OeMenu> findByNoGroup(String... columns) throws OeRpcException {
@@ -259,7 +259,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * @param parentId menu parent id
      * @param columns  array of columns
      * @return set of {@link OeMenu}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(OeCriteriaBuilder, String...)
      */
@@ -276,7 +276,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      *
      * @param groupId group id(s)
      * @return set of {@link OeMenu}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(OeCriteriaBuilder, String...)
      */
@@ -292,7 +292,7 @@ public class OeMenuService extends AbstractOeService<OeMenu> {
      * @param parentId menu parent id
      * @param groupId  group id
      * @return set of menus
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(OeCriteriaBuilder, String...)
      */

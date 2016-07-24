@@ -54,7 +54,8 @@ public class OeServerLocale implements Serializable {
      * @param scheme http or https
      * @param host   host name or ip address
      * @param port   port number
-     * @throws OeRpcException
+     * @throws OeRpcException if doListLang throws an exception
+     * @see #doListLang()
      */
     private OeServerLocale(String scheme, String host, int port) throws OeRpcException {
         this.scheme = scheme;
@@ -70,7 +71,8 @@ public class OeServerLocale implements Serializable {
      * @param scheme http or https
      * @param host   host name or ip address
      * @param port   port number
-     * @throws OeRpcException
+     * @throws OeRpcException if the doListLang throws an exception
+     * @see #OeServerLocale(String, String, int)
      */
     public static OeServerLocale getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
@@ -95,6 +97,12 @@ public class OeServerLocale implements Serializable {
         return port;
     }
 
+    /**
+     * get Odoo languages
+     *
+     * @return array of objects
+     * @throws OeRpcException if Odoo response with error
+     */
     private Object[] doListLang() throws OeRpcException {
         String reqUrl = url.setPath(GET_LANG_LIST.getPath()).toString();
         JsonObject response = postWithParams(reqUrl);
@@ -114,7 +122,8 @@ public class OeServerLocale implements Serializable {
      * Convert languages to {@link OeLocale}
      *
      * @return list of {@link OeLocale}
-     * @throws OeRpcException
+     * @throws OeRpcException if something wrong happened during getting languages
+     * @see #doListLang()
      */
     public List<OeLocale> getOeLocales() throws OeRpcException {
         List<OeLocale> locales = new ArrayList<OeLocale>(languages.length);

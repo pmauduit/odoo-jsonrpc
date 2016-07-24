@@ -157,7 +157,7 @@ public class OeDatabase implements Serializable {
      * list all databases
      *
      * @return array of string with databases name
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public final String[] doList() throws OeRpcException {
         String reqUrl = url.setPath(GET_LIST.getPath()).toString();
@@ -173,7 +173,7 @@ public class OeDatabase implements Serializable {
      * @param lang         database language
      * @param password     database admin password
      * @return true if created
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public boolean doCreate(String databaseName, boolean demo, String lang, String password) throws OeRpcException {
         String reqUrl = url.setPath(CREATE.getPath()).toString();
@@ -217,7 +217,7 @@ public class OeDatabase implements Serializable {
      *
      * @param databaseName database name to drop it
      * @return true if dropped
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public boolean doDrop(String databaseName) throws OeRpcException {
         String reqUrl = url.setPath(DROP.getPath()).toString();
@@ -246,7 +246,7 @@ public class OeDatabase implements Serializable {
      * @param databaseName    database name to duplicate
      * @param newDatabaseName the duplicated database name
      * @return true if duplicated
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public boolean doDuplicate(String databaseName, String newDatabaseName) throws OeRpcException {
         String reqUrl = url.setPath(DUPLICATE.getPath()).toString();

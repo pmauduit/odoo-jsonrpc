@@ -64,7 +64,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      *
      * @param code language code
      * @return language Odoo model
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #findAny(OeCriteriaBuilder, String...)
      * @see OeCriteriaBuilder
      */
@@ -83,7 +83,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      * @param id     record id
      * @param values new values to update
      * @return true means record is successfully updated
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #write(Object, Map)
      */
     @Override
@@ -100,7 +100,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      * @param id     record id
      * @param values new values to update
      * @return true means record is successfully updated
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see super#write(Object, Map)
      */
     @Override
@@ -113,7 +113,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      *
      * @param ids ids to be removed
      * @return true if the record is successfully deleted or unlike
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #delete(Long...)
      */
     @Override
@@ -126,7 +126,7 @@ public class OeLanguageService extends AbstractOeService<OeLanguage> {
      *
      * @param ids ids to be removed
      * @return true if the record is successfully deleted or unlike
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see #write(Object, Map)
      * @see super#unlike(Long...)
      */

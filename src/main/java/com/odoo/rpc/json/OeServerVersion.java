@@ -60,7 +60,7 @@ public class OeServerVersion implements Serializable {
      * @param host   host name or ip address
      * @param port   port number
      * @return singleton instance of {@link OeServerVersion}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public static OeServerVersion getInstance(String scheme, String host, int port) throws OeRpcException {
         if (instance == null) {
@@ -93,7 +93,7 @@ public class OeServerVersion implements Serializable {
      * connect and read Odoo version then process version json object
      *
      * @return OeVersion
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     private OeVersion getServerVersion() throws OeRpcException {
         String reqUrl = url.setPath(VERSION_INFO.getPath()).toString();

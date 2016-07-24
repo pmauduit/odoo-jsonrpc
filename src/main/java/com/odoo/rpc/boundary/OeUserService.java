@@ -63,7 +63,7 @@ public class OeUserService extends AbstractOeService<OeUser> {
      *
      * @param userId user id
      * @return OeMenu root and all menus are sub menus in it
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeMenuService#findByUserId(Long)
      */
     public OeMenu findMenusByUserId(Long userId) throws OeRpcException {
@@ -75,7 +75,7 @@ public class OeUserService extends AbstractOeService<OeUser> {
      *
      * @param userId user id
      * @return List of {@link OeMenu}
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeMenuService#findByUserIdAllInOne(Long)
      */
     public List<OeMenu> findMenusByUserIdAllInOne(Long userId) throws OeRpcException {
@@ -87,7 +87,7 @@ public class OeUserService extends AbstractOeService<OeUser> {
      *
      * @param code language code
      * @return OeLanguage by code
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeLanguageService#findByCode(String, String...)
      */
     public OeLanguage findLanguageByCode(String code) throws OeRpcException {

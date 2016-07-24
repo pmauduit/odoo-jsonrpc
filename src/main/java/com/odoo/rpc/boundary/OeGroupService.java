@@ -67,7 +67,7 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
      *
      * @param groupId group id
      * @return set of menus for the given group id
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeMenu
      * @see OeMenuService#findByGroupId(Long...)
      */
@@ -80,7 +80,7 @@ public class OeGroupService extends AbstractOeService<OeGroup> {
      *
      * @param userId user id
      * @return set of groups
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      * @see OeCriteriaBuilder
      * @see #find(OeCriteriaBuilder, String...)
      */

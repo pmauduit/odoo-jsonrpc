@@ -57,7 +57,7 @@ public class OeModuleService extends AbstractOeService<OeModule> {
      *
      * @param ids id(s) of Odoo modules to install
      * @return true if module successfully installed
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public boolean install(Object... ids) throws OeRpcException {
         executor.execute(name, Fun.INSTALL.name, OeJUtil.parseAsJsonArray(ids));
@@ -69,7 +69,7 @@ public class OeModuleService extends AbstractOeService<OeModule> {
      *
      * @param ids id(s) of Odoo modules to uninstall
      * @return true if module successfully uninstalled
-     * @throws OeRpcException
+     * @throws OeRpcException if Odoo response with error
      */
     public boolean uninstall(Object... ids) throws OeRpcException {
         executor.execute(name, Fun.UNINSTALL.name, ids, true);
