@@ -38,7 +38,6 @@ import static com.odoo.rpc.json.util.OeJEndPoint.Session.AUTHENTICATE;
 import static com.odoo.rpc.json.util.OeJEndPoint.Session.DESTROY;
 import static com.odoo.rpc.json.util.OeJUtil.convertJsonArrayToMapArray;
 import static com.odoo.rpc.json.util.OeJUtil.convertJsonToMap;
-import static com.odoo.rpc.json.util.OeJUtil.margeJsonObject;
 import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonArray;
 import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonElement;
 import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonObject;
@@ -48,7 +47,16 @@ import static com.odoo.rpc.util.OeConst.OeFun.UNLINK;
 import static com.odoo.rpc.util.OeConst.OeFun.WRITE;
 
 /**
+ * Executor class is the main executor for all lib operations
+ * <p>
+ * search
+ * read
+ * write
+ * create
+ * delete
+ *
  * @author Ahmed El-mawaziny
+ * @since 1.0
  */
 public class OeExecutor implements Serializable {
 
@@ -68,6 +76,17 @@ public class OeExecutor implements Serializable {
     private JsonObject jsonContext;
     private Map<String, Object> context;
 
+    /**
+     * Constructor for creating connection with Odoo then login and get uid, session_id and context
+     *
+     * @param scheme   http or https
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param database database name
+     * @param username login username
+     * @param password login password
+     * @throws OeRpcException if Odoo response with error
+     */
     private OeExecutor(String scheme, String host, int port, String database, String username, String password)
             throws OeRpcException {
         this.database = database;
@@ -84,14 +103,46 @@ public class OeExecutor implements Serializable {
         this.userId = loginResult.get("uid").getAsLong();
     }
 
+    /**
+     * Constructor for creating connection with Odoo then login and get uid, session_id and context
+     *
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param database database
+     * @param username login username
+     * @param password login password
+     * @throws OeRpcException if Odoo response with error
+     */
     private OeExecutor(String host, int port, String database, String username, String password) throws OeRpcException {
         this("http", host, port, database, username, password);
     }
 
+    /**
+     * Constructor for creating connection with Odoo then login and get uid, session_id and context
+     *
+     * @param host     host name or ip address
+     * @param database database name
+     * @param username login username
+     * @param password login password
+     * @throws OeRpcException if Odoo response with error
+     */
     private OeExecutor(String host, String database, String username, String password) throws OeRpcException {
         this("http", host, 8069, database, username, password);
     }
 
+    /**
+     * static for getting singleton instance for creating connection with Odoo then login and get uid, session_id
+     * and context
+     *
+     * @param scheme   http or https
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param database database name
+     * @param username login username
+     * @param password login password
+     * @return singleton instance
+     * @throws OeRpcException if Odoo response with error
+     */
     public static OeExecutor getInstance(String scheme, String host, int port, String database, String username,
                                          String password) throws OeRpcException {
         if (instance == null) {
@@ -104,6 +155,18 @@ public class OeExecutor implements Serializable {
         return instance;
     }
 
+    /**
+     * static for getting singleton instance for creating connection with Odoo then login and get uid, session_id
+     * and context
+     *
+     * @param host     host name or ip address
+     * @param port     port number
+     * @param database database name
+     * @param username login username
+     * @param password login password
+     * @return singleton instance
+     * @throws OeRpcException if Odoo response with error
+     */
     public static OeExecutor getInstance(String host, int port, String database, String username, String password)
             throws OeRpcException {
         if (instance == null) {
@@ -116,6 +179,17 @@ public class OeExecutor implements Serializable {
         return instance;
     }
 
+    /**
+     * static for getting singleton instance for creating connection with Odoo then login and get uid, session_id
+     * and context
+     *
+     * @param host     host name or password
+     * @param database database name
+     * @param username login username
+     * @param password login password
+     * @return singleton instance
+     * @throws OeRpcException if Odoo response with error
+     */
     public static OeExecutor getInstance(String host, String database, String username, String password)
             throws OeRpcException {
         if (instance == null) {
@@ -128,6 +202,12 @@ public class OeExecutor implements Serializable {
         return instance;
     }
 
+    /**
+     * login to Odoo server with database, username and password
+     *
+     * @return Odoo response
+     * @throws OeRpcException if Odoo response with error
+     */
     private JsonObject doLogin() throws OeRpcException {
         String reqUrl = url.setPath(AUTHENTICATE.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
@@ -138,6 +218,9 @@ public class OeExecutor implements Serializable {
         return new OeJsonObject(response).getAsJsonObject("result");
     }
 
+    /**
+     * logout the logged in user by destroying the session
+     */
     public void logout() {
         String reqUrl = url.setPath(DESTROY.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
@@ -154,6 +237,12 @@ public class OeExecutor implements Serializable {
         instance = null;
     }
 
+    /**
+     * getting user context from Odoo login response
+     *
+     * @param result login response
+     * @return user context as Json Object
+     */
     private JsonObject getJsonContextFromLogin(JsonObject result) {
         if (result != null) {
             String contextKeyName = "user_context";
@@ -165,56 +254,100 @@ public class OeExecutor implements Serializable {
         return null;
     }
 
+    /**
+     * checking if the Odoo version is 7.0
+     *
+     * @return true is the version number is 7 and the sub version is 0
+     * @throws OeRpcException if Odoo response with error
+     */
     public boolean isV70() throws OeRpcException {
         version = getOeVersion();
         return version.getVersionNumber() == 7 && version.getSubVersion() == 0;
     }
 
+    /**
+     * getting Odoo version as {@link OeVersion}
+     *
+     * @return OeVersion
+     * @throws OeRpcException if Odoo response with error
+     */
     public OeVersion getOeVersion() throws OeRpcException {
         this.version = OeServerVersion.getInstance(scheme, host, port).getVersion();
         return version;
     }
 
+    /**
+     * getting session id
+     *
+     * @return string of session id
+     */
     public String getSessionId() {
         return sessionId;
     }
 
+    /**
+     * getting user context as map
+     *
+     * @return user context as map
+     */
     public Map<String, Object> getContext() {
         return context;
     }
 
+    /**
+     * setting user context
+     *
+     * @param context user context as map
+     */
     public void setContext(Map<String, Object> context) {
         this.jsonContext = parseAsJsonObject(context);
         this.context = context;
     }
 
+    /**
+     * getting user context as json object
+     *
+     * @return user context as json object
+     */
     public JsonObject getJsonContext() {
         return jsonContext;
     }
 
+    /**
+     * setting user context as json object
+     *
+     * @param jsonContext user context as json object
+     */
     public void setJsonContext(JsonObject jsonContext) {
         this.context = convertJsonToMap(jsonContext);
         this.jsonContext = jsonContext;
     }
 
+    /**
+     * update user context by Map
+     *
+     * @param params passing params for updating user context as Map
+     */
     public void updateContext(Map<String, Object> params) {
         updateJsonContext(params);
         context.putAll(params);
     }
 
+    /**
+     * update user context with key and value
+     *
+     * @param key   key of new input in user context
+     * @param value value of the new input in user context
+     */
     public void updateContext(String key, Object value) {
         jsonContext.add(key, parseAsJsonElement(value));
         context.put(key, value);
     }
 
-    public void updateJsonContext(Map<String, Object> params) {
+    private void updateJsonContext(Map<String, Object> params) {
         for (String key : params.keySet()) {
             jsonContext.add(key, parseAsJsonElement(params.get(key)));
         }
-    }
-
-    public void updateJsonContext(JsonObject params) {
-        margeJsonObject(params, jsonContext);
     }
 
     public String getScheme() {
@@ -241,40 +374,141 @@ public class OeExecutor implements Serializable {
         return url.toString();
     }
 
+    /**
+     * Search then read with specific criteria and columns in Odoo model
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see #searchRead(String, List, String, String...)
+     */
     public Map<String, Object>[] searchReadMap(String model, List<Object> domain, String... columns)
             throws OeRpcException {
         return searchRead(model, domain, (String) null, columns);
     }
 
+    /**
+     * getting number of rows by searching then reading with specific criteria and columns in Odoo model
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param limit   number of rows
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see #searchRead(String, List, Integer, Integer, String...)
+     */
     public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer limit, String... columns)
             throws OeRpcException {
         return searchRead(model, domain, null, limit, columns);
     }
 
+    /**
+     * Search then read with specific criteria and columns in Odoo model then order these rows
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param order   order rows asc or desc
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see #searchRead(String, List, Integer, Integer, String, String...)
+     */
     public Map<String, Object>[] searchRead(String model, List<Object> domain, String order, String... columns)
             throws OeRpcException {
         return searchRead(model, domain, null, null, order, columns);
     }
 
+    /**
+     * getting number of rows by searching then reading with specific criteria and columns in Odoo model
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param offset  Odoo sql query offset
+     * @param limit   number of rows
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see #searchRead(String, List, Integer, Integer, String, String...)
+     */
     public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit,
                                             String... columns) throws OeRpcException {
         return searchRead(model, domain, offset, limit, null, columns);
     }
 
+    /**
+     * getting number of rows by searching then reading with specific criteria and columns in Odoo model
+     * then order these rows
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param offset  Odoo sql query offset
+     * @param limit   number of rows
+     * @param order   order rows asc or desc
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see #searchReadMap(String, List, Integer, Integer, String, Map, String...)
+     */
     public Map<String, Object>[] searchRead(String model, List<Object> domain, Integer offset, Integer limit,
                                             String order, String... columns) throws OeRpcException {
         return searchReadMap(model, domain, offset, limit, order, context, columns);
     }
 
+    /**
+     * getting number of rows by searching then reading with specific criteria and columns in Odoo model
+     * then order these rows
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param offset  Odoo sql query offset
+     * @param limit   number of rows
+     * @param order   order rows asc or desc
+     * @param context Odoo context
+     * @param columns model columns
+     * @return Odoo response result as json array
+     * @throws OeRpcException if Odoo response with error
+     * @see com.odoo.rpc.json.util.OeJUtil#parseAsJsonArray(Object)
+     * @see #searchReadStr(String, List, Integer, Integer, String, Map, String...)
+     */
     public JsonArray searchRead(String model, List<Object> domain, Integer offset, Integer limit, String order,
                                 Map<String, Object> context, String... columns) throws OeRpcException {
         return parseAsJsonArray(searchReadStr(model, domain, offset, limit, order, context, columns));
     }
 
+    /**
+     * Search then read with specific criteria and columns in Odoo model
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param columns model columns
+     * @return Odoo response result as json array
+     * @throws OeRpcException if Odoo response with error
+     * @see com.odoo.rpc.json.util.OeJUtil#parseAsJsonArray(Object)
+     * @see #searchReadStr(String, List, Integer, Integer, String, Map, String...)
+     */
     public JsonArray searchRead(String model, List<Object> domain, String... columns) throws OeRpcException {
         return parseAsJsonArray(searchReadStr(model, domain, null, null, null, context, columns));
     }
 
+    /**
+     * getting number of rows by searching then reading with specific criteria and columns in Odoo model
+     * then order these rows
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param offset  Odoo sql query offset
+     * @param limit   number of rows
+     * @param order   order rows asc or desc
+     * @param context Odoo context
+     * @param columns model columns
+     * @return Odoo response result as {@code Map<String, Object>[]}
+     * @throws OeRpcException if Odoo response with error
+     * @see com.odoo.rpc.json.util.OeJUtil#convertJsonArrayToMapArray(JsonArray)
+     * @see #searchReadStr(String, List, Integer, Integer, String, Map, String...)
+     */
     public Map<String, Object>[] searchReadMap(String model, List<Object> domain, Integer offset, Integer limit,
                                                String order, Map<String, Object> context, String... columns)
             throws OeRpcException {
