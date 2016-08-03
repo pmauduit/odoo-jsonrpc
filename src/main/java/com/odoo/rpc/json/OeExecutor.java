@@ -515,6 +515,19 @@ public class OeExecutor implements Serializable {
         return convertJsonArrayToMapArray(searchRead(model, domain, offset, limit, order, context, columns));
     }
 
+    /**
+     * The main method for composing the search read url and all required parameters then send it to Odoo
+     *
+     * @param model   Odoo model
+     * @param domain  search criteria
+     * @param offset  Odoo sql query offset
+     * @param limit   number of rows
+     * @param order   order rows asc or desc
+     * @param context Odoo context
+     * @param columns model columns
+     * @return Odoo response result as String
+     * @throws OeRpcException if Odoo response with error
+     */
     public String searchReadStr(String model, List<Object> domain, Integer offset, Integer limit, String order,
                                 Map<String, Object> context, String... columns) throws OeRpcException {
 
@@ -557,10 +570,29 @@ public class OeExecutor implements Serializable {
         return new OeJsonObject(response).getAsJsonObject("result").getAsJsonArray("records").toString();
     }
 
+    /**
+     * Count Odoo model with specific search criteria
+     *
+     * @param model  Odoo model of type {@link OeModel}
+     * @param domain search criteria
+     * @return row count as long
+     * @throws OeRpcException if Odoo response with error
+     * @see OeModel
+     * @see #count(String, List)
+     */
     public Long count(OeModel model, List<Object> domain) throws OeRpcException {
         return count(model.getName(), domain);
     }
 
+    /**
+     * Count Odoo model with specific search criteria
+     *
+     * @param model  Odoo model of type String
+     * @param domain search criteria
+     * @return row count as long
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray)
+     */
     public Long count(String model, List<Object> domain) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(parseAsJsonElement(domain));
@@ -571,10 +603,28 @@ public class OeExecutor implements Serializable {
         return 0L;
     }
 
+    /**
+     * Create new record in Odoo model
+     *
+     * @param model  Odoo model of type {@link OeModel}
+     * @param values new record values
+     * @return id of the new created record
+     * @throws OeRpcException if Odoo response with error
+     * @see #create(String, Map)
+     */
     public Long create(OeModel model, Map<String, Object> values) throws OeRpcException {
         return create(model.getName(), values);
     }
 
+    /**
+     * Create new record in Odoo model
+     *
+     * @param model  Odoo model of type String
+     * @param values new record values
+     * @return id of the new created record
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray)
+     */
     public Long create(String model, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(parseAsJsonElement(values));
@@ -586,6 +636,16 @@ public class OeExecutor implements Serializable {
         return 0L;
     }
 
+    /**
+     * Update Odoo model record
+     *
+     * @param model  Odoo model
+     * @param id     the record id to update
+     * @param values the new record values
+     * @return true if its updated successfully
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray)
+     */
     public Boolean write(String model, Object id, Map<String, Object> values) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(parseAsJsonElement(id));
@@ -594,6 +654,15 @@ public class OeExecutor implements Serializable {
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
+    /**
+     * Delete Odoo model record
+     *
+     * @param model Odoo model
+     * @param ids   one or more ids to delete
+     * @return true if its deleted successfully
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray)
+     */
     public Boolean unlike(String model, Long... ids) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(parseAsJsonArray(ids));
@@ -602,6 +671,15 @@ public class OeExecutor implements Serializable {
         return !OeUtil.isNULL(result) && Boolean.parseBoolean(result.toString());
     }
 
+    /**
+     * Execute specific method or function in Odoo model
+     *
+     * @param model  Odoo model
+     * @param method the new of Odoo method to execute
+     * @return Odoo result as {@code Map<String, Object>}
+     * @throws OeRpcException if Odoo response with error
+     * @see com.odoo.rpc.json.util.OeJUtil#convertJsonToMap(JsonObject)
+     */
     public Map<String, Object> execute(String model, String method) throws OeRpcException {
         JsonArray args = new JsonArray();
         args.add(jsonContext);
