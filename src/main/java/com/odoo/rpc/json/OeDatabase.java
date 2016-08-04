@@ -91,6 +91,7 @@ public class OeDatabase implements Serializable {
      * @param host     host name or ip address
      * @param port     port number
      * @param adminPwd admin password
+     * @return Singleton instance of {@link OeDatabase}
      */
     public static OeDatabase getInstance(String scheme, String host, int port, Object adminPwd) {
         if (instance == null) {
@@ -109,6 +110,7 @@ public class OeDatabase implements Serializable {
      * @param scheme http or https
      * @param host   host name or ip address
      * @param port   port number
+     * @return Singleton instance of {@link OeDatabase}
      */
     public static OeDatabase getInstance(String scheme, String host, int port) {
         if (instance == null) {
@@ -125,6 +127,7 @@ public class OeDatabase implements Serializable {
      * Constructor to build uri without admin password, http and 8069
      *
      * @param host host name or ip password
+     * @return Singleton instance of {@link OeDatabase}
      */
     public static OeDatabase getInstance(String host) {
         if (instance == null) {

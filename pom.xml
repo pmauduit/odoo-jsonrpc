@@ -138,6 +138,14 @@
                     <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <javadocExecutable>/usr/lib/jvm/java-8-oracle/bin/javadoc</javadocExecutable>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

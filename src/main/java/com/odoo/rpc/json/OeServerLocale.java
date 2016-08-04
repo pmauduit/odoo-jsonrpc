@@ -71,6 +71,7 @@ public class OeServerLocale implements Serializable {
      * @param scheme http or https
      * @param host   host name or ip address
      * @param port   port number
+     * @return Singleton instance {@link OeServerLocale}
      * @throws OeRpcException if the doListLang throws an exception
      * @see #OeServerLocale(String, String, int)
      */

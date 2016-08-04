@@ -728,6 +728,7 @@ public class OeExecutor implements Serializable {
      * @param method the new of Odoo method to execute
      * @param args   method arguments
      * @param kwargs Odoo method kwargs
+     * @return Odoo result as Object
      * @throws OeRpcException if Odoo response with error
      * @see #execute(String, String, JsonArray, JsonObject)
      */
@@ -744,6 +745,7 @@ public class OeExecutor implements Serializable {
      * @param method the new of Odoo method to execute
      * @param args   method arguments
      * @param kwargs Odoo method kwargs
+     * @return Odoo result as Object
      * @throws OeRpcException if Odoo response with error
      */
     public Object execute(String model, String method, JsonArray args, JsonObject kwargs) throws OeRpcException {

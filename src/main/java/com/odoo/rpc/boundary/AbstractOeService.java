@@ -53,6 +53,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      *
      * @param executor Odoo Executor {@link OeExecutor}
      * @param model    model class
+     * @param <C> generic extends from {@link AbstractOeEntity}
      */
     @SuppressWarnings("unchecked")
     public <C extends M> AbstractOeService(OeExecutor executor, Class<C> model) {
@@ -108,7 +109,8 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     /**
      * find Odoo Model or Object by id and return custom Entity
      *
-     * @param id Id of Odoo Model or Object
+     * @param id      Id of Odoo Model or Object
+     * @param columns Odoo model columns
      * @return custom Entity for Odoo model or object
      * @throws OeRpcException if any exception happened on the Odoo server or if no result found
      */
@@ -147,6 +149,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
     /**
      * find all Odoo Models or Objects with or without array of columns (recommended to reduce bandwidth)
      *
+     * @param columns Odoo model columns
      * @return list of custom Entities for Odoo models or Objects
      * @throws OeRpcException if any exception happened during this finding
      */
@@ -260,6 +263,7 @@ public abstract class AbstractOeService<M extends AbstractOeEntity> implements S
      * find all Odoo Models or Objects with Odoo context
      *
      * @param context Odoo context
+     * @param columns Odoo model columns
      * @return list of custom Entities for Odoo models or Objects with
      * specific Odoo context
      * @throws OeRpcException if Odoo response with error

@@ -51,6 +51,7 @@ public class HttpClient {
     /**
      * static method to wrap the request data with some properties
      *
+     * @param url  URL to post
      * @return json object wrap the request data
      * @see #postWithParams(String, JsonObject)
      */
@@ -61,6 +62,7 @@ public class HttpClient {
     /**
      * static method to wrap the request data with some properties
      *
+     * @param url  URL to post
      * @param data request json object
      * @return json object wrap the request data
      */

@@ -34,7 +34,7 @@ import static com.odoo.rpc.util.OeConst._COL_WRITE_DATE;
 import static com.odoo.rpc.util.OeConst._COL_WRITE_UID;
 
 /**
- * @param <T>
+ * @param <T> generic extends from {@link AbstractOeService}
  * @author Ahmed El-mawaziny
  */
 public abstract class AbstractOeEntity<T extends AbstractOeService> implements Serializable {
