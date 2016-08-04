@@ -686,6 +686,17 @@ public class OeExecutor implements Serializable {
         return convertJsonToMap((JsonObject) execute(model, method, args));
     }
 
+    /**
+     * Execute specific method or function in Odoo model with arguments
+     *
+     * @param model    Odoo model
+     * @param method   the new of Odoo method to execute
+     * @param args     method arguments
+     * @param wrapArgs wrap the method args with another json array
+     * @return Odoo result as Object
+     * @throws OeRpcException if Odoo response with error
+     * @see com.odoo.rpc.json.util.OeJUtil#parseAsJsonArray(Object)
+     */
     public Object execute(String model, String method, Object args, boolean wrapArgs) throws OeRpcException {
         JsonArray argsArr = new JsonArray();
         if (wrapArgs) {
@@ -696,16 +707,45 @@ public class OeExecutor implements Serializable {
         return execute(model, method, argsArr);
     }
 
+    /**
+     * Execute specific method or function in Odoo model with arguments
+     *
+     * @param model  Odoo model
+     * @param method the new of Odoo method to execute
+     * @param args   method arguments
+     * @return Odoo result as Object
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray, JsonObject)
+     */
     public Object execute(String model, String method, JsonArray args) throws OeRpcException {
         return execute(model, method, args, new JsonObject());
     }
 
+    /**
+     * Execute specific method or function in Odoo model with arguments
+     *
+     * @param model  Odoo model
+     * @param method the new of Odoo method to execute
+     * @param args   method arguments
+     * @param kwargs Odoo method kwargs
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, String, JsonArray, JsonObject)
+     */
     public Object execute(String model, String method, Object[] args, Map<String, Object> kwargs) throws OeRpcException {
         JsonArray argsJson = parseAsJsonArray(args);
         JsonObject kwargsJson = parseAsJsonObject(kwargs);
         return execute(model, method, argsJson, kwargsJson);
     }
 
+    /**
+     * Execute specific method or function in Odoo model with arguments by calling call_kw path
+     *
+     * @param model  Odoo model
+     * @param method the new of Odoo method to execute
+     * @param args   method arguments
+     * @param kwargs Odoo method kwargs
+     * @throws OeRpcException if Odoo response with error
+     */
     public Object execute(String model, String method, JsonArray args, JsonObject kwargs) throws OeRpcException {
         String reqUrl = url.setPath(CALL_KW.getPath()).setParameter("session_id", sessionId).toString();
         JsonObject params = new JsonObject();
@@ -721,10 +761,27 @@ public class OeExecutor implements Serializable {
         return new OeJsonObject(response).get("result");
     }
 
+    /**
+     * Execute specific method or function with parameters by calling function path
+     *
+     * @param fun    function name
+     * @param params function parameters as {@code Map<String, Object>}
+     * @return Odoo result as {@code Map<String, Object>}
+     * @throws OeRpcException if Odoo response with error
+     * @see #execute(String, JsonObject)
+     */
     public Map<String, Object> execute(String fun, Map<String, Object> params) throws OeRpcException {
         return convertJsonToMap((JsonObject) execute(fun, parseAsJsonObject(params)));
     }
 
+    /**
+     * Execute specific method or function with parameters by calling function path
+     *
+     * @param fun     function name
+     * @param jsonObj function parameters as Json Object
+     * @return Odoo result as Object
+     * @throws OeRpcException if Odoo response with error
+     */
     public Object execute(String fun, JsonObject jsonObj) throws OeRpcException {
         String reqUrl = url.setPath(fun).setParameter("session_id", sessionId).toString();
         return postWithParams(reqUrl, jsonObj).get("result");
