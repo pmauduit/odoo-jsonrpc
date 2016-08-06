@@ -15,7 +15,6 @@ Jre 6
 1. Change skipTests value to false
 
         ```
-        #!xml
             <skipTests>false</skipTests>
         ```
 
