@@ -14,16 +14,17 @@ Jre 6
 
 1. Change skipTests value to false
 
-```
-<skipTests>false</skipTests>
-```
+        ```
+        #!xml
+            <skipTests>false</skipTests>
+        ```
 
 2. Configure test to connect to your Odoo server in /src/test/java/com/odoo/rpc/AbstractBaseTest.java
 
 3. 
-```
-$ mvn clean install
-```
+        ```
+            $ mvn clean install
+        ```
 
 ## Deployment
 
