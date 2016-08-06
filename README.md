@@ -14,16 +14,12 @@ Jre 6
 
 1. Change skipTests value to false
 
-        ```
             <skipTests>false</skipTests>
-        ```
 
 2. Configure test to connect to your Odoo server in /src/test/java/com/odoo/rpc/AbstractBaseTest.java
 
 3. 
-        ```
             $ mvn clean install
-        ```
 
 ## Deployment
 
@@ -35,7 +31,7 @@ include this library jar to you android, desktop, web application
 
 ## Authors
 
-* **Ahmed El-mawaziny** - [QFast](https://bitbucket.org/qfast/)
+* [Ahmed El-mawaziny](https://bitbucket.org/amawaziny/) in [QFast](https://bitbucket.org/qfast/) team
 
 ## License
 
