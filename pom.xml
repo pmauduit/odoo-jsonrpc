@@ -59,6 +59,10 @@
         </developer>
     </developers>
 
+    <scm>
+        <url>https://bitbucket.org/qfast/odoo-jsonrpc</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
