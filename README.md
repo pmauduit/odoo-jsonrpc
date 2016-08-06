@@ -8,7 +8,7 @@ This library allows you to interact with Odoo Modules ORMs by retrieving all jso
 
 ### Prerequisities
 
-Jre 6
+JDK6
 
 ## Running the tests
 
