@@ -4,6 +4,8 @@ This library allows you to interact with Odoo Modules ORMs by retrieving all jso
 
 ## Getting Started
 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
 * Download jar file
 
 1. [odoo-jsonrpc](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0.jar)
