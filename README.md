@@ -32,6 +32,7 @@ JDK6
 * include this library jar to you android, desktop or web application
 
 * Add to your local repository for use in your builds
+
         $ mvn install:install-file -Dfile=<path-to-odoo-jsonrpc-1.0.jar> -DgroupId=org.qfast.odoo-rpc \
         -DartifactId=odoo-jsonrpc -Dversion=1.0 -Dpackaging=jar
 
