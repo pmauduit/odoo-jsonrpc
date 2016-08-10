@@ -4,7 +4,13 @@ This library allows you to interact with Odoo Modules ORMs by retrieving all jso
 
 ## Getting Started
 
+```
+#!java
 
+OeExecutor executor = OeExecutor.getInstance(SCHEME, HOST, PORT, DATABASE, USERNAME, PASSWORD);
+OeUserService service = new OeUserService(executor);
+OeUser oeUser = service.findById(id);
+```
 
 ### Prerequisities
 
