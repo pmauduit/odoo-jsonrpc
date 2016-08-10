@@ -29,7 +29,7 @@ JDK6
 
 ## Deployment
 
-* include this library jar to you android, desktop or web application
+* Include this library jar to you android, desktop or web application
 
 * Add to your local repository for use in your builds
 
