@@ -9,8 +9,8 @@ These instructions will get you a copy of the project up and running on your loc
 * Download jar file
 
     1. [odoo-jsonrpc](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0.jar)
-    2. [odoo-jsonrpc-javadoc](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0-javadoc.jar)
-    3. [odoo-jsonrpc-sources](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0-sources.jar)
+    2. [odoo-jsonrpc-javadoc](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0-javadoc.jar) - (optional)
+    3. [odoo-jsonrpc-sources](https://bitbucket.org/qfast/odoo-jsonrpc/downloads/odoo-jsonrpc-1.0-sources.jar) - (optional)
 
 
 
