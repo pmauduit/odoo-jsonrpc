@@ -22,7 +22,7 @@ JDK6
 
             <skipTests>false</skipTests>
 
-2. Configure test to connect to your Odoo server in [AbstractBaseTest](/src/test/java/com/odoo/rpc/AbstractBaseTest.java)
+2. Configure test to connect to your Odoo server in [/src/test/java/com/odoo/rpc/AbstractBaseTest.java](/src/test/java/com/odoo/rpc/AbstractBaseTest.java)
 
 3. 
             $ mvn clean install
