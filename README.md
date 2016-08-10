@@ -35,6 +35,13 @@ JDK6
 
         $ mvn install:install-file -Dfile=<path-to-odoo-jsonrpc-1.0.jar> -DgroupId=org.qfast.odoo-rpc \
         -DartifactId=odoo-jsonrpc -Dversion=1.0 -Dpackaging=jar
+        
+        $ mvn install:install-file -Dfile=<path-to-odoo-jsonrpc-1.0-javadoc.jar> -DgroupId=org.qfast.odoo-rpc \
+        -DartifactId=odoo-jsonrpc -Dversion=1.0 -Dpackaging=jar
+        
+    
+        $ mvn install:install-file -Dfile=<path-to-odoo-jsonrpc-1.0-sources.jar> -DgroupId=org.qfast.odoo-rpc \
+        -DartifactId=odoo-jsonrpc -Dversion=1.0 -Dpackaging=jar
 
 ## Built With
 
