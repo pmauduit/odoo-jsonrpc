@@ -22,6 +22,7 @@
 package com.odoo.rpc.json.util;
 
 import com.google.gson.JsonObject;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -35,6 +36,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.odoo.rpc.json.util.OeJUtil.parseAsJsonObject;
 
@@ -102,7 +105,18 @@ public class HttpClient {
                     InputStream in = entity.getContent();
                     String resultString = convertStreamToString(in);
 
-                    return parseAsJsonObject(resultString);
+                    JsonObject ret = parseAsJsonObject(resultString);
+
+                    Header setCookieHeader = response.getFirstHeader("set-cookie");
+                    if (setCookieHeader != null) {
+                        Pattern sessIdPattern = Pattern.compile("session_id=([a-z0-9]+);");
+                        Matcher m = sessIdPattern.matcher(setCookieHeader.getValue());
+                        if (m.find()) {
+                            String sessionId = m.group(1);
+                            ret.getAsJsonObject("result").addProperty("session_id", sessionId);
+                        }
+                    }
+                    return ret;
                 }
             } finally {
                 if (httpclient != null)
